@@ -1,4 +1,6 @@
-﻿namespace Infrastructure.Ef.DbEntities;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Infrastructure.Ef.DbEntities;
 
 public class DbReservation
 {
@@ -9,8 +11,7 @@ public class DbReservation
     public DateOnly ArrivalDate { get; set; }
     
     public DateOnly LeaveDate { get; set; }
-    
-    
+
     public int ReservationStatusId { get; set; }
     
     public int AdId { get; set; }

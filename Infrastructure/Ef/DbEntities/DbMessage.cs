@@ -1,4 +1,6 @@
-﻿namespace Infrastructure.Ef.DbEntities;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Infrastructure.Ef.DbEntities;
 
 public class DbMessage
 {
@@ -7,7 +9,7 @@ public class DbMessage
     public int SenderId { get; set; }
     
     public string Content { get; set; }
-    
+   
     public bool View { get; set; }
     
 }
