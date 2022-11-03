@@ -1,4 +1,5 @@
 using API;
+using Application.Services.Auth;
 using Application.Services.User;
 using Application.UseCases.Users;
 using Infrastructure.Ef;
@@ -21,6 +22,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<UseCaseFetchAllUsers>();
 builder.Services.AddScoped<UseCaseCreateUser>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 var app = builder.Build();
 
