@@ -10,7 +10,7 @@ public class DbUser
     
     public string LastName { get; set; }
     
-    public DateTime AccountCreation { get; set; }
+//    public DateTime AccountCreation { get; set; }
     
     public string Email { get; set; }
     

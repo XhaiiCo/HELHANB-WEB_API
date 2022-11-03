@@ -120,7 +120,7 @@ public class HelhanbContext : DbContext
             entity.Property(u => u.Id).HasColumnName("user_id");
             entity.Property(u => u.FirstName).HasColumnName("first_name");
             entity.Property(u => u.LastName).HasColumnName("last_name");
-            entity.Property(u => u.AccountCreation).HasColumnName("account_creation");
+            //entity.Property(u => u.AccountCreation).HasColumnName("account_creation");
             entity.Property(u => u.Email).HasColumnName("email");
             entity.Property(u => u.Password).HasColumnName("password");
             entity.Property(u => u.BirthDate).HasColumnName("birth_date");
