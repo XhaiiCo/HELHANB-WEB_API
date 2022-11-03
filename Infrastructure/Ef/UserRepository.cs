@@ -1,5 +1,4 @@
 ﻿using Infrastructure.Utils;
-using Microsoft.Identity.Client;
 
 namespace Infrastructure.Ef.DbEntities;
 
@@ -16,5 +15,13 @@ public class UserRepository: IUserRepository
     {
         using var context = _contextProvider.NewContext() ;
         return context.Users.ToList() ;
+    }
+
+    public DbUser Create(DbUser user)
+    {
+        using var context = _contextProvider.NewContext();
+        context.Users.Add(user);
+        context.SaveChanges();
+        return user;
     }
 }

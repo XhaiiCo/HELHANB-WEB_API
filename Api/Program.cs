@@ -18,6 +18,7 @@ builder.Services.AddScoped<HelhanbContextProvider>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddScoped<UseCaseFetchAllUsers>();
+builder.Services.AddScoped<UseCaseCreateUser>();
 
 var app = builder.Build();
 

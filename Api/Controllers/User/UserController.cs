@@ -9,10 +9,14 @@ namespace API.Controllers.User;
 public class UserController: ControllerBase
 {
     private readonly UseCaseFetchAllUsers _useCaseFetchAllUsers;
+    private readonly UseCaseCreateUser _useCaseCreateUser ;
 
-    public UserController(UseCaseFetchAllUsers useCaseFetchAllUsers)
+    public UserController(
+        UseCaseFetchAllUsers useCaseFetchAllUsers, 
+        UseCaseCreateUser useCaseCreateUser)
     {
         _useCaseFetchAllUsers = useCaseFetchAllUsers;
+        _useCaseCreateUser = useCaseCreateUser;
     }
 
     [HttpGet]
@@ -21,4 +25,9 @@ public class UserController: ControllerBase
         return Ok(_useCaseFetchAllUsers.Execute());
     }
 
+    [HttpPost]
+    public ActionResult<DtoOutputUser> Create(DtoInputCreateUser userDto)
+    {
+        return Ok(_useCaseCreateUser.Execute(userDto));
+    }
 }
