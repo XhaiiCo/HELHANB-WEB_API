@@ -1,4 +1,6 @@
 using API;
+using Infrastructure.Ef;
+using Infrastructure.Ef.DbEntities;
 using Infrastructure.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +14,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IConnectionStringProvider, ConnectionStringProvider>();
 builder.Services.AddScoped<HelhanbContextProvider>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 var app = builder.Build();
 
