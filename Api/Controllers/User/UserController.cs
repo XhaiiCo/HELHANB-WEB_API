@@ -26,8 +26,14 @@ public class UserController: ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public ActionResult<DtoOutputUser> Create(DtoInputCreateUser userDto)
     {
-        return Ok(_useCaseCreateUser.Execute(userDto));
+        var user = _useCaseCreateUser.Execute(userDto);
+        if (user != null)
+            return Ok(user);
+        
+        return Unauthorized();
     }
 }

@@ -1,17 +1,19 @@
-﻿namespace Application.Services.User;
+﻿using Application;
+using Application.Services.User;
+using Infrastructure.Ef;
 
 public class UserService: IUserService
 {
-    private readonly IUserService _userService;
+    private readonly IUserRepository _userRepository;
 
-    public UserService(IUserService userService)
+    public UserService(IUserRepository userRepository)
     {
-        _userService = userService;
+        _userRepository = userRepository;
     }
 
     public Domain.User FetchByEmail(string email)
     {
-        var dbUser = _userService.FetchByEmail(email);
+        var dbUser = _userRepository.FetchByEmail(email);
         return Mapper.GetInstance().Map<Domain.User>(dbUser);
     }
 }
