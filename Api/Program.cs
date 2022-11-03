@@ -1,4 +1,5 @@
 using API;
+using Application.Services.User;
 using Application.UseCases.Users;
 using Infrastructure.Ef;
 using Infrastructure.Ef.DbEntities;
@@ -19,6 +20,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddScoped<UseCaseFetchAllUsers>();
 builder.Services.AddScoped<UseCaseCreateUser>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 
