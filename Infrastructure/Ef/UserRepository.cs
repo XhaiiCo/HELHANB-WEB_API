@@ -24,4 +24,14 @@ public class UserRepository: IUserRepository
         context.SaveChanges();
         return user;
     }
+
+    public DbUser FetchByEmail(string email)
+    {
+        using var context = _contextProvider.NewContext();
+        var user = context.Users.FirstOrDefault(user => user.Email == email);
+
+        if (user == null) throw new KeyNotFoundException($"User with email {email} has not been found");
+
+        return user;
+    }
 }

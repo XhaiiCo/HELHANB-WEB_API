@@ -5,5 +5,7 @@ namespace Infrastructure.Ef;
 public interface IUserRepository
 {
     IEnumerable<DbUser> FetchAll();
-    DbUser Create(DbUser user) ; 
+    DbUser Create(DbUser user) ;
+
+    DbUser FetchByEmail(string email);
 }
