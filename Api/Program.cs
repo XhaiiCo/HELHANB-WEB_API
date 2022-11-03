@@ -1,4 +1,5 @@
 using API;
+using Application.UseCases.Users;
 using Infrastructure.Ef;
 using Infrastructure.Ef.DbEntities;
 using Infrastructure.Utils;
@@ -15,6 +16,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IConnectionStringProvider, ConnectionStringProvider>();
 builder.Services.AddScoped<HelhanbContextProvider>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+builder.Services.AddScoped<UseCaseFetchAllUsers>();
 
 var app = builder.Build();
 

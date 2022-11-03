@@ -12,7 +12,7 @@ public class HelhanbContext : DbContext
     {
         _connectionStringProvider = connectionStringProvider;
     }
-    
+ /*   
     public DbSet<DbAd> Ads { get; set; }
     
     public DbSet<DbConversation> Conversations { get; set; }
@@ -26,7 +26,7 @@ public class HelhanbContext : DbContext
     public DbSet<DbReservationStatus> ReservationStatus { get; set; }
     
     public DbSet<DbRole> Roles { get; set; }
-
+*/
     public DbSet<DbUser> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -38,6 +38,7 @@ public class HelhanbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        /*
         modelBuilder.Entity<DbConversation>(entity =>
         {
             entity.ToTable("conversation");
@@ -112,7 +113,7 @@ public class HelhanbContext : DbContext
             entity.Property(r => r.AdId).HasColumnName("ad_id");
             entity.Property(r => r.Renter).HasColumnName("renter");
         });
-
+        */
         modelBuilder.Entity<DbUser>(entity =>
         {
             entity.ToTable("users");
@@ -126,5 +127,6 @@ public class HelhanbContext : DbContext
             //entity.Property(u => u.BirthDate).HasColumnName("birth_date");
             entity.Property(u => u.RoleId).HasColumnName("role_id");
         });
+
     }
 }

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Application.UseCases.Users;
+using Application.UseCases.Users.Dtos;
+using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.User;
 
@@ -6,10 +8,17 @@ namespace API.Controllers.User;
 [Route("api/v1/users")]
 public class UserController: ControllerBase
 {
-    [HttpGet]
-    public ActionResult FetchAll()
+    private readonly UseCaseFetchAllUsers _useCaseFetchAllUsers;
+
+    public UserController(UseCaseFetchAllUsers useCaseFetchAllUsers)
     {
-        return Ok();
+        _useCaseFetchAllUsers = useCaseFetchAllUsers;
+    }
+
+    [HttpGet]
+    public ActionResult<IEnumerable<DtoOutputUser>> FetchAll()
+    {
+        return Ok(_useCaseFetchAllUsers.Execute());
     }
 
 }
