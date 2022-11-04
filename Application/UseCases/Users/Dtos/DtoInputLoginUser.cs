@@ -8,5 +8,5 @@ public class DtoInputLoginUser
     [Required] public string Email { get; set; }
     
     [MinLength(6)]
-    [Required] public string password { get; set; }
+    [Required] public string Password { get; set; }
 }

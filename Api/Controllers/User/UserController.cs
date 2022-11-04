@@ -10,13 +10,16 @@ public class UserController: ControllerBase
 {
     private readonly UseCaseFetchAllUsers _useCaseFetchAllUsers;
     private readonly UseCaseCreateUser _useCaseCreateUser ;
+    private readonly UseCaseLoginUser _useCaseLoginUser;
 
     public UserController(
         UseCaseFetchAllUsers useCaseFetchAllUsers, 
-        UseCaseCreateUser useCaseCreateUser)
+        UseCaseCreateUser useCaseCreateUser,
+        UseCaseLoginUser useCaseLoginUser)
     {
         _useCaseFetchAllUsers = useCaseFetchAllUsers;
         _useCaseCreateUser = useCaseCreateUser;
+        _useCaseLoginUser = useCaseLoginUser;
     }
 
     [HttpGet]
@@ -26,7 +29,6 @@ public class UserController: ControllerBase
     }
 
     [HttpPost]
-    [Route("login")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public ActionResult<DtoOutputUser> Create(DtoInputCreateUser userDto)
@@ -39,9 +41,18 @@ public class UserController: ControllerBase
     }
 
     [HttpPost]
+    [Route("login")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public ActionResult<DtoOutputUser> Login(DtoInputLoginUser userDto)
     {
-        return Ok();
+        try
+        {
+            var user = _useCaseLoginUser.Execute(userDto);
+            return Ok(user);
+        }
+        catch (KeyNotFoundException e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
 }
