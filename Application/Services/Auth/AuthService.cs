@@ -1,4 +1,7 @@
-﻿namespace Application.Services.Auth;
+﻿using Azure;
+using Microsoft.AspNetCore.Http;
+
+namespace Application.Services.Auth;
 using BCrypt.Net;
 
 public class AuthService: IAuthService

@@ -1,5 +1,8 @@
-﻿using Application.UseCases.Users;
+﻿using Application;
+using Application.Services.Token;
+using Application.UseCases.Users;
 using Application.UseCases.Users.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.User;
@@ -8,6 +11,9 @@ namespace API.Controllers.User;
 [Route("api/v1/users")]
 public class UserController: ControllerBase
 {
+    private readonly ITokenService _tokenService;
+    private IConfiguration _config;  
+    
     private readonly UseCaseFetchAllUsers _useCaseFetchAllUsers;
     private readonly UseCaseCreateUser _useCaseCreateUser ;
     private readonly UseCaseLoginUser _useCaseLoginUser;
@@ -15,32 +21,42 @@ public class UserController: ControllerBase
     public UserController(
         UseCaseFetchAllUsers useCaseFetchAllUsers, 
         UseCaseCreateUser useCaseCreateUser,
-        UseCaseLoginUser useCaseLoginUser)
+        UseCaseLoginUser useCaseLoginUser,
+        ITokenService tokenService,
+        IConfiguration config)
     {
         _useCaseFetchAllUsers = useCaseFetchAllUsers;
         _useCaseCreateUser = useCaseCreateUser;
         _useCaseLoginUser = useCaseLoginUser;
+        _tokenService = tokenService;
+        _config = config;
     }
 
     [HttpGet]
+    [Authorize(Roles = "2")]
     public ActionResult<IEnumerable<DtoOutputUser>> FetchAll()
     {
         return Ok(_useCaseFetchAllUsers.Execute());
     }
 
     [HttpPost]
+    [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public ActionResult<DtoOutputUser> Create(DtoInputCreateUser userDto)
     {
         var user = _useCaseCreateUser.Execute(userDto);
+
         if (user != null)
+        {
             return Ok(user);
+        }
         
         return Unauthorized();
     }
 
     [HttpPost]
+    [AllowAnonymous]
     [Route("login")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public ActionResult<DtoOutputUser> Login(DtoInputLoginUser userDto)
@@ -48,6 +64,15 @@ public class UserController: ControllerBase
         try
         {
             var user = _useCaseLoginUser.Execute(userDto);
+            CookieOptions cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true
+            };
+            DtoTokenUser tokenUser = Mapper.GetInstance().Map<DtoTokenUser>(user);
+            string generatedToken = _tokenService.BuildToken(_config["Jwt:Key"], _config["Jwt:Issuer"], tokenUser);
+            Response.Cookies.Append("jwt", generatedToken, cookieOptions); 
+
             return Ok(user);
         }
         catch (KeyNotFoundException e)

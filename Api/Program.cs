@@ -1,6 +1,7 @@
 using System.Text;
 using API;
 using Application.Services.Auth;
+using Application.Services.Token;
 using Application.Services.User;
 using Application.UseCases.Users;
 using Infrastructure.Ef;
@@ -52,6 +53,7 @@ builder.Services.AddScoped<UseCaseLoginUser>();
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 var app = builder.Build();
 

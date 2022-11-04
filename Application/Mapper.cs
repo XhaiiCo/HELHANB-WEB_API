@@ -25,6 +25,7 @@ public class Mapper
             cfg.CreateMap<DtoInputCreateUser, DbUser>();
             cfg.CreateMap<DbUser, DtoOutputUser>();
             cfg.CreateMap<DbUser, User>();
+            cfg.CreateMap<DtoOutputUser, DtoTokenUser>();
         });
         return new AutoMapper.Mapper(config);
     }
