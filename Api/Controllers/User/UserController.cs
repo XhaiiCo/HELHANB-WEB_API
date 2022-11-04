@@ -26,6 +26,7 @@ public class UserController: ControllerBase
     }
 
     [HttpPost]
+    [Route("login")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public ActionResult<DtoOutputUser> Create(DtoInputCreateUser userDto)
@@ -35,5 +36,12 @@ public class UserController: ControllerBase
             return Ok(user);
         
         return Unauthorized();
+    }
+
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public ActionResult<DtoOutputUser> Login(DtoInputLoginUser userDto)
+    {
+        return Ok();
     }
 }

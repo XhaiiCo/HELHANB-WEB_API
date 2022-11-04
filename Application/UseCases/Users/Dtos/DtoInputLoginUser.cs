@@ -1,9 +1,8 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Application.UseCases.Users.Dtos;
 
-public class DtoInputCreateUser
+public class DtoInputLoginUser
 {
     [EmailAddress]
     [Required] public string Email { get; set; }
