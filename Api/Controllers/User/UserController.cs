@@ -11,6 +11,7 @@ namespace API.Controllers.User;
 [Route("api/v1/users")]
 public class UserController: ControllerBase
 {
+    public static IWebHostEnvironment _environment;
     private readonly ITokenService _tokenService;
     private IConfiguration _config;  
     
@@ -23,13 +24,15 @@ public class UserController: ControllerBase
         UseCaseCreateUser useCaseCreateUser,
         UseCaseLoginUser useCaseLoginUser,
         ITokenService tokenService,
-        IConfiguration config)
+        IConfiguration config,
+        IWebHostEnvironment environment)
     {
         _useCaseFetchAllUsers = useCaseFetchAllUsers;
         _useCaseCreateUser = useCaseCreateUser;
         _useCaseLoginUser = useCaseLoginUser;
         _tokenService = tokenService;
         _config = config;
+        _environment = environment;
     }
 
     [HttpGet]
@@ -55,6 +58,49 @@ public class UserController: ControllerBase
         return Unauthorized();
     }
 
+    [HttpPost]
+    [Route("profilPicture")]
+    public string Post(IFormFile profilePicture)
+    {
+        try
+        {
+            if (profilePicture.Length > 0)
+            {
+                var basePath = "\\Upload\\ProfilePicture\\";
+                
+                //Create a unique file name
+                var fileName = DateTime.Now.Ticks + "_" +  profilePicture.FileName;
+
+                //Check the file type
+                string[] fileTypes = { "image/jpeg", "image/png" };
+                if (!fileTypes.Contains(profilePicture.ContentType)) return "File type invalid";
+                
+                //Create the directory
+                if (!Directory.Exists(_environment.WebRootPath + basePath))
+                {
+                    Directory.CreateDirectory(_environment.WebRootPath + basePath);
+                }
+
+                using (FileStream fileStream = System.IO.File.Create(_environment.WebRootPath +
+                                                                     basePath +
+                                                                     fileName))
+                {
+                    profilePicture.CopyTo(fileStream);
+                    fileStream.Flush();
+                    return basePath + fileName;
+                }
+            }
+            else
+            {
+                return "Failed";
+            }
+        }
+        catch (Exception e)
+        {
+            return e.Message.ToString();
+        }
+    }
+    
     [HttpPost]
     [AllowAnonymous]
     [Route("login")]
