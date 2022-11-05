@@ -1,5 +1,6 @@
 ﻿using Application;
 using Application.Services.Token;
+using Application.Services.User;
 using Application.UseCases.Users;
 using Application.UseCases.Users.Dtos;
 using Microsoft.AspNetCore.Authorization;
@@ -13,11 +14,13 @@ public class UserController: ControllerBase
 {
     public static IWebHostEnvironment _environment;
     private readonly ITokenService _tokenService;
+    private readonly IUserService _userService;
     private IConfiguration _config;  
     
     private readonly UseCaseFetchAllUsers _useCaseFetchAllUsers;
     private readonly UseCaseCreateUser _useCaseCreateUser ;
     private readonly UseCaseLoginUser _useCaseLoginUser;
+    private readonly UseCaseUpdateUserProfilePicture _useCaseUpdateUserProfilePicture;
 
     public UserController(
         UseCaseFetchAllUsers useCaseFetchAllUsers, 
@@ -25,7 +28,9 @@ public class UserController: ControllerBase
         UseCaseLoginUser useCaseLoginUser,
         ITokenService tokenService,
         IConfiguration config,
-        IWebHostEnvironment environment)
+        IWebHostEnvironment environment,
+        IUserService userService,
+        UseCaseUpdateUserProfilePicture useCaseUpdateUserProfilePicture)
     {
         _useCaseFetchAllUsers = useCaseFetchAllUsers;
         _useCaseCreateUser = useCaseCreateUser;
@@ -33,6 +38,8 @@ public class UserController: ControllerBase
         _tokenService = tokenService;
         _config = config;
         _environment = environment;
+        _userService = userService;
+        _useCaseUpdateUserProfilePicture = useCaseUpdateUserProfilePicture;
     }
 
     [HttpGet]
@@ -62,7 +69,6 @@ public class UserController: ControllerBase
     [Route("{id}/profilPicture")]
     public string Post(int id, IFormFile profilePicture)
     {
-        
         try
         {
             if (profilePicture.Length > 0)
@@ -82,24 +88,28 @@ public class UserController: ControllerBase
                     Directory.CreateDirectory(_environment.WebRootPath + basePath);
                 }
 
-                using (FileStream fileStream = System.IO.File.Create(_environment.WebRootPath +
-                                                                     basePath +
-                                                                     fileName))
+                var dtoInputUpdateProfilePictureUser = new DtoInputUpdateProfilePictureUser
                 {
-                    profilePicture.CopyTo(fileStream);
-                    fileStream.Flush();
-                    return basePath + fileName;
-                }
-            }
-            else
-            {
-                return "Failed";
+                    Id = id,
+                    ProfilePicturePath = basePath + fileName
+                };
+                _useCaseUpdateUserProfilePicture.Execute(dtoInputUpdateProfilePictureUser);
+
+                using var fileStream = System.IO.File.Create(_environment.WebRootPath +
+                                                             basePath +
+                                                             fileName);
+                //Copy the file to the directory
+                profilePicture.CopyTo(fileStream);
+                fileStream.Flush();
+                return basePath + fileName;
             }
         }
         catch (Exception e)
         {
             return e.Message.ToString();
         }
+
+        return "Failed";
     }
     
     [HttpPost]

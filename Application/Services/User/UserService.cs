@@ -20,7 +20,7 @@ public class UserService: IUserService
 
     public User FetchById(int id)
     {
-        var dbUser = _userRepository.fetchById(id);
+        var dbUser = _userRepository.FetchById(id);
         return Mapper.GetInstance().Map<Domain.User>(dbUser);
     }
 }

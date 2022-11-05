@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Utils;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Ef.DbEntities;
 
@@ -35,7 +36,7 @@ public class UserRepository: IUserRepository
         return user;
     }
 
-    public DbUser fetchById(int id)
+    public DbUser FetchById(int id)
     {
         using var context = _contextProvider.NewContext();
         var user = context.Users.FirstOrDefault(user => user.Id == id);
@@ -43,6 +44,17 @@ public class UserRepository: IUserRepository
         if (user == null)
             throw new KeyNotFoundException($"User with id {id} has not been found");
 
+        return user;
+    }
+
+    public DbUser Update(DbUser user)
+    {
+        using var context = _contextProvider.NewContext();
+        
+        context.Attach(user);
+        context.Entry(user).State = EntityState.Modified;
+        context.SaveChanges();
+        
         return user;
     }
 }

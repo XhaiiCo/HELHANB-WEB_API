@@ -8,5 +8,6 @@ public interface IUserRepository
     DbUser Create(DbUser user) ;
 
     DbUser FetchByEmail(string email);
-    DbUser fetchById(int id);
+    DbUser FetchById(int id);
+    DbUser Update(DbUser user);
 }
