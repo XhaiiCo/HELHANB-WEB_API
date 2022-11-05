@@ -66,7 +66,7 @@ public class UserController: ControllerBase
     }
 
     [HttpPost]
-    [Route("{id}/profilPicture")]
+    [Route("{id}/profilePicture")]
     public string Post(int id, IFormFile profilePicture)
     {
         try
