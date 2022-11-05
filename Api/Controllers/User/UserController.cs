@@ -51,6 +51,7 @@ public class UserController: ControllerBase
 
     [HttpPost]
     [AllowAnonymous]
+    [Route("registration")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public ActionResult<DtoOutputUser> Create(DtoInputCreateUser userDto)
@@ -59,6 +60,16 @@ public class UserController: ControllerBase
 
         if (user != null)
         {
+            //Login the user
+            CookieOptions cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true
+            };
+            DtoTokenUser tokenUser = Mapper.GetInstance().Map<DtoTokenUser>(user);
+            string generatedToken = _tokenService.BuildToken(_config["Jwt:Key"], _config["Jwt:Issuer"], tokenUser);
+            Response.Cookies.Append("jwt", generatedToken, cookieOptions); 
+            
             return Ok(user);
         }
         
