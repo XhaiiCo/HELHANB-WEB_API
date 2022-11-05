@@ -59,21 +59,22 @@ public class UserController: ControllerBase
     }
 
     [HttpPost]
-    [Route("profilPicture")]
-    public string Post(IFormFile profilePicture)
+    [Route("{id}/profilPicture")]
+    public string Post(int id, IFormFile profilePicture)
     {
+        
         try
         {
             if (profilePicture.Length > 0)
             {
                 var basePath = "\\Upload\\ProfilePicture\\";
                 
-                //Create a unique file name
-                var fileName = DateTime.Now.Ticks + "_" +  profilePicture.FileName;
-
                 //Check the file type
                 string[] fileTypes = { "image/jpeg", "image/png" };
                 if (!fileTypes.Contains(profilePicture.ContentType)) return "File type invalid";
+                
+                //Create a unique file name
+                var fileName = id + "_" + DateTime.Now.Ticks + "_" +  profilePicture.FileName;
                 
                 //Create the directory
                 if (!Directory.Exists(_environment.WebRootPath + basePath))

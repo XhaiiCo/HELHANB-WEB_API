@@ -34,4 +34,15 @@ public class UserRepository: IUserRepository
 
         return user;
     }
+
+    public DbUser fetchById(int id)
+    {
+        using var context = _contextProvider.NewContext();
+        var user = context.Users.FirstOrDefault(user => user.Id == id);
+
+        if (user == null)
+            throw new KeyNotFoundException($"User with id {id} has not been found");
+
+        return user;
+    }
 }
