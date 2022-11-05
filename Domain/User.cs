@@ -11,4 +11,5 @@ public class User
 //    public DateOnly BirthDate { get; set; }
     public int RoleId { get; set; }
 
+    public string? ProfilePicturePath { get; set; }
 }

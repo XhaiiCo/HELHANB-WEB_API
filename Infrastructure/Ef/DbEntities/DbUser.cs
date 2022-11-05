@@ -20,5 +20,6 @@ public class DbUser
     
     public int RoleId { get; set; }
     
+    public string? ProfilePicturePath { get; set; }
     
 }
