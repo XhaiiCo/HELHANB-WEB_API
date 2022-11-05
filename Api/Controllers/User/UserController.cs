@@ -78,7 +78,9 @@ public class UserController: ControllerBase
 
     [HttpPost]
     [Route("{id}/profilePicture")]
-    public string Post(int id, IFormFile profilePicture)
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public ActionResult<DtoOutputUser> UpdateProfilePicture(int id, IFormFile profilePicture)
     {
         try
         {
@@ -88,7 +90,7 @@ public class UserController: ControllerBase
                 
                 //Check the file type
                 string[] fileTypes = { "image/jpeg", "image/png" };
-                if (!fileTypes.Contains(profilePicture.ContentType)) return "File type invalid";
+                if (!fileTypes.Contains(profilePicture.ContentType)) return Unauthorized("File type invalid");
                 
                 //Create a unique file name
                 var fileName = id + "_" + DateTime.Now.Ticks + "_" +  profilePicture.FileName;
@@ -104,7 +106,7 @@ public class UserController: ControllerBase
                     Id = id,
                     ProfilePicturePath = basePath + fileName
                 };
-                _useCaseUpdateUserProfilePicture.Execute(dtoInputUpdateProfilePictureUser);
+                var user = _useCaseUpdateUserProfilePicture.Execute(dtoInputUpdateProfilePictureUser);
 
                 using var fileStream = System.IO.File.Create(_environment.WebRootPath +
                                                              basePath +
@@ -112,15 +114,15 @@ public class UserController: ControllerBase
                 //Copy the file to the directory
                 profilePicture.CopyTo(fileStream);
                 fileStream.Flush();
-                return basePath + fileName;
+                return Ok(user);
             }
         }
         catch (Exception e)
         {
-            return e.Message.ToString();
+            return Unauthorized(e.Message.ToString());
         }
 
-        return "Failed";
+        return Unauthorized("Failed");
     }
     
     [HttpPost]
