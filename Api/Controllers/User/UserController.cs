@@ -105,7 +105,7 @@ public class UserController : ControllerBase
                 if (!fileTypes.Contains(profilePicture.ContentType)) return Unauthorized("File type invalid");
 
                 //Create a unique file name
-                var fileName = id + "_" + DateTime.Now.Ticks + "_" + profilePicture.FileName;
+                var fileName = id + "_" + DateTime.Now.Ticks + "_" + profilePicture.FileName.Replace(" ", "");
 
                 //Create the directory
                 if (!Directory.Exists(_environment.WebRootPath + basePath))
