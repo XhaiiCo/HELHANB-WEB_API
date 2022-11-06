@@ -10,20 +10,20 @@ namespace API.Controllers.User;
 
 [ApiController]
 [Route("api/v1/users")]
-public class UserController: ControllerBase
+public class UserController : ControllerBase
 {
     public static IWebHostEnvironment _environment;
     private readonly ITokenService _tokenService;
     private readonly IUserService _userService;
-    private IConfiguration _config;  
-    
+    private IConfiguration _config;
+
     private readonly UseCaseFetchAllUsers _useCaseFetchAllUsers;
-    private readonly UseCaseCreateUser _useCaseCreateUser ;
+    private readonly UseCaseCreateUser _useCaseCreateUser;
     private readonly UseCaseLoginUser _useCaseLoginUser;
     private readonly UseCaseUpdateUserProfilePicture _useCaseUpdateUserProfilePicture;
 
     public UserController(
-        UseCaseFetchAllUsers useCaseFetchAllUsers, 
+        UseCaseFetchAllUsers useCaseFetchAllUsers,
         UseCaseCreateUser useCaseCreateUser,
         UseCaseLoginUser useCaseLoginUser,
         ITokenService tokenService,
@@ -42,8 +42,25 @@ public class UserController: ControllerBase
         _useCaseUpdateUserProfilePicture = useCaseUpdateUserProfilePicture;
     }
 
+    private void AppendCookies(string token)
+    {
+        //Create the cookie options
+        CookieOptions cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true
+        };
+
+        Response.Cookies.Append("jwt", token, cookieOptions);
+    }
+
+    private string GenerateToken(DtoTokenUser tokenUser)
+    {
+        return _tokenService.BuildToken(_config["Jwt:Key"], _config["Jwt:Issuer"], tokenUser);
+    }
+
     [HttpGet]
-    [Authorize(Roles = "2")]
+//    [Authorize(Roles = "2")]
     public ActionResult<IEnumerable<DtoOutputUser>> FetchAll()
     {
         return Ok(_useCaseFetchAllUsers.Execute());
@@ -61,18 +78,13 @@ public class UserController: ControllerBase
         if (user != null)
         {
             //Login the user
-            CookieOptions cookieOptions = new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = true
-            };
             DtoTokenUser tokenUser = Mapper.GetInstance().Map<DtoTokenUser>(user);
-            string generatedToken = _tokenService.BuildToken(_config["Jwt:Key"], _config["Jwt:Issuer"], tokenUser);
-            Response.Cookies.Append("jwt", generatedToken, cookieOptions); 
-            
+            var generatedToken = this.GenerateToken(tokenUser) ;
+            this.AppendCookies(generatedToken);
+
             return Ok(user);
         }
-        
+
         return Unauthorized();
     }
 
@@ -87,14 +99,14 @@ public class UserController: ControllerBase
             if (profilePicture.Length > 0)
             {
                 var basePath = "\\Upload\\ProfilePicture\\";
-                
+
                 //Check the file type
                 string[] fileTypes = { "image/jpeg", "image/png" };
                 if (!fileTypes.Contains(profilePicture.ContentType)) return Unauthorized("File type invalid");
-                
+
                 //Create a unique file name
-                var fileName = id + "_" + DateTime.Now.Ticks + "_" +  profilePicture.FileName;
-                
+                var fileName = id + "_" + DateTime.Now.Ticks + "_" + profilePicture.FileName;
+
                 //Create the directory
                 if (!Directory.Exists(_environment.WebRootPath + basePath))
                 {
@@ -124,7 +136,7 @@ public class UserController: ControllerBase
 
         return Unauthorized("Failed");
     }
-    
+
     [HttpPost]
     [AllowAnonymous]
     [Route("login")]
@@ -134,14 +146,11 @@ public class UserController: ControllerBase
         try
         {
             var user = _useCaseLoginUser.Execute(userDto);
-            CookieOptions cookieOptions = new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = true
-            };
+            
+            //Login the user
             DtoTokenUser tokenUser = Mapper.GetInstance().Map<DtoTokenUser>(user);
-            string generatedToken = _tokenService.BuildToken(_config["Jwt:Key"], _config["Jwt:Issuer"], tokenUser);
-            Response.Cookies.Append("jwt", generatedToken, cookieOptions); 
+            var generatedToken = this.GenerateToken(tokenUser) ;
+            this.AppendCookies(generatedToken);
 
             return Ok(user);
         }
