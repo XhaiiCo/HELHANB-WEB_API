@@ -112,6 +112,12 @@ public class UserController : ControllerBase
                 {
                     Directory.CreateDirectory(_environment.WebRootPath + basePath);
                 }
+                
+                var currentUser = _userService.FetchById(id);
+                if (currentUser.ProfilePicturePath != null)
+                {
+                   //TODO: remove the current user profile picture 
+                }
 
                 var dtoInputUpdateProfilePictureUser = new DtoInputUpdateProfilePictureUser
                 {
