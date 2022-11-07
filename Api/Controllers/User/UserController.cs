@@ -165,4 +165,11 @@ public class UserController : ControllerBase
             return Unauthorized(e.Message);
         }
     }
+
+    [HttpGet]
+    [Route("disconnect")]
+    public void Disconnect()
+    {
+       Response.Cookies.Delete("jwt");
+    }
 }
