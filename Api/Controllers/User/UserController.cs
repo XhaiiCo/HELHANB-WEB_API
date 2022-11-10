@@ -88,20 +88,27 @@ public class UserController : ControllerBase
     [Route("registration")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public ActionResult<DtoOutputUser> Create(DtoInputCreateUser userDto)
     {
-        var user = _useCaseCreateUser.Execute(userDto);
-
-        if (user != null)
+        try
         {
-            //Login the user
-            DtoTokenUser tokenUser = Mapper.GetInstance().Map<DtoTokenUser>(user);
-            var generatedToken = this.GenerateToken(tokenUser) ;
-            this.AppendCookies(generatedToken);
+            var user = _useCaseCreateUser.Execute(userDto);
+            if (user != null)
+            {
+                //Login the user
+                DtoTokenUser tokenUser = Mapper.GetInstance().Map<DtoTokenUser>(user);
+                var generatedToken = this.GenerateToken(tokenUser);
+                this.AppendCookies(generatedToken);
 
-            return Ok(user);
+                return Ok(user);
+            }
         }
-
+        catch (Exception e)
+        {
+            return Conflict(e.Message);
+        }
+        
         return Unauthorized();
     }
 
@@ -114,7 +121,7 @@ public class UserController : ControllerBase
     {
         //Check that this is the id of the logged in user
         if ("" + id != User.Identity?.Name) return Unauthorized();
-        
+
         try
         {
             if (profilePicture.Length > 0)
@@ -133,11 +140,11 @@ public class UserController : ControllerBase
                 {
                     Directory.CreateDirectory(_environment.WebRootPath + basePath);
                 }
-                
+
                 var currentUser = _userService.FetchById(id);
                 if (currentUser.ProfilePicturePath != null)
                 {
-                   //TODO: remove the current user profile picture 
+                    //TODO: remove the current user profile picture 
                 }
 
                 var dtoInputUpdateProfilePictureUser = new DtoInputUpdateProfilePictureUser
@@ -173,10 +180,10 @@ public class UserController : ControllerBase
         try
         {
             var user = _useCaseLoginUser.Execute(userDto);
-            
+
             //Login the user
             DtoTokenUser tokenUser = Mapper.GetInstance().Map<DtoTokenUser>(user);
-            var generatedToken = this.GenerateToken(tokenUser) ;
+            var generatedToken = this.GenerateToken(tokenUser);
             this.AppendCookies(generatedToken);
 
             return Ok(user);
@@ -192,6 +199,6 @@ public class UserController : ControllerBase
     [Route("disconnect")]
     public void Disconnect()
     {
-       Response.Cookies.Delete("jwt");
+        Response.Cookies.Delete("jwt");
     }
 }
