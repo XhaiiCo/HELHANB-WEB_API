@@ -66,6 +66,14 @@ public class UserController : ControllerBase
         return Ok(_useCaseFetchAllUsers.Execute());
     }
 
+    [HttpGet]
+    [Route("connected")]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public ActionResult<DtoOutputUser> isConnected()
+    {
+        return Unauthorized();
+    }
+
     [HttpPost]
     [AllowAnonymous]
     [Route("registration")]
@@ -94,6 +102,8 @@ public class UserController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public ActionResult<DtoOutputUser> UpdateProfilePicture(int id, IFormFile profilePicture)
     {
+        if ("" + id != User.Identity?.Name) return Unauthorized();
+        
         try
         {
             if (profilePicture.Length > 0)
