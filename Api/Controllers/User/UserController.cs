@@ -5,6 +5,7 @@ using Application.UseCases.Users;
 using Application.UseCases.Users.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static System.Int32;
 
 namespace API.Controllers.User;
 
@@ -21,6 +22,7 @@ public class UserController : ControllerBase
     private readonly UseCaseCreateUser _useCaseCreateUser;
     private readonly UseCaseLoginUser _useCaseLoginUser;
     private readonly UseCaseUpdateUserProfilePicture _useCaseUpdateUserProfilePicture;
+    private readonly UseCaseFetchUserById _useCaseFetchUserById;
 
     public UserController(
         UseCaseFetchAllUsers useCaseFetchAllUsers,
@@ -30,7 +32,8 @@ public class UserController : ControllerBase
         IConfiguration config,
         IWebHostEnvironment environment,
         IUserService userService,
-        UseCaseUpdateUserProfilePicture useCaseUpdateUserProfilePicture)
+        UseCaseUpdateUserProfilePicture useCaseUpdateUserProfilePicture,
+        UseCaseFetchUserById useCaseFetchUserById)
     {
         _useCaseFetchAllUsers = useCaseFetchAllUsers;
         _useCaseCreateUser = useCaseCreateUser;
@@ -40,6 +43,7 @@ public class UserController : ControllerBase
         _environment = environment;
         _userService = userService;
         _useCaseUpdateUserProfilePicture = useCaseUpdateUserProfilePicture;
+        _useCaseFetchUserById = useCaseFetchUserById;
     }
 
     private void AppendCookies(string token)
@@ -67,11 +71,16 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize]
     [Route("connected")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public ActionResult<DtoOutputUser> isConnected()
+    public ActionResult<DtoOutputUser> IsConnected()
     {
-        return Unauthorized();
+        var userId = User.Identity?.Name;
+        if (userId == null) return Unauthorized();
+
+        return Ok(_useCaseFetchUserById.Execute(Parse(userId)));
     }
 
     [HttpPost]
@@ -97,11 +106,13 @@ public class UserController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     [Route("{id}/profilePicture")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public ActionResult<DtoOutputUser> UpdateProfilePicture(int id, IFormFile profilePicture)
     {
+        //Check that this is the id of the logged in user
         if ("" + id != User.Identity?.Name) return Unauthorized();
         
         try
@@ -177,6 +188,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize]
     [Route("disconnect")]
     public void Disconnect()
     {
