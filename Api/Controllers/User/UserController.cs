@@ -25,6 +25,7 @@ public class UserController : ControllerBase
     private readonly UseCaseLoginUser _useCaseLoginUser;
     private readonly UseCaseUpdateUserProfilePicture _useCaseUpdateUserProfilePicture;
     private readonly UseCaseFetchUserById _useCaseFetchUserById;
+    private readonly UseCaseDeleteUserById _useCaseDeleteUserById;
 
     public UserController(
         UseCaseFetchAllUsers useCaseFetchAllUsers,
@@ -36,7 +37,8 @@ public class UserController : ControllerBase
         IUserService userService,
         UseCaseUpdateUserProfilePicture useCaseUpdateUserProfilePicture,
         UseCaseFetchUserById useCaseFetchUserById,
-        IPictureService pictureService)
+        IPictureService pictureService, UseCaseDeleteUserById
+        useCaseDeleteUserById)
     {
         _useCaseFetchAllUsers = useCaseFetchAllUsers;
         _useCaseCreateUser = useCaseCreateUser;
@@ -48,6 +50,7 @@ public class UserController : ControllerBase
         _useCaseUpdateUserProfilePicture = useCaseUpdateUserProfilePicture;
         _useCaseFetchUserById = useCaseFetchUserById;
         _pictureService = pictureService;
+        _useCaseDeleteUserById = useCaseDeleteUserById;
     }
 
     private void AppendCookies(string token)
@@ -69,9 +72,29 @@ public class UserController : ControllerBase
 
     [HttpGet]
     [Authorize(Roles = "2")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public ActionResult<IEnumerable<DtoOutputUser>> FetchAll()
     {
         return Ok(_useCaseFetchAllUsers.Execute());
+    }
+    
+    [HttpDelete]
+    [Authorize(Roles = "2")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    public ActionResult<DtoOutputUser> Delete(int id)
+    {
+        try
+        {
+            var user = _useCaseDeleteUserById.Execute(id) ;
+            return Ok(user);
+        }
+        catch (KeyNotFoundException e)
+        {
+            return Conflict(e.Message);
+        }
     }
 
     [HttpGet]

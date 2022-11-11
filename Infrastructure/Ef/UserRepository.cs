@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Ef.DbEntities;
 
-public class UserRepository: IUserRepository
+public class UserRepository : IUserRepository
 {
     private readonly HelhanbContextProvider _contextProvider;
 
@@ -14,8 +14,8 @@ public class UserRepository: IUserRepository
 
     public IEnumerable<DbUser> FetchAll()
     {
-        using var context = _contextProvider.NewContext() ;
-        return context.Users.ToList() ;
+        using var context = _contextProvider.NewContext();
+        return context.Users.ToList();
     }
 
     public DbUser Create(DbUser user)
@@ -50,11 +50,21 @@ public class UserRepository: IUserRepository
     public DbUser Update(DbUser user)
     {
         using var context = _contextProvider.NewContext();
-        
+
         context.Attach(user);
         context.Entry(user).State = EntityState.Modified;
         context.SaveChanges();
-        
+
+        return user;
+    }
+
+    public DbUser Delete(DbUser user)
+    {
+        using var context = _contextProvider.NewContext();
+
+        context.Users.Remove(user);
+        context.SaveChanges();
+
         return user;
     }
 }

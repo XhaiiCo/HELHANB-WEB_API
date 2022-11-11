@@ -10,4 +10,6 @@ public interface IUserRepository
     DbUser FetchByEmail(string email);
     DbUser FetchById(int id);
     DbUser Update(DbUser user);
+
+    DbUser Delete(DbUser user);
 }
