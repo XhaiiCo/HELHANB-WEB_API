@@ -1,4 +1,5 @@
-﻿using Application;
+﻿using API.Utils.Picture;
+using Application;
 using Application.Services.Token;
 using Application.Services.User;
 using Application.UseCases.Users;
@@ -17,6 +18,7 @@ public class UserController : ControllerBase
     private readonly ITokenService _tokenService;
     private readonly IUserService _userService;
     private IConfiguration _config;
+    private IPictureService _pictureService;
 
     private readonly UseCaseFetchAllUsers _useCaseFetchAllUsers;
     private readonly UseCaseCreateUser _useCaseCreateUser;
@@ -33,7 +35,8 @@ public class UserController : ControllerBase
         IWebHostEnvironment environment,
         IUserService userService,
         UseCaseUpdateUserProfilePicture useCaseUpdateUserProfilePicture,
-        UseCaseFetchUserById useCaseFetchUserById)
+        UseCaseFetchUserById useCaseFetchUserById,
+        IPictureService pictureService)
     {
         _useCaseFetchAllUsers = useCaseFetchAllUsers;
         _useCaseCreateUser = useCaseCreateUser;
@@ -44,6 +47,7 @@ public class UserController : ControllerBase
         _userService = userService;
         _useCaseUpdateUserProfilePicture = useCaseUpdateUserProfilePicture;
         _useCaseFetchUserById = useCaseFetchUserById;
+        _pictureService = pictureService;
     }
 
     private void AppendCookies(string token)
@@ -129,17 +133,13 @@ public class UserController : ControllerBase
                 var basePath = "\\Upload\\ProfilePicture\\";
 
                 //Check the file type
-                string[] fileTypes = { "image/jpeg", "image/png" };
-                if (!fileTypes.Contains(profilePicture.ContentType)) return Unauthorized("File type invalid");
+                if (!_pictureService.ValidPictureType(profilePicture.ContentType))
+                {
+                    return Unauthorized("Extension d'image invalide acceptés: jpeg, png");
+                }
 
                 //Create a unique file name
-                var fileName = id + "_" + DateTime.Now.Ticks + "_" + profilePicture.FileName.Replace(" ", "");
-
-                //Create the directory
-                if (!Directory.Exists(_environment.WebRootPath + basePath))
-                {
-                    Directory.CreateDirectory(_environment.WebRootPath + basePath);
-                }
+                var fileName = _pictureService.GenerateUniqueFileName(id, profilePicture.FileName);
 
                 var currentUser = _userService.FetchById(id);
                 if (currentUser.ProfilePicturePath != null)
@@ -154,12 +154,7 @@ public class UserController : ControllerBase
                 };
                 var user = _useCaseUpdateUserProfilePicture.Execute(dtoInputUpdateProfilePictureUser);
 
-                using var fileStream = System.IO.File.Create(_environment.WebRootPath +
-                                                             basePath +
-                                                             fileName);
-                //Copy the file to the directory
-                profilePicture.CopyTo(fileStream);
-                fileStream.Flush();
+                this._pictureService.UploadPicture(basePath, fileName, profilePicture) ;
                 return Ok(user);
             }
         }

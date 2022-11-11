@@ -1,5 +1,6 @@
 using System.Text;
 using API;
+using API.Utils.Picture;
 using Application.Services.Auth;
 using Application.Services.Token;
 using Application.Services.User;
@@ -63,9 +64,10 @@ builder.Services.AddScoped<UseCaseLoginUser>();
 builder.Services.AddScoped<UseCaseUpdateUserProfilePicture>();
 builder.Services.AddScoped<UseCaseFetchUserById>();
 
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IUserService, UserService>() ;
+builder.Services.AddScoped<IAuthService, AuthService>() ;
+builder.Services.AddScoped<ITokenService, TokenService>() ;
+builder.Services.AddScoped<IPictureService, PictureService>() ;
 
 var app = builder.Build();
 
