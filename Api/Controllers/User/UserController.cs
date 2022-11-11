@@ -80,6 +80,7 @@ public class UserController : ControllerBase
     }
     
     [HttpDelete]
+    [Route("{id}")]
     [Authorize(Roles = "2")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
