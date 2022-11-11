@@ -1,11 +1,10 @@
 ﻿using Application.UseCases.Users.Dtos;
 using Application.UseCases.Utils;
 using Infrastructure.Ef;
-using Microsoft.VisualBasic.CompilerServices;
 
 namespace Application.UseCases.Users;
 
-public class UseCaseFetchUserById: IUseCaseWriter<DtoOutputUser, int>
+public class UseCaseFetchUserById: IUseCaseParameterizedQuery<DtoOutputUser, int>
 {
     private readonly IUserRepository _userRepository;
 

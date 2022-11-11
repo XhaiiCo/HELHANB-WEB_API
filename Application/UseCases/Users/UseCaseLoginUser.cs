@@ -6,7 +6,7 @@ using Domain;
 
 namespace Application.UseCases.Users;
 
-public class UseCaseLoginUser: IUseCaseWriter<DtoOutputUser, DtoInputLoginUser>
+public class UseCaseLoginUser: IUseCaseParameterizedQuery<DtoOutputUser, DtoInputLoginUser>
 {
     private readonly IUserService _userService;
     private readonly IAuthService _authService;
