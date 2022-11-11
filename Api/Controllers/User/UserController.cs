@@ -68,7 +68,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
-//    [Authorize(Roles = "2")]
+    [Authorize(Roles = "2")]
     public ActionResult<IEnumerable<DtoOutputUser>> FetchAll()
     {
         return Ok(_useCaseFetchAllUsers.Execute());
