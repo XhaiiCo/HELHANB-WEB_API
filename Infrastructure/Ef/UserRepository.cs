@@ -31,7 +31,7 @@ public class UserRepository: IUserRepository
         using var context = _contextProvider.NewContext();
         var user = context.Users.FirstOrDefault(user => user.Email == email);
 
-        if (user == null) throw new KeyNotFoundException($"User with email {email} has not been found");
+        if (user == null) throw new KeyNotFoundException($"L'adresse email n'a pas été trouvée");
 
         return user;
     }

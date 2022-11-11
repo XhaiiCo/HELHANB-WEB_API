@@ -27,7 +27,7 @@ public class UseCaseLoginUser: IUseCaseWriter<DtoOutputUser, DtoInputLoginUser>
             return dtoUser;
         }
 
-        throw new KeyNotFoundException($"Incorrect password");
+        throw new KeyNotFoundException($"Mot de passe incorrect");
 
     }
 }

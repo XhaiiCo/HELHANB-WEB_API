@@ -26,7 +26,7 @@ public class UseCaseCreateUser: IUseCaseWriter<DtoOutputUser?, DtoInputCreateUse
         try
         {
             _userService.FetchByEmail(input.Email) ;
-            throw new Exception("Cet email est déjà utilisé");
+            throw new Exception("Cette adresse email est déjà utilisée");
         }
         catch (KeyNotFoundException e)
         {
