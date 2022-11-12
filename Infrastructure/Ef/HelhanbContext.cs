@@ -25,8 +25,8 @@ public class HelhanbContext : DbContext
     
     public DbSet<DbReservationStatus> ReservationStatus { get; set; }
     
-    public DbSet<DbRole> Roles { get; set; }
 */
+    public DbSet<DbRole> Roles { get; set; }
     public DbSet<DbUser> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -54,13 +54,6 @@ public class HelhanbContext : DbContext
             entity.HasKey(rs => rs.Id);
             entity.Property(rs => rs.Id).HasColumnName("reservation_status_id");
             entity.Property(rs => rs.StatusName).HasColumnName("status_name");
-        });
-        modelBuilder.Entity<DbRole>(entity =>
-        {
-            entity.ToTable("roles");
-            entity.HasKey(r => r.Id);
-            entity.Property(r => r.Id).HasColumnName("role_id");
-            entity.Property(r => r.Name).HasColumnName("name");
         });
 
         modelBuilder.Entity<DbMessage>(entity =>
@@ -114,6 +107,15 @@ public class HelhanbContext : DbContext
             entity.Property(r => r.Renter).HasColumnName("renter");
         });
         */
+        
+        modelBuilder.Entity<DbRole>(entity =>
+        {
+            entity.ToTable("roles");
+            entity.HasKey(r => r.Id);
+            entity.Property(r => r.Id).HasColumnName("role_id");
+            entity.Property(r => r.Name).HasColumnName("name");
+        });
+        
         modelBuilder.Entity<DbUser>(entity =>
         {
             entity.ToTable("users");
