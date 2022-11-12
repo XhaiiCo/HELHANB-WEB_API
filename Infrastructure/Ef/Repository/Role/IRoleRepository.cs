@@ -1,6 +1,8 @@
-﻿namespace Infrastructure.Ef.Repository;
+﻿using Infrastructure.Ef.DbEntities;
+
+namespace Infrastructure.Ef.Repository;
 
 public interface IRoleRepository
 {
-    
+    public IEnumerable<DbRole> FetchAll();
 }
