@@ -16,7 +16,6 @@ public class DbUser
     
     public string Password { get; set; }
     
-    //public DateOnly BirthDate { get; set; }
     
     public int RoleId { get; set; }
     

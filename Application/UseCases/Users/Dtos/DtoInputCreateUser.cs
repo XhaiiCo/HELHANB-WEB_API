@@ -11,7 +11,6 @@ public class DtoInputCreateUser
     
     [EmailAddress]
     [Required] public string Email { get; set; }
-    //[Required] public DateOnly BirthDate { get; set; }
     [MinLength(6)]
     [Required] public string password { get; set; }
 }
