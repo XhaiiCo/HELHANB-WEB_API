@@ -71,7 +71,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Roles = "2")]
+    [Authorize(Roles = "3")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public ActionResult<IEnumerable<DtoOutputUser>> FetchAll()
@@ -81,7 +81,7 @@ public class UserController : ControllerBase
     
     [HttpDelete]
     [Route("{id}")]
-    [Authorize(Roles = "2")]
+    [Authorize(Roles = "3")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
