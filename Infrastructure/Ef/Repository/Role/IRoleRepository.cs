@@ -5,4 +5,5 @@ namespace Infrastructure.Ef.Repository;
 public interface IRoleRepository
 {
     public IEnumerable<DbRole> FetchAll();
+    public DbRole FetchById(int id);
 }

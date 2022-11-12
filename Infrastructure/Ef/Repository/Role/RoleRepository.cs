@@ -18,4 +18,16 @@ public class RoleRepository: IRoleRepository
 
         return context.Roles.ToList();
     }
+
+    public DbRole FetchById(int id)
+    {
+        using var context = _contextProvider.NewContext();
+
+        var role = context.Roles.FirstOrDefault(role => role.Id == id);
+
+        if (role == null)
+            throw new KeyNotFoundException($"Le role avec l'id: {id} n'a pas été trouvé");
+        
+        return role ;
+    }
 }
