@@ -1,4 +1,5 @@
 ﻿using System.Data.Common;
+using Application.UseCases.Roles.Dtos;
 using Application.UseCases.Users.Dtos;
 using AutoMapper;
 using Domain;
@@ -27,6 +28,9 @@ public class Mapper
             cfg.CreateMap<DbUser, User>();
             cfg.CreateMap<DtoOutputUser, DtoTokenUser>();
             cfg.CreateMap<User, DbUser>();
+            
+            //Role
+            cfg.CreateMap<DbRole, DtoOutputRole>();
         });
         return new AutoMapper.Mapper(config);
     }
