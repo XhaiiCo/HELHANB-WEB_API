@@ -25,6 +25,6 @@ public class UseCaseDeleteUserById: IUseCaseParameterizedQuery<DtoOutputUser, in
 
         _userRepository.Delete(dbUser);
 
-        return Mapper.GetInstance().Map<DtoOutputUser>(dbUser) ;
+        return Mapper.GetInstance().Map<DtoOutputUser>(user) ;
     }
 }

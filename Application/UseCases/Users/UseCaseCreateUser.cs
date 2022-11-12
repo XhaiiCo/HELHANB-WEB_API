@@ -4,6 +4,7 @@ using Application.UseCases.Users.Dtos;
 using Application.UseCases.Utils;
 using Infrastructure.Ef;
 using Infrastructure.Ef.DbEntities;
+using Infrastructure.Ef.Repository;
 
 namespace Application.UseCases.Users;
 
@@ -12,12 +13,14 @@ public class UseCaseCreateUser: IUseCaseWriter<DtoOutputUser?, DtoInputCreateUse
     private readonly IUserRepository _userRepository;
     private readonly IUserService _userService;
     private readonly IAuthService _authService;
+    private readonly IRoleRepository _roleRepository;
 
-    public UseCaseCreateUser(IUserRepository userRepository, IUserService userService, IAuthService authService)
+    public UseCaseCreateUser(IUserRepository userRepository, IUserService userService, IAuthService authService, IRoleRepository roleRepository)
     {
         _userRepository = userRepository;
         _userService = userService;
         _authService = authService;
+        _roleRepository = roleRepository;
     }
 
     public DtoOutputUser? Execute(DtoInputCreateUser input)
@@ -36,7 +39,10 @@ public class UseCaseCreateUser: IUseCaseWriter<DtoOutputUser?, DtoInputCreateUse
             //hash password
             user.Password = _authService.HashPassword(user.Password);
             var userInDb = _userRepository.Create(user);
-            return Mapper.GetInstance().Map<DtoOutputUser>(userInDb);
+            var dtoUser =  Mapper.GetInstance().Map<DtoOutputUser>(userInDb);
+            dtoUser.RoleName = _roleRepository.FetchById(dtoUser.RoleId).Name;
+            
+            return dtoUser;
         }
     }
 }
