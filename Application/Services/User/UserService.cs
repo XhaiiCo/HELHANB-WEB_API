@@ -20,36 +20,35 @@ public class UserService : IUserService
     public Domain.User FetchByEmail(string email)
     {
         var dbUser = _userRepository.FetchByEmail(email);
-        var user = Mapper.GetInstance().Map<Domain.User>(dbUser);
-        
-        user.RoleName = _roleRepository.FetchById(user.RoleId).Name;
-        return user;
+
+        return MapToUser(dbUser);
     }
 
     public User FetchById(int id)
     {
         var dbUser = _userRepository.FetchById(id);
-        var user =  Mapper.GetInstance().Map<Domain.User>(dbUser);
 
-        user.RoleName = _roleRepository.FetchById(user.RoleId).Name;
-        return user ;
+        return MapToUser(dbUser);
     }
 
     public IEnumerable<User> FetchAll()
     {
         var dbUsers = _userRepository.FetchAll();
-        var users = dbUsers.Select(dbUser => new User
-        {
-            Id = dbUser.Id,
-            FirstName = dbUser.FirstName,
-            LastName = dbUser.LastName,
-            AccountCreation = dbUser.AccountCreation,
-            Email = dbUser.Email,
-            RoleId = dbUser.RoleId,
-            RoleName = _roleRepository.FetchById(dbUser.RoleId).Name,
-            ProfilePicturePath = dbUser.ProfilePicturePath
-        });
+        var users = dbUsers.Select(MapToUser);
 
         return users;
+    }
+
+    public User MapToUser(DbUser dbUser)
+    {
+        var user = Mapper.GetInstance().Map<User>(dbUser);
+
+        user.Role = new Role
+        {
+            Id = dbUser.RoleId,
+            Name = _roleRepository.FetchById(dbUser.RoleId).Name
+        };
+
+        return user;
     }
 }
