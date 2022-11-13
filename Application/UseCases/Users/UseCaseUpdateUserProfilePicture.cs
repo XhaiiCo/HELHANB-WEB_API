@@ -23,10 +23,9 @@ public class UseCaseUpdateUserProfilePicture: IUseCaseWriter<DtoOutputUser, DtoI
         user.ProfilePicturePath = input.ProfilePicturePath;
 
         var dbUser = Mapper.GetInstance().Map<DbUser>(user);
-        var updatedUser = _userRepository.Update(dbUser);
+        var updatedUser = _userService.MapToUser(_userRepository.Update(dbUser)) ;
 
         var dtoUser =  Mapper.GetInstance().Map<DtoOutputUser>(updatedUser);
-        dtoUser.RoleName = user.RoleName;
         
         return dtoUser;
     }

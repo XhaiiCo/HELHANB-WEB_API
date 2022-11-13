@@ -16,7 +16,7 @@ public class UseCaseFetchUserById: IUseCaseParameterizedQuery<DtoOutputUser, int
 
     public DtoOutputUser Execute(int id)
     {
-        var userDb = _userService.FetchById(id);
-        return Mapper.GetInstance().Map<DtoOutputUser>(userDb);
+        var user = _userService.FetchById(id);
+        return Mapper.GetInstance().Map<DtoOutputUser>(user);
     }
 }

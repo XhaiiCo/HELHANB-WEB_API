@@ -31,6 +31,7 @@ public class Mapper
             
             //Role
             cfg.CreateMap<DbRole, DtoOutputRole>();
+            cfg.CreateMap<Role, DtoOutputRole>();
         });
         return new AutoMapper.Mapper(config);
     }

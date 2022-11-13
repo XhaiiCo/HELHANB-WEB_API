@@ -1,4 +1,6 @@
-﻿namespace Application.UseCases.Users.Dtos;
+﻿using Application.UseCases.Roles.Dtos;
+
+namespace Application.UseCases.Users.Dtos;
 
 public class DtoOutputUser
 {
@@ -7,7 +9,8 @@ public class DtoOutputUser
     public string LastName { get; set; }
     public DateTime AccountCreation { get; set; }
     public string Email { get; set; }
-    public int RoleId { get; set; }
-    public string RoleName { get; set; }
+    
+    public DtoOutputRole Role { get; set; }
+    
     public string? ProfilePicturePath { get; set; }
 }

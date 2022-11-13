@@ -31,18 +31,20 @@ public class UseCaseCreateUser: IUseCaseWriter<DtoOutputUser?, DtoInputCreateUse
             _userService.FetchByEmail(input.Email) ;
             throw new Exception("Cette adresse email est déjà utilisée");
         }
+        //If the email isn't used
         catch (KeyNotFoundException e)
         {
-            DbUser user = Mapper.GetInstance().Map<DbUser>(input);
-            user.AccountCreation = DateTime.Now;
-            user.RoleId = 1 ;
+            DbUser userToAdd = Mapper.GetInstance().Map<DbUser>(input);
+            userToAdd.AccountCreation = DateTime.Now;
+            userToAdd.RoleId = 1 ;
             //hash password
-            user.Password = _authService.HashPassword(user.Password);
-            var userInDb = _userRepository.Create(user);
-            var dtoUser =  Mapper.GetInstance().Map<DtoOutputUser>(userInDb);
-            dtoUser.RoleName = _roleRepository.FetchById(dtoUser.RoleId).Name;
+            userToAdd.Password = _authService.HashPassword(userToAdd.Password);
             
-            return dtoUser;
+            var newUser = _userRepository.Create(userToAdd);
+
+            var user = _userService.MapToUser(newUser);  
+            
+            return Mapper.GetInstance().Map<DtoOutputUser>(user) ;
         }
     }
 }
