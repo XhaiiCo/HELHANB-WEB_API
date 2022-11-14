@@ -20,9 +20,22 @@ public class AdController: ControllerBase
     
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public ActionResult<DtoOutputAd> Create(DtoInputCreateAd dto)
     {
-        return Ok(_useCaseCreateAd.Execute(dto));
+
+        try
+        {
+            return Ok(_useCaseCreateAd.Execute(dto));
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            return Unauthorized(e.Message);
+        }
+        catch (KeyNotFoundException e)
+        {
+            return Unauthorized(e.Message );
+        }
     }
 
 }
