@@ -3,7 +3,7 @@ using Infrastructure.Utils;
 
 namespace Infrastructure.Ef.Repository.Ad;
 
-public class AdRepository: IAdRepository
+public class AdRepository : IAdRepository
 {
     private readonly HelhanbContextProvider _contextProvider;
 

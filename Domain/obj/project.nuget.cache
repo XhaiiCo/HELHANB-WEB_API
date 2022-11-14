@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "IbCC+w2TUOalGX59gRy9K5PbOXMtIrO5MXpxe7aFd5mYQSM9z435sEC9SN8bVYroA6hqORl/aej8G+Xg4jD1qA==",
+  "dgSpecHash": "e9CIb/lsa1NNHvsJxamVWyJ3z8Y8P53YubzhQP0k9Qphqyltb5gHQJU4Q73horRGTgfdM0fv9bkik+a/KNLy/w==",
   "success": true,
-  "projectFilePath": "C:\\Users\\XhaiiCo\\Desktop\\TI\\HELHANB_API\\Domain\\Domain.csproj",
+  "projectFilePath": "C:\\Informatique de gestion\\BAC3\\Projet TI\\HELHANB-WEB_API\\Domain\\Domain.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

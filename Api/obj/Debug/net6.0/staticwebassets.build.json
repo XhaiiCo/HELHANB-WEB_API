@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "MUvX1aV4iROqjsAHCBJJF71acrUsExudPwidpsHJ4K8=",
+  "Hash": "kRxI241MRVzO9kwGl5opuy4zXuI6LfOgRcUDLyw12+E=",
   "Source": "Api",
   "BasePath": "_content/Api",
   "Mode": "Default",
@@ -10,10 +10,28 @@
     {
       "Name": "Api\\wwwroot",
       "Source": "Api",
-      "ContentRoot": "C:\\Users\\david\\Desktop\\TI\\HELHANB-WEB_API\\Api\\wwwroot\\",
+      "ContentRoot": "C:\\Informatique de gestion\\BAC3\\Projet TI\\HELHANB-WEB_API\\Api\\wwwroot\\",
       "BasePath": "_content/Api",
       "Pattern": "**"
     }
   ],
-  "Assets": []
+  "Assets": [
+    {
+      "Identity": "C:\\Informatique de gestion\\BAC3\\Projet TI\\HELHANB-WEB_API\\Api\\wwwroot\\Upload\\ProfilePicture\\16_638038518579748061_lines_spots_light_30501_1920x1080.jpg",
+      "SourceId": "Api",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Informatique de gestion\\BAC3\\Projet TI\\HELHANB-WEB_API\\Api\\wwwroot\\",
+      "BasePath": "_content/Api",
+      "RelativePath": "Upload/ProfilePicture/16_638038518579748061_lines_spots_light_30501_1920x1080.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Upload\\ProfilePicture\\16_638038518579748061_lines_spots_light_30501_1920x1080.jpg"
+    }
+  ]
 }
