@@ -14,4 +14,6 @@ public class DtoInputCreateAd
     [Required] public int PostalCode { get; set; }
     [Required] public string Country { get; set; }
     [Required] public string City { get; set; }
+    [Required] public DateTime Created { get; set; }
+    [Required] public int UserId { get; set; }
 }

@@ -6,8 +6,7 @@ public interface IAdRepository
 {
     //  IEnumerable <DbAd> FetchAll();
 
-    DbAd Create(int id,string name, float price, string description, int numberOfPerson,int numberOfBedrooms ,string street, int postalCode, string country,
-        string city);
+    DbAd Create(DbAd ad);
 
     // DbAd FetchByCountry(string country);
 }

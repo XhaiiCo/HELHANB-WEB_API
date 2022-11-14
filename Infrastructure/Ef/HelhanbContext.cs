@@ -13,7 +13,6 @@ public class HelhanbContext : DbContext
         _connectionStringProvider = connectionStringProvider;
     }
    
-    public DbSet<DbAd> Ads { get; set; }
    /* 
     public DbSet<DbConversation> Conversations { get; set; }
     
@@ -26,6 +25,7 @@ public class HelhanbContext : DbContext
     public DbSet<DbReservationStatus> ReservationStatus { get; set; }
     
 */
+    public DbSet<DbAd> Ads { get; set; }
     public DbSet<DbRole> Roles { get; set; }
     public DbSet<DbUser> Users { get; set; }
 
@@ -66,26 +66,8 @@ public class HelhanbContext : DbContext
             entity.Property(m => m.View).HasColumnName("vieww");
             
             
-        }); */
-        modelBuilder.Entity<DbAd>(entity =>
-        {
-            entity.ToTable("ads");
-            entity.HasKey(a => a.Id);
-            entity.Property(a => a.Id).HasColumnName("ad_id");
-            entity.Property(a => a.Name).HasColumnName("ad_name");
-           // entity.Property(a => a.Created).HasColumnName("ad_created");
-            entity.Property(a => a.PricePerNight).HasColumnName("price_per_night");
-            entity.Property(a => a.Description).HasColumnName("description");
-            entity.Property(a => a.NumberOfPersons).HasColumnName("number_of_persons");
-            entity.Property(a => a.NumberOfBedrooms).HasColumnName("number_of_bedrooms");
-            entity.Property(a => a.Street).HasColumnName("street");
-            entity.Property(a => a.PostalCode).HasColumnName("postal_code");
-            entity.Property(a => a.Country).HasColumnName("country");
-            entity.Property(a => a.City).HasColumnName("city");
-          //  entity.Property(a => a.UserId).HasColumnName("user_id");
-            
-        });
-        /*
+        }); 
+        
         modelBuilder.Entity<DbPicture>(entity =>
         {
             entity.ToTable("pictures");
@@ -107,6 +89,25 @@ public class HelhanbContext : DbContext
             entity.Property(r => r.Renter).HasColumnName("renter");
         });
         */
+        
+        modelBuilder.Entity<DbAd>(entity =>
+        {
+            entity.ToTable("ads");
+            entity.HasKey(a => a.Id);
+            entity.Property(a => a.Id).HasColumnName("ad_id");
+            entity.Property(a => a.Name).HasColumnName("ad_name");
+            entity.Property(a => a.Created).HasColumnName("ad_created");
+            entity.Property(a => a.PricePerNight).HasColumnName("price_per_night");
+            entity.Property(a => a.Description).HasColumnName("description");
+            entity.Property(a => a.NumberOfPersons).HasColumnName("number_of_persons");
+            entity.Property(a => a.NumberOfBedrooms).HasColumnName("number_of_bedrooms");
+            entity.Property(a => a.Street).HasColumnName("street");
+            entity.Property(a => a.PostalCode).HasColumnName("postal_code");
+            entity.Property(a => a.Country).HasColumnName("country");
+            entity.Property(a => a.City).HasColumnName("city");
+            entity.Property(a => a.UserId).HasColumnName("user_id");
+            
+        });
         
         modelBuilder.Entity<DbRole>(entity =>
         {

@@ -1,4 +1,5 @@
 ﻿using Application.UseCases.Ads.Dtos;
+using Infrastructure.Ef.DbEntities;
 using Infrastructure.Ef.Repository.Ad;
 
 namespace Application.UseCases.Ads;
@@ -16,10 +17,9 @@ public class UseCaseCreateAd
     {
         var mapper = Mapper.GetInstance();
 
-        var ad = mapper.Map<Domain.Ad>(input);
-        var dbAd = _adRepository.Create
-        (ad.Id,ad.Name, ad.PricePerNight, ad.Description, ad.NumberOfPersons, ad.NumberOfBedrooms, ad.Street, ad.PostalCode, ad.Country,
-            ad.City);
-        return Mapper.GetInstance().Map<DtoOutputAd>(dbAd);
+        var dbAd = mapper.Map<DbAd>(input);
+        var newAd = _adRepository.Create(dbAd);
+        
+        return mapper.Map<DtoOutputAd>(dbAd);
     }
 }

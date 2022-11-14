@@ -6,8 +6,9 @@ namespace API.Controllers.Ads;
 
 [ApiController]
 [Route("api/v1/ad")]
-public class AdController
+public class AdController: ControllerBase
 {
+    
     private readonly UseCaseCreateAd _useCaseCreateAd;
 
 
@@ -21,7 +22,7 @@ public class AdController
     [ProducesResponseType(StatusCodes.Status201Created)]
     public ActionResult<DtoOutputAd> Create(DtoInputCreateAd dto)
     {
-        return (_useCaseCreateAd.Execute(dto));
+        return Ok(_useCaseCreateAd.Execute(dto));
     }
 
 }

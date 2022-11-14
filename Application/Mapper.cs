@@ -1,4 +1,5 @@
 ﻿using System.Data.Common;
+using Application.UseCases.Ads.Dtos;
 using Application.UseCases.Roles.Dtos;
 using Application.UseCases.Users.Dtos;
 using AutoMapper;
@@ -32,6 +33,11 @@ public class Mapper
             //Role
             cfg.CreateMap<DbRole, DtoOutputRole>();
             cfg.CreateMap<Role, DtoOutputRole>();
+            
+            //Ad
+            cfg.CreateMap<DtoInputCreateAd, Ad>();
+            cfg.CreateMap<DtoInputCreateAd, DbAd>();
+            cfg.CreateMap<DbAd, DtoOutputAd>();
         });
         return new AutoMapper.Mapper(config);
     }

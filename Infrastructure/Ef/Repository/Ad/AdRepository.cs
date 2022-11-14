@@ -3,7 +3,7 @@ using Infrastructure.Utils;
 
 namespace Infrastructure.Ef.Repository.Ad;
 
-public class AdRepository
+public class AdRepository: IAdRepository
 {
     private readonly HelhanbContextProvider _contextProvider;
 
@@ -19,14 +19,10 @@ public class AdRepository
         return context.Ads.ToList();
     }*/
 
-    public DbAd Create(int id,string name, float price, string description,int numberOfPersons,int numberOfBedrooms, string street, int postalCode, string country, string city)
+    public DbAd Create(DbAd ad)
     {
         using var context = _contextProvider.NewContext();
-        var ad = new DbAd
-        {
-            Id= id, Name = name, PricePerNight = price, Description = description,NumberOfPersons = numberOfPersons, NumberOfBedrooms = numberOfBedrooms,Street = street,PostalCode = postalCode,
-            Country = country, City = city
-        };
+        
         context.Ads.Add(ad);
         context.SaveChanges();
         return ad;

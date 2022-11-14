@@ -4,11 +4,13 @@ using API.Utils.Picture;
 using Application.Services.Auth;
 using Application.Services.Token;
 using Application.Services.User;
+using Application.UseCases.Ads;
 using Application.UseCases.Roles;
 using Application.UseCases.Users;
 using Infrastructure.Ef;
 using Infrastructure.Ef.DbEntities;
 using Infrastructure.Ef.Repository;
+using Infrastructure.Ef.Repository.Ad;
 using Infrastructure.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -58,8 +60,11 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IConnectionStringProvider, ConnectionStringProvider>();
 builder.Services.AddScoped<HelhanbContextProvider>();
+
+// Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IAdRepository, AdRepository>();
 
 // Users
 builder.Services.AddScoped<UseCaseFetchAllUsers>();
@@ -72,7 +77,10 @@ builder.Services.AddScoped<UseCaseDeleteUserById>();
 // Roles
 builder.Services.AddScoped<UseCaseFetchAllRoles>() ;
 
-//Services
+//Ads
+builder.Services.AddScoped<UseCaseCreateAd>();
+
+// Services
 builder.Services.AddScoped<IUserService, UserService>() ;
 builder.Services.AddScoped<IAuthService, AuthService>() ;
 builder.Services.AddScoped<ITokenService, TokenService>() ;
