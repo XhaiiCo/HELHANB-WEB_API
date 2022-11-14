@@ -9,6 +9,7 @@ using Application.UseCases.Users;
 using Infrastructure.Ef;
 using Infrastructure.Ef.DbEntities;
 using Infrastructure.Ef.Repository;
+using Infrastructure.Ef.Repository.Ad;
 using Infrastructure.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -60,6 +61,7 @@ builder.Services.AddScoped<IConnectionStringProvider, ConnectionStringProvider>(
 builder.Services.AddScoped<HelhanbContextProvider>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IAdRepository, AdRepository>();
 
 // Users
 builder.Services.AddScoped<UseCaseFetchAllUsers>();

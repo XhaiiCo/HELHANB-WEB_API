@@ -4241,19 +4241,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\XhaiiCo\\.nuget\\packages\\": {}
+    "C:\\Users\\jerem\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\XhaiiCo\\Desktop\\TI\\HELHANB_API\\Api\\Api.csproj",
+      "projectUniqueName": "C:\\Informatique de gestion\\BAC3\\Projet TI\\HELHANB-WEB_API\\Api\\Api.csproj",
       "projectName": "Api",
-      "projectPath": "C:\\Users\\XhaiiCo\\Desktop\\TI\\HELHANB_API\\Api\\Api.csproj",
-      "packagesPath": "C:\\Users\\XhaiiCo\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\XhaiiCo\\Desktop\\TI\\HELHANB_API\\Api\\obj\\",
+      "projectPath": "C:\\Informatique de gestion\\BAC3\\Projet TI\\HELHANB-WEB_API\\Api\\Api.csproj",
+      "packagesPath": "C:\\Users\\jerem\\.nuget\\packages\\",
+      "outputPath": "C:\\Informatique de gestion\\BAC3\\Projet TI\\HELHANB-WEB_API\\Api\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\XhaiiCo\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\jerem\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net6.0"
@@ -4265,11 +4265,11 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "C:\\Users\\XhaiiCo\\Desktop\\TI\\HELHANB_API\\Application\\Application.csproj": {
-              "projectPath": "C:\\Users\\XhaiiCo\\Desktop\\TI\\HELHANB_API\\Application\\Application.csproj"
+            "C:\\Informatique de gestion\\BAC3\\Projet TI\\HELHANB-WEB_API\\Application\\Application.csproj": {
+              "projectPath": "C:\\Informatique de gestion\\BAC3\\Projet TI\\HELHANB-WEB_API\\Application\\Application.csproj"
             },
-            "C:\\Users\\XhaiiCo\\Desktop\\TI\\HELHANB_API\\Infrastructure\\Infrastructure.csproj": {
-              "projectPath": "C:\\Users\\XhaiiCo\\Desktop\\TI\\HELHANB_API\\Infrastructure\\Infrastructure.csproj"
+            "C:\\Informatique de gestion\\BAC3\\Projet TI\\HELHANB-WEB_API\\Infrastructure\\Infrastructure.csproj": {
+              "projectPath": "C:\\Informatique de gestion\\BAC3\\Projet TI\\HELHANB-WEB_API\\Infrastructure\\Infrastructure.csproj"
             }
           }
         }
@@ -4308,7 +4308,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.402\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
       }
     }
   }
