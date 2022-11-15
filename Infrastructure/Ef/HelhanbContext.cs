@@ -63,9 +63,8 @@ public class HelhanbContext : DbContext
             entity.Property(m => m.Id).HasColumnName("message_id");
             entity.Property(m => m.SenderId).HasColumnName("sender_id");
             entity.Property(m => m.Content).HasColumnName("content");
-            entity.Property(m => m.View).HasColumnName("vieww");
-            
-            
+            entity.Property(m => m.View).HasColumnName("view");
+            entity.Property(m => m.SendTime).HasColumnName("send_time");
         }); 
         
         modelBuilder.Entity<DbPicture>(entity =>

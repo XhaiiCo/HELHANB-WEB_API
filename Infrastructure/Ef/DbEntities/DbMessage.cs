@@ -11,5 +11,6 @@ public class DbMessage
     public string Content { get; set; }
    
     public bool View { get; set; }
+    public DateTime SendTime { get; set; }
     
 }
