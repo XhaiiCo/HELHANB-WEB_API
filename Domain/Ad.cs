@@ -16,6 +16,7 @@ public class Ad
     public string Country { get; set; }
     public string City { get; set; }
 
+    public List<Picture> Pictures;
     private List<Reservation> _Reservations;
 
     public List<Reservation> Reservations
