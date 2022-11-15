@@ -6,4 +6,6 @@ public class Reservation
     public DateTime Creation { get; set; }
     public DateOnly ArrivalDate { get; set; }
     public DateOnly LeaveDate { get; set; }
+
+    public ReservationStatus ReservationStatus { get; set; }
 }
