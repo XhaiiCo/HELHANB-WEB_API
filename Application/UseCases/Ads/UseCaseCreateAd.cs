@@ -28,6 +28,8 @@ public class UseCaseCreateAd : IUseCaseWriter<DtoOutputAd, DtoInputCreateAd>
            
         
         var dbAd = mapper.Map<DbAd>(input);
+        dbAd.Created = DateTime.Now;
+        
         var newAd = _adRepository.Create(dbAd);
         
         return mapper.Map<DtoOutputAd>(newAd);
