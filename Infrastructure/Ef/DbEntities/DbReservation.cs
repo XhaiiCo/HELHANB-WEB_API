@@ -8,9 +8,9 @@ public class DbReservation
     
     public DateTime Creation { get; set; }
     
-    public DateOnly ArrivalDate { get; set; }
+    public DateTime ArrivalDate { get; set; }
     
-    public DateOnly LeaveDate { get; set; }
+    public DateTime LeaveDate { get; set; }
 
     public int ReservationStatusId { get; set; }
     
