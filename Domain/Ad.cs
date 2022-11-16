@@ -19,6 +19,11 @@ public class Ad
     public List<Picture> Pictures;
     private List<Reservation> _Reservations;
 
+    public Ad()
+    {
+        Pictures = new List<Picture>();
+        _Reservations = new List<Reservation>();
+    }
     public List<Reservation> Reservations
     {
         get => _Reservations;
@@ -27,28 +32,10 @@ public class Ad
 
     public bool AddReservation(Reservation reservation)
     {
-        if (!IsDateAvailable(reservation.ArrivalDate, reservation.LeaveDate)) return false;
+        if (!Reservation.IsDateAvailable(Reservations, reservation)) return false;
         
         this.Reservations.Add(reservation);
         return true;
 
-    }
-
-    private bool IsDateAvailable(DateOnly dateArrival, DateOnly dateLeave)
-    {
-        foreach (var reservation in this.Reservations)
-        {
-            //TODO: speak about it 
-
-            //If the booking starts after
-            if (reservation.ArrivalDate > dateLeave) continue;
-
-            //If the booking ends before
-            if (reservation.LeaveDate < dateArrival) continue;
-
-            return false;
-        }
-        
-        return true;
     }
 }
