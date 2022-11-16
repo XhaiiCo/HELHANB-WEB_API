@@ -16,10 +16,10 @@ public class Reservation
             //TODO: speak about it 
 
             //If the booking starts after
-            if (reservation.ArrivalDate > newReservation.LeaveDate) continue;
+            if (newReservation.LeaveDate < reservation.ArrivalDate) continue;
 
             //If the booking ends before
-            if (reservation.LeaveDate < newReservation.ArrivalDate) continue;
+            if (newReservation.ArrivalDate > reservation.LeaveDate) continue;
 
             return false;
         }
