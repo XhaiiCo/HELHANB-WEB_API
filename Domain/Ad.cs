@@ -22,10 +22,10 @@ public class Ad
     public List<Reservation> Reservations
     {
         get => _Reservations;
-        set { value.ForEach(reservation => addReservation(reservation)); }
+        set { value.ForEach(reservation => AddReservation(reservation)); }
     }
 
-    public bool addReservation(Reservation reservation)
+    public bool AddReservation(Reservation reservation)
     {
         if (!IsDateAvailable(reservation.ArrivalDate, reservation.LeaveDate)) return false;
         
@@ -48,7 +48,7 @@ public class Ad
 
             return false;
         }
-
+        
         return true;
     }
 }
