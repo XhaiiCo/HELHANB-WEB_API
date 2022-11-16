@@ -3,5 +3,5 @@
 public class DtoTokenUser
 {
     public int Id { get; set; }
-    public int RoleId { get; set; }
+    public String RoleName { get; set; }
 }

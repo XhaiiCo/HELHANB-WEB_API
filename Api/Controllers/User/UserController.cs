@@ -38,7 +38,7 @@ public class UserController : ControllerBase
         UseCaseUpdateUserProfilePicture useCaseUpdateUserProfilePicture,
         UseCaseFetchUserById useCaseFetchUserById,
         IPictureService pictureService, UseCaseDeleteUserById
-        useCaseDeleteUserById)
+            useCaseDeleteUserById)
     {
         _useCaseFetchAllUsers = useCaseFetchAllUsers;
         _useCaseCreateUser = useCaseCreateUser;
@@ -71,17 +71,17 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Roles = "3")]
+    [Authorize(Roles = "administrateur")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public ActionResult<IEnumerable<DtoOutputUser>> FetchAll()
     {
         return Ok(_useCaseFetchAllUsers.Execute());
     }
-    
+
     [HttpDelete]
     [Route("{id}")]
-    [Authorize(Roles = "3")]
+    [Authorize(Roles = "administrateur")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
@@ -89,7 +89,7 @@ public class UserController : ControllerBase
     {
         try
         {
-            var user = _useCaseDeleteUserById.Execute(id) ;
+            var user = _useCaseDeleteUserById.Execute(id);
             return Ok(user);
         }
         catch (KeyNotFoundException e)
@@ -125,7 +125,11 @@ public class UserController : ControllerBase
             if (user != null)
             {
                 //Login the user
-                DtoTokenUser tokenUser = Mapper.GetInstance().Map<DtoTokenUser>(user);
+                DtoTokenUser tokenUser = new DtoTokenUser
+                {
+                    Id = user.Id,
+                    RoleName = user.Role.Name
+                };
                 var generatedToken = this.GenerateToken(tokenUser);
                 this.AppendCookies(generatedToken);
 
@@ -136,7 +140,7 @@ public class UserController : ControllerBase
         {
             return Conflict(e.Message);
         }
-        
+
         return Unauthorized();
     }
 
@@ -178,7 +182,7 @@ public class UserController : ControllerBase
                 };
                 var user = _useCaseUpdateUserProfilePicture.Execute(dtoInputUpdateProfilePictureUser);
 
-                this._pictureService.UploadPicture(basePath, fileName, profilePicture) ;
+                this._pictureService.UploadPicture(basePath, fileName, profilePicture);
                 return Ok(user);
             }
         }
@@ -201,7 +205,12 @@ public class UserController : ControllerBase
             var user = _useCaseLoginUser.Execute(userDto);
 
             //Login the user
-            DtoTokenUser tokenUser = Mapper.GetInstance().Map<DtoTokenUser>(user);
+            DtoTokenUser tokenUser = new DtoTokenUser
+            {
+                Id = user.Id,
+                RoleName = user.Role.Name
+            };
+            
             var generatedToken = this.GenerateToken(tokenUser);
             this.AppendCookies(generatedToken);
 
