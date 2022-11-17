@@ -28,4 +28,6 @@ public class DbAd
     
     public int UserId { get; set; }
     
+    public int AdStatusId { get; set; }
+    
 }

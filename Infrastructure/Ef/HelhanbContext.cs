@@ -89,6 +89,14 @@ public class HelhanbContext : DbContext
         });
         */
         
+        modelBuilder.Entity<DbAdStatus>(entity =>
+        {
+            entity.ToTable("ad_status");
+            entity.HasKey(adStatus => adStatus.Id);
+            entity.Property(adStatus => adStatus.Id).HasColumnName("ad_status_id");
+            entity.Property(adStatus => adStatus.StatusName).HasColumnName("status_name");
+        });
+        
         modelBuilder.Entity<DbAd>(entity =>
         {
             entity.ToTable("ads");
@@ -105,6 +113,7 @@ public class HelhanbContext : DbContext
             entity.Property(a => a.Country).HasColumnName("country");
             entity.Property(a => a.City).HasColumnName("city");
             entity.Property(a => a.UserId).HasColumnName("user_id");
+            entity.Property(a => a.AdStatusId).HasColumnName("ad_status_id");
             
         });
         
