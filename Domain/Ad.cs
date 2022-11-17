@@ -15,6 +15,7 @@ public class Ad
     public int PostalCode { get; set; }
     public string Country { get; set; }
     public string City { get; set; }
+    public int  AdStatusId { get; set; } 
 
     public List<Picture> Pictures;
     private List<Reservation> _Reservations;
