@@ -74,9 +74,13 @@ public class UserController : ControllerBase
     [Authorize(Roles = "administrateur")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public ActionResult<IEnumerable<DtoOutputUser>> FetchAll()
+    public ActionResult<IEnumerable<DtoOutputUser>> FetchAll([FromQuery] string? role, [FromQuery] string? search)
     {
-        return Ok(_useCaseFetchAllUsers.Execute());
+        return Ok(_useCaseFetchAllUsers.Execute(new DtoInputFilteringUsers
+        {
+            Role = role,  
+            Search = search 
+        }));
     }
 
     [HttpDelete]

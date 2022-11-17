@@ -5,7 +5,7 @@ using Infrastructure.Ef;
 
 namespace Application.UseCases.Users;
 
-public class UseCaseFetchAllUsers: IUseCaseQuery<IEnumerable<DtoOutputUser>>
+public class UseCaseFetchAllUsers: IUseCaseParameterizedQuery<IEnumerable<DtoOutputUser>, DtoInputFilteringUsers>
 {
 
     private readonly IUserService _userService;
@@ -15,9 +15,17 @@ public class UseCaseFetchAllUsers: IUseCaseQuery<IEnumerable<DtoOutputUser>>
         _userService = userService;
     }
 
-    public IEnumerable<DtoOutputUser> Execute()
+    public IEnumerable<DtoOutputUser> Execute(DtoInputFilteringUsers param)
     {
         var users = _userService.FetchAll();
+        
+        if(param.Role != null)
+            users = users.Where(user => user.Role.Name == param.Role);
+
+        if (param.Search != null)
+            users = users.Where(user => user.FirstName.ToLower().Contains(param.Search.ToLower()) ||
+                                        user.LastName.ToLower().Contains(param.Search.ToLower()) ||
+                                        user.Email.ToLower().Contains(param.Search.ToLower()));
         
         return Mapper.GetInstance().Map<IEnumerable<DtoOutputUser>>(users);
     }
