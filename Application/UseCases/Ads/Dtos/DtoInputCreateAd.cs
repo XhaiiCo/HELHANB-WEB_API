@@ -4,7 +4,6 @@ namespace Application.UseCases.Ads.Dtos;
 
 public class DtoInputCreateAd
 {
-    [Required] public int Id { get; set; }
     [Required] public string Name { get; set; }
     [Required] public float PricePerNight { get; set; }
     [Required] public string Description { get; set; }

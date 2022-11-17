@@ -14,5 +14,6 @@ public class DtoOutputAd
     public string Country { get; set; }
     public string City { get; set; }
     // public int UserId { get; set; }
+    //public int AdStatusId { get; set; }
 
 }
