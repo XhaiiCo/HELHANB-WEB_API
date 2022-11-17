@@ -16,4 +16,7 @@ public class DtoOutputAd
  //   public int UserId { get; set; }
     public int AdStatusId { get; set; }
 
+    public TimeSpan ArrivalTimeRangeStart { get; set; }
+    public TimeSpan ArrivalTimeRangeEnd { get; set; }
+    public TimeSpan LeaveTime { get; set; }
 }

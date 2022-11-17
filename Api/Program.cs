@@ -2,6 +2,7 @@ using System.Text;
 using API;
 using API.Utils.Picture;
 using Application.Services.Auth;
+using Application.Services.Time;
 using Application.Services.Token;
 using Application.Services.User;
 using Application.UseCases.Ads;
@@ -85,6 +86,7 @@ builder.Services.AddScoped<IUserService, UserService>() ;
 builder.Services.AddScoped<IAuthService, AuthService>() ;
 builder.Services.AddScoped<ITokenService, TokenService>() ;
 builder.Services.AddScoped<IPictureService, PictureService>() ;
+builder.Services.AddScoped<ITimeService, TimeService>();
 
 var app = builder.Build();
 

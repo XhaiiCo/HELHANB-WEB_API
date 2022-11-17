@@ -14,4 +14,7 @@ public class DtoInputCreateAd
     [Required] public string Country { get; set; }
     [Required] public string City { get; set; }
     [Required] public int UserId { get; set; }
+    [Required] public DtoInputTime ArrivalTimeRangeStart { get; set; }
+    [Required] public DtoInputTime ArrivalTimeRangeEnd { get; set; }
+    [Required] public DtoInputTime LeaveTime { get; set; }
 }

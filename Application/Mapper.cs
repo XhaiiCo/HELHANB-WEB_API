@@ -38,6 +38,9 @@ public class Mapper
             cfg.CreateMap<DtoInputCreateAd, Ad>();
             cfg.CreateMap<DtoInputCreateAd, DbAd>();
             cfg.CreateMap<DbAd, DtoOutputAd>();
+
+            //Time
+            cfg.CreateMap<DtoInputTime, TimeSpan>();
         });
         return new AutoMapper.Mapper(config);
     }

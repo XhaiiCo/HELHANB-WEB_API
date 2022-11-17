@@ -114,6 +114,9 @@ public class HelhanbContext : DbContext
             entity.Property(a => a.City).HasColumnName("city");
             entity.Property(a => a.UserId).HasColumnName("user_id");
             entity.Property(a => a.AdStatusId).HasColumnName("ad_status_id");
+            entity.Property(a => a.ArrivalTimeRangeStart).HasColumnName("arrival_time_range_start");
+            entity.Property(a => a.ArrivalTimeRangeEnd).HasColumnName("arrival_time_range_end");
+            entity.Property(a => a.LeaveTime).HasColumnName("leave_time");
             
         });
         
