@@ -13,14 +13,12 @@ public class UseCaseCreateUser: IUseCaseWriter<DtoOutputUser?, DtoInputCreateUse
     private readonly IUserRepository _userRepository;
     private readonly IUserService _userService;
     private readonly IAuthService _authService;
-    private readonly IRoleRepository _roleRepository;
 
-    public UseCaseCreateUser(IUserRepository userRepository, IUserService userService, IAuthService authService, IRoleRepository roleRepository)
+    public UseCaseCreateUser(IUserRepository userRepository, IUserService userService, IAuthService authService)
     {
         _userRepository = userRepository;
         _userService = userService;
         _authService = authService;
-        _roleRepository = roleRepository;
     }
 
     public DtoOutputUser? Execute(DtoInputCreateUser input)
@@ -31,6 +29,7 @@ public class UseCaseCreateUser: IUseCaseWriter<DtoOutputUser?, DtoInputCreateUse
             _userService.FetchByEmail(input.Email) ;
             throw new Exception("Cette adresse email est déjà utilisée");
         }
+        
         //If the email isn't used
         catch (KeyNotFoundException e)
         {

@@ -8,6 +8,7 @@ using Application.Services.User;
 using Application.UseCases.Ads;
 using Application.UseCases.Roles;
 using Application.UseCases.Users;
+using Application.UseCases.Users.Dtos;
 using Infrastructure.Ef;
 using Infrastructure.Ef.DbEntities;
 using Infrastructure.Ef.Repository;
@@ -74,6 +75,7 @@ builder.Services.AddScoped<UseCaseLoginUser>();
 builder.Services.AddScoped<UseCaseUpdateUserProfilePicture>();
 builder.Services.AddScoped<UseCaseFetchUserById>();
 builder.Services.AddScoped<UseCaseDeleteUserById>();
+builder.Services.AddScoped<UseCaseUpdatePasswordUser>();
 
 // Roles
 builder.Services.AddScoped<UseCaseFetchAllRoles>() ;

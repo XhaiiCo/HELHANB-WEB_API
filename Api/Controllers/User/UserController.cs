@@ -26,6 +26,7 @@ public class UserController : ControllerBase
     private readonly UseCaseUpdateUserProfilePicture _useCaseUpdateUserProfilePicture;
     private readonly UseCaseFetchUserById _useCaseFetchUserById;
     private readonly UseCaseDeleteUserById _useCaseDeleteUserById;
+    private readonly UseCaseUpdatePasswordUser _useCaseUpdatePasswordUser;
 
     public UserController(
         UseCaseFetchAllUsers useCaseFetchAllUsers,
@@ -37,8 +38,9 @@ public class UserController : ControllerBase
         IUserService userService,
         UseCaseUpdateUserProfilePicture useCaseUpdateUserProfilePicture,
         UseCaseFetchUserById useCaseFetchUserById,
-        IPictureService pictureService, UseCaseDeleteUserById
-            useCaseDeleteUserById)
+        IPictureService pictureService,
+        UseCaseDeleteUserById useCaseDeleteUserById,
+        UseCaseUpdatePasswordUser useCaseUpdatePasswordUser)
     {
         _useCaseFetchAllUsers = useCaseFetchAllUsers;
         _useCaseCreateUser = useCaseCreateUser;
@@ -51,6 +53,7 @@ public class UserController : ControllerBase
         _useCaseFetchUserById = useCaseFetchUserById;
         _pictureService = pictureService;
         _useCaseDeleteUserById = useCaseDeleteUserById;
+        _useCaseUpdatePasswordUser = useCaseUpdatePasswordUser;
     }
 
     private void AppendCookies(string token)
@@ -78,8 +81,8 @@ public class UserController : ControllerBase
     {
         return Ok(_useCaseFetchAllUsers.Execute(new DtoInputFilteringUsers
         {
-            Role = role,  
-            Search = search 
+            Role = role,
+            Search = search
         }));
     }
 
@@ -148,9 +151,23 @@ public class UserController : ControllerBase
         return Unauthorized();
     }
 
-    [HttpPost]
+    [HttpPut]
     [Authorize]
-    [Route("{id}/profilePicture")]
+    [Route("password")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public ActionResult<DtoOutputUser> UpdatePassword(DtoInputUpdatePasswordUser dto)
+    {
+        //Check that this is the id of the logged in user
+        if ("" + dto.Id != User.Identity?.Name) return Unauthorized();
+
+        return Ok(_useCaseUpdatePasswordUser.Execute(dto));
+    }
+
+
+    [HttpPut]
+    [Authorize]
+    [Route("{id:int}/profilePicture")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public ActionResult<DtoOutputUser> UpdateProfilePicture(int id, IFormFile profilePicture)
@@ -214,7 +231,7 @@ public class UserController : ControllerBase
                 Id = user.Id,
                 RoleName = user.Role.Name
             };
-            
+
             var generatedToken = this.GenerateToken(tokenUser);
             this.AppendCookies(generatedToken);
 
