@@ -1,5 +1,7 @@
-﻿using Application.UseCases.Reservations.Dtos;
+﻿using Application.Services.ReservationBook;
+using Application.UseCases.Reservations.Dtos;
 using Application.UseCases.Utils;
+using Domain;
 using Infrastructure.Ef;
 using Infrastructure.Ef.DbEntities;
 using Infrastructure.Ef.Repository.Ad;
@@ -14,13 +16,14 @@ public class UseCaseCreateReservation: IUseCaseWriter<DtoOutputReservation, DtoI
     private readonly IUserRepository _userRepository;
     private readonly IReservationStatusRepository _reservationStatusRepository;
     private readonly IAdRepository _adRepository;
-    
-    public UseCaseCreateReservation(IReservationRepository reservationRepository, IUserRepository userRepository, IReservationStatusRepository reservationStatusRepository, IAdRepository adRepository)
+    private readonly IReservationBookService _reservationBookService;
+    public UseCaseCreateReservation(IReservationRepository reservationRepository, IUserRepository userRepository, IReservationStatusRepository reservationStatusRepository, IAdRepository adRepository, IReservationBookService reservationBookService)
     {
         _reservationRepository = reservationRepository;
         _userRepository = userRepository;
         _reservationStatusRepository = reservationStatusRepository;
         _adRepository = adRepository;
+        _reservationBookService = reservationBookService;
     }
 
     public DtoOutputReservation Execute(DtoInputCreateReservation input)
@@ -30,6 +33,23 @@ public class UseCaseCreateReservation: IUseCaseWriter<DtoOutputReservation, DtoI
         dbReservation.ReservationStatusId = 1;
         dbReservation.Creation = DateTime.Now;
         
+        //check if the new reservation is available
+        var newDomainReservation = mapper.Map<Reservation>(dbReservation);
+        newDomainReservation.dateTimeRange = new DateTimeRange
+        {
+            _arrivalDate = dbReservation.ArrivalDate,
+            _leaveDate = dbReservation.LeaveDate
+        };
+        
+        var reservationBook = _reservationBookService.Fetch(input.AdId);
+        
+        //on ne garde que celles qui ont le status accepté
+        var reservations = (reservationBook.Where(r => r.reservationStatus.Id == 3)).Entries();
+        
+        if (!Reservation.IsDateAvailable(reservations, newDomainReservation))
+            throw new Exception("This date range isn't available");
+        
+        //si tout s est bien passé
         _reservationRepository.Create(dbReservation);
         
         var dto = mapper.Map<DtoOutputReservation>(dbReservation);

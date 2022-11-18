@@ -51,6 +51,7 @@ public class Mapper
             cfg.CreateMap<DbUser, DtoOutputReservation.DtoRenter>();
             cfg.CreateMap<DbReservationStatus, DtoOutputReservation.DtoReservationStatus>();
             cfg.CreateMap<DbAd, DtoOutputReservation.DtoAd>();
+            cfg.CreateMap<DbReservation, Reservation>();
             
         });
         return new AutoMapper.Mapper(config);

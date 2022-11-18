@@ -20,8 +20,13 @@ public class ReservationRepository: IReservationRepository
         return reservation;
     }
 
-    public IEnumerable<DbReservation> FilterByAdId(int userId)
+    public IEnumerable<DbReservation> FilterByAdId(int adId)
     {
-        throw new NotImplementedException();
+        using var context = _contextProvider.NewContext();
+        var reservations = context.Reservations
+            .Where(dbR => dbR.AdId == adId)
+            .ToList();
+        
+        return reservations;
     }
 }

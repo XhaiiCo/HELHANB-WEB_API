@@ -3,6 +3,7 @@ using API;
 using API.Utils.Picture;
 using Application.Services.Ad;
 using Application.Services.Auth;
+using Application.Services.ReservationBook;
 using Application.Services.Time;
 using Application.Services.Token;
 using Application.Services.User;
@@ -100,6 +101,7 @@ builder.Services.AddScoped<ITokenService, TokenService>() ;
 builder.Services.AddScoped<IPictureService, PictureService>() ;
 builder.Services.AddScoped<ITimeService, TimeService>();
 builder.Services.AddScoped<IAdService, AdService>();
+builder.Services.AddScoped<IReservationBookService, ReservationBookService>();
 
 var app = builder.Build();
 

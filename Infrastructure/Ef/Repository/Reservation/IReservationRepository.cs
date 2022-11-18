@@ -5,5 +5,5 @@ namespace Infrastructure.Ef.Repository.Reservation;
 public interface IReservationRepository
 {
     DbReservation Create(DbReservation reservation);
-    IEnumerable<DbReservation> FilterByAdId(int userId);
+    IEnumerable<DbReservation> FilterByAdId(int adId);
 }
