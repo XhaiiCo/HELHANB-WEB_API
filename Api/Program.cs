@@ -1,6 +1,7 @@
 using System.Text;
 using API;
 using API.Utils.Picture;
+using Application.Services.Ad;
 using Application.Services.Auth;
 using Application.Services.Time;
 using Application.Services.Token;
@@ -82,6 +83,7 @@ builder.Services.AddScoped<UseCaseFetchAllRoles>() ;
 
 //Ads
 builder.Services.AddScoped<UseCaseCreateAd>();
+//builder.Services.AddScoped<UseCaseDeleteAd>();
 
 // Services
 builder.Services.AddScoped<IUserService, UserService>() ;
@@ -89,6 +91,7 @@ builder.Services.AddScoped<IAuthService, AuthService>() ;
 builder.Services.AddScoped<ITokenService, TokenService>() ;
 builder.Services.AddScoped<IPictureService, PictureService>() ;
 builder.Services.AddScoped<ITimeService, TimeService>();
+builder.Services.AddScoped<IAdService, AdService>();
 
 var app = builder.Build();
 

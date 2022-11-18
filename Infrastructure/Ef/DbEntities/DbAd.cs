@@ -10,7 +10,7 @@ public class DbAd
     
     public DateTime Created { get; set; }
     
-    public float PricePerNight { get; set; }
+    public double PricePerNight { get; set; }
     
     public string Description { get; set; }
     
