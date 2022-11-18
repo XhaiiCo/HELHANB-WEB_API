@@ -186,6 +186,8 @@ public class UserController : ControllerBase
         try
         {
             var currentUser = _userService.FetchById(id);
+            
+            //If the protilePicture is null remove it
             if (profilePicture == null)
             {
                 //Remove the current profile picture if exist
@@ -204,6 +206,7 @@ public class UserController : ControllerBase
                 return Ok(user);
             }
 
+            //Else add the  new profile picture
             else if (profilePicture.Length > 0)
             {
                 var basePath = "\\Upload\\ProfilePicture\\";
@@ -224,6 +227,7 @@ public class UserController : ControllerBase
                     _pictureService.RemoveFile(currentUser.ProfilePicturePath);
                 }
 
+                //Update the user
                 var dtoInputUpdateProfilePictureUser = new DtoInputUpdateProfilePictureUser
                 {
                     Id = id,
@@ -231,6 +235,7 @@ public class UserController : ControllerBase
                 };
                 var user = _useCaseUpdateUserProfilePicture.Execute(dtoInputUpdateProfilePictureUser);
 
+                //Upload the new picture
                 this._pictureService.UploadPicture(basePath, fileName, profilePicture);
                 return Ok(user);
             }
