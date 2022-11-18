@@ -2,7 +2,6 @@
 
 namespace Tests;
 
-
 public class AdTests
 {
     [Test]
@@ -13,27 +12,26 @@ public class AdTests
     public void AddReservation(string dateArrival, string dateLeave, bool expected, int size)
     {
         Ad ad = new Ad();
+        ReservationBook reservationBook = new ReservationBook();
 
-        ad.AddReservation(new Reservation
+        reservationBook.AddReservation(new Reservation
         {
-            dateTimeRange = new DateTimeRange
-            {
-                ArrivalDate = new DateTime(2022, 01, 01, 10, 0, 0),
-                LeaveDate = new DateTime(2022, 01, 13, 22, 0, 0)
-            }
+            DateTimeRange = new DateTimeRange
+            (
+                new DateTime(2022, 01, 01, 10, 0, 0),
+                new DateTime(2022, 01, 13, 22, 0, 0)
+            )
         });
 
-        Assert.That(ad.AddReservation(new Reservation
-        { 
-            dateTimeRange = new DateTimeRange
-            {
-                ArrivalDate = DateTime.Parse(dateArrival), 
-                LeaveDate = DateTime.Parse(dateLeave)
-            }
+        Assert.That(reservationBook.AddReservation(new Reservation
+        {
+            DateTimeRange = new DateTimeRange
+            (
+                DateTime.Parse(dateArrival),
+                DateTime.Parse(dateLeave)
+            )
         }), Is.EqualTo(expected));
-        
-        Assert.That(ad.Reservations, Has.Exactly(size).Items);
+
+        Assert.That(reservationBook.Reservations, Has.Exactly(size).Items);
     }
-    
-    
 }
