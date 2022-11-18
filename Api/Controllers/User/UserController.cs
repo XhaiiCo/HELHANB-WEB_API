@@ -178,14 +178,33 @@ public class UserController : ControllerBase
     [Route("{id:int}/profilePicture")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public ActionResult<DtoOutputUser> UpdateProfilePicture(int id, IFormFile profilePicture)
+    public ActionResult<DtoOutputUser> UpdateProfilePicture(int id, IFormFile? profilePicture)
     {
         //Check that this is the id of the logged in user
         if ("" + id != User.Identity?.Name) return Unauthorized();
 
         try
         {
-            if (profilePicture.Length > 0)
+            var currentUser = _userService.FetchById(id);
+            if (profilePicture == null)
+            {
+                //Remove the current profile picture if exist
+                if (currentUser.ProfilePicturePath != null)
+                {
+                    _pictureService.RemoveFile(currentUser.ProfilePicturePath);
+                }
+                
+                var dtoInputUpdateProfilePictureUser = new DtoInputUpdateProfilePictureUser
+                {
+                    Id = id,
+                    ProfilePicturePath = null
+                };
+                var user = _useCaseUpdateUserProfilePicture.Execute(dtoInputUpdateProfilePictureUser);
+                
+                return Ok(user);
+            }
+
+            else if (profilePicture.Length > 0)
             {
                 var basePath = "\\Upload\\ProfilePicture\\";
 
@@ -198,7 +217,6 @@ public class UserController : ControllerBase
                 //Create a unique file name
                 var fileName = _pictureService.GenerateUniqueFileName(id, profilePicture.FileName);
 
-                var currentUser = _userService.FetchById(id);
 
                 //Remove the current profile picture if exist
                 if (currentUser.ProfilePicturePath != null)
