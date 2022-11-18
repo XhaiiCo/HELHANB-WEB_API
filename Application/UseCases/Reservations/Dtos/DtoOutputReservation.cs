@@ -10,6 +10,7 @@ public class DtoOutputReservation
     
     public DtoRenter Renter { get; set; }
     
+    public DtoAd Ad { get; set; }
     public DtoReservationStatus Status { get; set; }
     
     public class DtoRenter
@@ -23,6 +24,13 @@ public class DtoOutputReservation
     {
         public int Id { get; set; }
         public string StatusName { get; set; }
+    }
+
+    public class DtoAd
+    {
+        public int Id { get; set; }
+
+        public string Name { get; set; }
     }
 }
 
