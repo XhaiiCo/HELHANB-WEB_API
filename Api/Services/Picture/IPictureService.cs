@@ -7,5 +7,7 @@ public interface IPictureService
 
     public void CreateDirectory(string path);
 
+    public void RemoveFile(string path);
+
     public void UploadPicture(string path, string fileName, IFormFile picture);
 }

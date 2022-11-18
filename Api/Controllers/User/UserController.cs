@@ -94,6 +94,14 @@ public class UserController : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public ActionResult<DtoOutputUser> Delete(int id)
     {
+        var currentUser = _userService.FetchById(id);
+
+        //Remove the current profile picture if exist
+        if (currentUser.ProfilePicturePath != null)
+        {
+            _pictureService.RemoveFile(currentUser.ProfilePicturePath);
+        }
+
         try
         {
             var user = _useCaseDeleteUserById.Execute(id);
@@ -191,9 +199,11 @@ public class UserController : ControllerBase
                 var fileName = _pictureService.GenerateUniqueFileName(id, profilePicture.FileName);
 
                 var currentUser = _userService.FetchById(id);
+
+                //Remove the current profile picture if exist
                 if (currentUser.ProfilePicturePath != null)
                 {
-                    //TODO: remove the current user profile picture 
+                    _pictureService.RemoveFile(currentUser.ProfilePicturePath);
                 }
 
                 var dtoInputUpdateProfilePictureUser = new DtoInputUpdateProfilePictureUser
