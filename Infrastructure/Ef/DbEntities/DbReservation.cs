@@ -16,5 +16,5 @@ public class DbReservation
     
     public int AdId { get; set; }
     
-    public int Renter { get; set; }
+    public int RenterId { get; set; }
 }

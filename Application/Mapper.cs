@@ -1,5 +1,6 @@
 ﻿using System.Data.Common;
 using Application.UseCases.Ads.Dtos;
+using Application.UseCases.Reservations.Dtos;
 using Application.UseCases.Roles.Dtos;
 using Application.UseCases.Users.Dtos;
 using AutoMapper;
@@ -41,6 +42,13 @@ public class Mapper
 
             //Time
             cfg.CreateMap<DtoInputTime, TimeSpan>();
+            
+            //Reservations
+            cfg.CreateMap<DtoInputCreateReservation, DbReservation>();
+            cfg.CreateMap<DbReservation, DtoOutputReservation>();
+            cfg.CreateMap<DbUser, DtoOutputReservation.DtoRenter>();
+            cfg.CreateMap<DbReservationStatus, DtoOutputReservation.DtoReservationStatus>();
+            
         });
         return new AutoMapper.Mapper(config);
     }

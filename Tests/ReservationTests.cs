@@ -16,13 +16,20 @@ public class ReservationTests
         
         reservations.Add(new Reservation
         {
-            ArrivalDate = new DateTime(2022, 01, 01, 10, 0, 0), 
-            LeaveDate = new DateTime(2022, 01, 13, 22, 0, 0)
+            dateTimeRange = new DateTimeRange
+            {
+                ArrivalDate = new DateTime(2022, 01, 01, 10, 0, 0), 
+                LeaveDate = new DateTime(2022, 01, 13, 22, 0, 0)
+            }
         });
         
         Assert.That(Reservation.IsDateAvailable(reservations, new Reservation
         {
-            ArrivalDate = DateTime.Parse(dateArrival), LeaveDate = DateTime.Parse(dateLeave)
+            dateTimeRange = new DateTimeRange
+            {
+                ArrivalDate = DateTime.Parse(dateArrival), 
+                LeaveDate = DateTime.Parse(dateLeave)
+            }
         }), Is.EqualTo(expected));
         
         

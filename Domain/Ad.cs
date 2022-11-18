@@ -19,7 +19,7 @@ public class Ad
 
     public List<Picture> Pictures;
     private List<Reservation> _Reservations;
-
+    
     public Ad()
     {
         Pictures = new List<Picture>();

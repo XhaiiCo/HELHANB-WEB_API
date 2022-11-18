@@ -19,16 +19,16 @@ public class HelhanbContext : DbContext
     public DbSet<DbMessage> Messages { get; set; }
     
     public DbSet<DbPicture> Pictures { get; set; }
-    
-    public DbSet<DbReservation> Reservations { get; set; }
-    
-    public DbSet<DbReservationStatus> ReservationStatus { get; set; }
-    
+        
 */
     public DbSet<DbAd> Ads { get; set; }
     public DbSet<DbRole> Roles { get; set; }
     public DbSet<DbUser> Users { get; set; }
 
+    public DbSet<DbReservation> Reservations { get; set; }
+    
+    public DbSet<DbReservationStatus> ReservationStatus { get; set; }
+    
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (!optionsBuilder.IsConfigured)
@@ -46,14 +46,6 @@ public class HelhanbContext : DbContext
             entity.Property(c => c.Id).HasColumnName("conversation_id");
             entity.Property(c => c.IdUser1).HasColumnName("id_user_1");
             entity.Property(c => c.IdUser2).HasColumnName("id_user_2");
-        });
-
-        modelBuilder.Entity<DbReservationStatus>(entity =>
-        {
-            entity.ToTable("reservation_status");
-            entity.HasKey(rs => rs.Id);
-            entity.Property(rs => rs.Id).HasColumnName("reservation_status_id");
-            entity.Property(rs => rs.StatusName).HasColumnName("status_name");
         });
 
         modelBuilder.Entity<DbMessage>(entity =>
@@ -75,18 +67,7 @@ public class HelhanbContext : DbContext
             entity.Property(p => p.Path).HasColumnName("path");
         });
 
-        modelBuilder.Entity<DbReservation>(entity =>
-        {
-            entity.ToTable("reservations");
-            entity.HasKey(r => r.Id);
-            entity.Property(r => r.Id).HasColumnName("reservation_id");
-            entity.Property(r => r.Creation).HasColumnName("reservation_creation");
-            entity.Property(r => r.ArrivalDate).HasColumnName("arrival_date");
-            entity.Property(r => r.LeaveDate).HasColumnName("leave_date");
-            entity.Property(r => r.ReservationStatusId).HasColumnName("reservation_status_id");
-            entity.Property(r => r.AdId).HasColumnName("ad_id");
-            entity.Property(r => r.Renter).HasColumnName("renter");
-        });
+
         */
         
         modelBuilder.Entity<DbAdStatus>(entity =>
@@ -141,6 +122,26 @@ public class HelhanbContext : DbContext
             entity.Property(u => u.RoleId).HasColumnName("role_id");
             entity.Property(u => u.ProfilePicturePath).HasColumnName("profile_picture_path");
         });
+        
+        modelBuilder.Entity<DbReservation>(entity =>
+        {
+            entity.ToTable("reservations");
+            entity.HasKey(r => r.Id);
+            entity.Property(r => r.Id).HasColumnName("reservation_id");
+            entity.Property(r => r.Creation).HasColumnName("reservation_creation");
+            entity.Property(r => r.ArrivalDate).HasColumnName("arrival_date");
+            entity.Property(r => r.LeaveDate).HasColumnName("leave_date");
+            entity.Property(r => r.ReservationStatusId).HasColumnName("reservation_status_id");
+            entity.Property(r => r.AdId).HasColumnName("ad_id");
+            entity.Property(r => r.RenterId).HasColumnName("renter");
+        });
 
+        modelBuilder.Entity<DbReservationStatus>(entity =>
+        {
+            entity.ToTable("reservation_status");
+            entity.HasKey(rs => rs.Id);
+            entity.Property(rs => rs.Id).HasColumnName("reservation_status_id");
+            entity.Property(rs => rs.StatusName).HasColumnName("status_name");
+        });
     }
 }

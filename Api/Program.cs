@@ -6,12 +6,15 @@ using Application.Services.Time;
 using Application.Services.Token;
 using Application.Services.User;
 using Application.UseCases.Ads;
+using Application.UseCases.Reservations;
 using Application.UseCases.Roles;
 using Application.UseCases.Users;
 using Infrastructure.Ef;
 using Infrastructure.Ef.DbEntities;
 using Infrastructure.Ef.Repository;
 using Infrastructure.Ef.Repository.Ad;
+using Infrastructure.Ef.Repository.AdStatus;
+using Infrastructure.Ef.Repository.Reservation;
 using Infrastructure.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -66,6 +69,8 @@ builder.Services.AddScoped<HelhanbContextProvider>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IAdRepository, AdRepository>();
+builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
+builder.Services.AddScoped<IReservationStatusRepository, ReservationStatusRepository>();
 
 // Users
 builder.Services.AddScoped<UseCaseFetchAllUsers>();
@@ -74,6 +79,9 @@ builder.Services.AddScoped<UseCaseLoginUser>();
 builder.Services.AddScoped<UseCaseUpdateUserProfilePicture>();
 builder.Services.AddScoped<UseCaseFetchUserById>();
 builder.Services.AddScoped<UseCaseDeleteUserById>();
+
+//Resercation
+builder.Services.AddScoped<UseCaseCreateReservation>();
 
 // Roles
 builder.Services.AddScoped<UseCaseFetchAllRoles>() ;

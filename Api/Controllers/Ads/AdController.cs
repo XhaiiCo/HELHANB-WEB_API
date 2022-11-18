@@ -1,5 +1,7 @@
 ﻿using Application.UseCases.Ads;
 using Application.UseCases.Ads.Dtos;
+using Application.UseCases.Reservations;
+using Application.UseCases.Reservations.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.Ads;
@@ -10,11 +12,12 @@ public class AdController: ControllerBase
 {
     
     private readonly UseCaseCreateAd _useCaseCreateAd;
+    private readonly UseCaseCreateReservation _useCaseCreateReservation;
 
-
-    public AdController(UseCaseCreateAd useCaseCreateAd)
+    public AdController(UseCaseCreateAd useCaseCreateAd, UseCaseCreateReservation useCaseCreateReservation)
     {
         _useCaseCreateAd = useCaseCreateAd;
+        _useCaseCreateReservation = useCaseCreateReservation;
     }
 
     
@@ -37,5 +40,17 @@ public class AdController: ControllerBase
             return Unauthorized(e.Message );
         }
     }
+
+    [HttpPost]
+    [Route("{id:int}/reservation")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    public ActionResult<DtoOutputReservation> CreateReservation(int id, DtoInputCreateReservation dto)
+    {
+        dto.AdId = id;
+
+        return StatusCode(201, _useCaseCreateReservation.Execute(dto));
+
+    }
+
 
 }

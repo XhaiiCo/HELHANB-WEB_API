@@ -14,14 +14,22 @@ public class AdTests
     {
         Ad ad = new Ad();
 
-        ad.AddReservation(new Reservation{
-            ArrivalDate = new DateTime(2022, 01, 01, 10, 0, 0), 
-            LeaveDate = new DateTime(2022, 01, 13, 22, 0, 0)
+        ad.AddReservation(new Reservation
+        {
+            dateTimeRange = new DateTimeRange
+            {
+                ArrivalDate = new DateTime(2022, 01, 01, 10, 0, 0),
+                LeaveDate = new DateTime(2022, 01, 13, 22, 0, 0)
+            }
         });
 
         Assert.That(ad.AddReservation(new Reservation
-        {
-            ArrivalDate = DateTime.Parse(dateArrival), LeaveDate = DateTime.Parse(dateLeave)
+        { 
+            dateTimeRange = new DateTimeRange
+            {
+                ArrivalDate = DateTime.Parse(dateArrival), 
+                LeaveDate = DateTime.Parse(dateLeave)
+            }
         }), Is.EqualTo(expected));
         
         Assert.That(ad.Reservations, Has.Exactly(size).Items);
