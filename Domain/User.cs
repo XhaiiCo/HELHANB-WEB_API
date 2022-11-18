@@ -2,7 +2,6 @@
 
 public class User
 {
-
     public int Id { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
@@ -10,23 +9,21 @@ public class User
     public string Email { get; set; }
     public string Password { get; set; }
     public string? ProfilePicturePath { get; set; }
-    
+
     public Role Role { get; set; }
 
-    public List<Ad> _Ads;
+    private List<Ad> _Ads;
+
     public List<Ad> Ads
     {
         get => _Ads;
-        set
-        {
-            value.ForEach(ad => AddAd(ad));
-        }
+        set { value.ForEach(ad => AddAd(ad)); }
     }
 
     public bool AddAd(Ad ad)
     {
-        if (this.Role?.Id != 2) return false;
-        
+        if (this.Role?.Name != "hote") return false;
+
         this.Ads.Add(ad);
 
         return true;

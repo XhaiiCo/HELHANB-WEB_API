@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Security.Cryptography;
 
 namespace Domain;
 
@@ -15,28 +16,29 @@ public class Ad
     public int PostalCode { get; set; }
     public string Country { get; set; }
     public string City { get; set; }
-    public int  AdStatusId { get; set; } 
+    public int AdStatusId { get; set; }
 
-    public List<Picture> Pictures;
-    private List<Reservation> _Reservations;
-    
+    private List<Picture> _pictures;
+
+    public List<Picture> Pictures
+    {
+        get => _pictures;
+        set { value.ForEach(picture => AddPicture(picture)); }
+    }
+
     public Ad()
     {
-        Pictures = new List<Picture>();
-        _Reservations = new List<Reservation>();
-    }
-    public List<Reservation> Reservations
-    {
-        get => _Reservations;
-        set { value.ForEach(reservation => AddReservation(reservation)); }
+        _pictures = new List<Picture>();
     }
 
-    public bool AddReservation(Reservation reservation)
+    public bool AddPicture(Picture picture)
     {
-        if (!Reservation.IsDateAvailable(Reservations, reservation)) return false;
-        
-        this.Reservations.Add(reservation);
+        foreach (var p in _pictures)
+        {
+            if (p.Equals(picture)) return false;
+        }
+
+        _pictures.Add(picture) ;
         return true;
-
     }
 }
