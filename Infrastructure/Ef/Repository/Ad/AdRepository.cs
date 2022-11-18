@@ -38,7 +38,7 @@ public class AdRepository : IAdRepository
 
         return ad;
     }
-    /*public DbAd Delete(DbAd ad)
+    public DbAd Delete(DbAd ad)
     {
         using var context = _contextProvider.NewContext();
 
@@ -46,7 +46,7 @@ public class AdRepository : IAdRepository
         context.SaveChanges();
 
         return ad;
-    }*/
+    }
 
 
     /*public DbAd FetchByCountry(string country)

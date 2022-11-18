@@ -11,12 +11,12 @@ public class AdController: ControllerBase
 {
     
     private readonly UseCaseCreateAd _useCaseCreateAd;
- //   private readonly UseCaseDeleteAd _useCaseDeleteAd;
+    private readonly UseCaseDeleteAd _useCaseDeleteAd;
 
-    public AdController(UseCaseCreateAd useCaseCreateAd,/*UseCaseDeleteAd useCaseDeleteAd*/)
+    public AdController(UseCaseCreateAd useCaseCreateAd,UseCaseDeleteAd useCaseDeleteAd)
     {
         _useCaseCreateAd = useCaseCreateAd;
-      //  _useCaseDeleteAd = useCaseDeleteAd;
+        _useCaseDeleteAd = useCaseDeleteAd;
     }
 
     
@@ -40,7 +40,7 @@ public class AdController: ControllerBase
         }
     }
     
-    /*[HttpDelete]
+    [HttpDelete]
     [Route("{id}")]
     [Authorize(Roles = "administrateur")]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
@@ -60,6 +60,6 @@ public class AdController: ControllerBase
         {
             return Conflict(e.Message);
         }
-    }*/
+    }
 
 }

@@ -10,7 +10,7 @@ public interface IAdRepository
 
     DbAd FetchById(int id);
 
-    //DbAd Delete(DbAd ad);
+    DbAd Delete(DbAd ad);
 
     // DbAd FetchByCountry(string country);
 }

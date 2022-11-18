@@ -83,7 +83,7 @@ builder.Services.AddScoped<UseCaseFetchAllRoles>() ;
 
 //Ads
 builder.Services.AddScoped<UseCaseCreateAd>();
-//builder.Services.AddScoped<UseCaseDeleteAd>();
+builder.Services.AddScoped<UseCaseDeleteAd>();
 
 // Services
 builder.Services.AddScoped<IUserService, UserService>() ;
