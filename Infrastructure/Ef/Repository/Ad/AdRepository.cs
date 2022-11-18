@@ -28,6 +28,26 @@ public class AdRepository : IAdRepository
         return ad;
 
     }
+    public DbAd FetchById(int id)
+    {
+        using var context = _contextProvider.NewContext();
+        var ad = context.Ads.FirstOrDefault(ad => ad.Id == id);
+
+        if (ad == null)
+            throw new KeyNotFoundException($"Ad with id {id} has not been found");
+
+        return ad;
+    }
+    public DbAd Delete(DbAd ad)
+    {
+        using var context = _contextProvider.NewContext();
+
+        context.Ads.Remove(ad);
+        context.SaveChanges();
+
+        return ad;
+    }
+
 
     /*public DbAd FetchByCountry(string country)
     {

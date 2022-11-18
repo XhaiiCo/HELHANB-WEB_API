@@ -1,6 +1,7 @@
 using System.Text;
 using API;
 using API.Utils.Picture;
+using Application.Services.Ad;
 using Application.Services.Auth;
 using Application.Services.Time;
 using Application.Services.Token;
@@ -9,6 +10,7 @@ using Application.UseCases.Ads;
 using Application.UseCases.Reservations;
 using Application.UseCases.Roles;
 using Application.UseCases.Users;
+using Application.UseCases.Users.Dtos;
 using Infrastructure.Ef;
 using Infrastructure.Ef.DbEntities;
 using Infrastructure.Ef.Repository;
@@ -79,6 +81,7 @@ builder.Services.AddScoped<UseCaseLoginUser>();
 builder.Services.AddScoped<UseCaseUpdateUserProfilePicture>();
 builder.Services.AddScoped<UseCaseFetchUserById>();
 builder.Services.AddScoped<UseCaseDeleteUserById>();
+builder.Services.AddScoped<UseCaseUpdatePasswordUser>();
 
 //Resercation
 builder.Services.AddScoped<UseCaseCreateReservation>();
@@ -88,6 +91,7 @@ builder.Services.AddScoped<UseCaseFetchAllRoles>() ;
 
 //Ads
 builder.Services.AddScoped<UseCaseCreateAd>();
+builder.Services.AddScoped<UseCaseDeleteAd>();
 
 // Services
 builder.Services.AddScoped<IUserService, UserService>() ;
@@ -95,6 +99,7 @@ builder.Services.AddScoped<IAuthService, AuthService>() ;
 builder.Services.AddScoped<ITokenService, TokenService>() ;
 builder.Services.AddScoped<IPictureService, PictureService>() ;
 builder.Services.AddScoped<ITimeService, TimeService>();
+builder.Services.AddScoped<IAdService, AdService>();
 
 var app = builder.Build();
 

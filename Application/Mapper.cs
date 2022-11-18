@@ -39,6 +39,8 @@ public class Mapper
             cfg.CreateMap<DtoInputCreateAd, Ad>();
             cfg.CreateMap<DtoInputCreateAd, DbAd>();
             cfg.CreateMap<DbAd, DtoOutputAd>();
+            cfg.CreateMap<Ad, DbAd>();
+            cfg.CreateMap<DbAd, Ad>();
 
             //Time
             cfg.CreateMap<DtoInputTime, TimeSpan>();

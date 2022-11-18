@@ -30,6 +30,14 @@ public class PictureService : IPictureService
         }
     }
 
+    public void RemoveFile(string path)
+    {
+        if (File.Exists(_environment.WebRootPath + path))
+        {
+            File.Delete(_environment.WebRootPath + path);
+        }
+    }
+
     public void UploadPicture(string path, string fileName, IFormFile picture)
     {
         this.CreateDirectory(path);
