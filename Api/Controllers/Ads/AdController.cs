@@ -13,11 +13,8 @@ namespace API.Controllers.Ads;
 [Route("api/v1/ad")]
 public class AdController: ControllerBase
 {
-    
     private readonly UseCaseCreateAd _useCaseCreateAd;
-
     private readonly UseCaseDeleteAd _useCaseDeleteAd;
-
     private readonly UseCaseCreateReservation _useCaseCreateReservation;
 
     public AdController(UseCaseCreateAd useCaseCreateAd,UseCaseDeleteAd useCaseDeleteAd, UseCaseCreateReservation useCaseCreateReservation)
@@ -29,11 +26,14 @@ public class AdController: ControllerBase
 
     
     [HttpPost]
+    [Authorize(Roles = "hote")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public ActionResult<DtoOutputAd> Create(DtoInputCreateAd dto)
     {
-
+        //Check that this is the id of the logged in user
+        if ("" + dto.UserId != User.Identity?.Name) return Unauthorized();
+        
         try
         {
             return Ok(_useCaseCreateAd.Execute(dto));
@@ -49,7 +49,7 @@ public class AdController: ControllerBase
     }
     
     [HttpDelete]
-    [Route("{id}")]
+    [Route("{id:int}")]
     [Authorize(Roles = "administrateur")]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -72,13 +72,17 @@ public class AdController: ControllerBase
 
     [HttpPost]
     [Route("{id:int}/reservation")]
+    [Authorize(Roles = "utilisateur,hote" )]
     [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public ActionResult<DtoOutputReservation> CreateReservation(int id, DtoInputCreateReservation dto)
     {
+        //Check that this is the id of the logged in user
+        if ("" + dto.RenterId != User.Identity?.Name) return Unauthorized();
+        
         dto.AdId = id;
 
         return StatusCode(201, _useCaseCreateReservation.Execute(dto));
-
     }
 
 
