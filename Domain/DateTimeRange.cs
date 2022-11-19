@@ -34,7 +34,7 @@ public class DateTimeRange
             //If the date is already initialized
             if (!_arrivalDate.Equals(new DateTime(1, 1, 1)))
                 if (value.CompareTo(_arrivalDate) <= 0)
-                    throw new ArgumentException($"_arrival {_arrivalDate} value {value} Leaving date can't be before arrival date");
+                    throw new ArgumentException($"Leaving date can't be before arrival date");
 
             _leaveDate = value;
         }

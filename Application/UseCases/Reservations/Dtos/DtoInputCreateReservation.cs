@@ -9,8 +9,8 @@ public class DtoInputCreateReservation
     [Required] public int RenterId { get; set; }
 
     [Required]
-    public DateTime ArrivalDate { get; set; }
+    public DtoInputDateOnly ArrivalDate { get; set; }
     
     [Required]
-    public DateTime LeaveDate { get; set; }
+    public DtoInputDateOnly LeaveDateOnly { get; set; }
 }

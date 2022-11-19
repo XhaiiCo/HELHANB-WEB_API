@@ -1,4 +1,6 @@
-﻿using Application.Services.ReservationBook;
+﻿using Application.Services.Date;
+using Application.Services.ReservationBook;
+using Application.UseCases.Ads;
 using Application.UseCases.Reservations.Dtos;
 using Application.UseCases.Utils;
 using Domain;
@@ -17,27 +19,35 @@ public class UseCaseCreateReservation : IUseCaseWriter<DtoOutputReservation, Dto
     private readonly IReservationStatusRepository _reservationStatusRepository;
     private readonly IAdRepository _adRepository;
     private readonly IReservationBookService _reservationBookService;
+    private readonly IDateService _dateService;
 
     public UseCaseCreateReservation(IReservationRepository reservationRepository, IUserRepository userRepository,
         IReservationStatusRepository reservationStatusRepository, IAdRepository adRepository,
-        IReservationBookService reservationBookService)
+        IReservationBookService reservationBookService, IDateService dateService)
     {
         _reservationRepository = reservationRepository;
         _userRepository = userRepository;
         _reservationStatusRepository = reservationStatusRepository;
         _adRepository = adRepository;
         _reservationBookService = reservationBookService;
+        _dateService = dateService;
     }
+
 
     public DtoOutputReservation Execute(DtoInputCreateReservation input)
     {
         var mapper = Mapper.GetInstance();
-        
+
         var dbReservation = mapper.Map<DbReservation>(input);
-        
+
         //Add default params
         dbReservation.ReservationStatusId = 1;
         dbReservation.Creation = DateTime.Now;
+
+        //Change the dateOnly to dateTime with the arrival and leave time 
+        var dbAd = _adRepository.FetchById(dbReservation.AdId);
+        dbReservation.ArrivalDate = _dateService.DateAndTimeCombineur(_dateService.MapToDateOnly(input.ArrivalDate), dbAd.ArrivalTimeRangeStart);
+        dbReservation.LeaveDate = _dateService.DateAndTimeCombineur(_dateService.MapToDateOnly(input.LeaveDateOnly), dbAd.LeaveTime);
 
         //check if the new reservation is available
         var newDomainReservation = mapper.Map<Reservation>(dbReservation);
@@ -70,7 +80,6 @@ public class UseCaseCreateReservation : IUseCaseWriter<DtoOutputReservation, Dto
         dto.Status = mapper.Map<DtoOutputReservation.DtoReservationStatus>(dbReservationStatus);
 
         //Add the ad
-        var dbAd = _adRepository.FetchById(dbReservation.AdId);
         dto.Ad = mapper.Map<DtoOutputReservation.DtoAd>(dbAd);
 
         return dto;

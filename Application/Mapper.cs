@@ -1,5 +1,4 @@
-﻿using System.Data.Common;
-using Application.UseCases.Ads.Dtos;
+﻿using Application.UseCases.Ads.Dtos;
 using Application.UseCases.Reservations.Dtos;
 using Application.UseCases.Roles.Dtos;
 using Application.UseCases.Users.Dtos;
@@ -44,6 +43,9 @@ public class Mapper
 
             //Time
             cfg.CreateMap<DtoInputTime, TimeSpan>();
+            
+            //Date
+            cfg.CreateMap<DtoInputDateOnly, DateTime>();
             
             //Reservations
             cfg.CreateMap<DtoInputCreateReservation, DbReservation>();
