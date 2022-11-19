@@ -81,6 +81,13 @@ public class AdController : ControllerBase
 
         dto.AdId = id;
 
-        return StatusCode(201, _useCaseCreateReservation.Execute(dto));
+        try
+        {
+            return StatusCode(201, _useCaseCreateReservation.Execute(dto));
+        }
+        catch (Exception e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
 }

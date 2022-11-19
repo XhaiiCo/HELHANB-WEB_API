@@ -12,5 +12,5 @@ public class DtoInputCreateReservation
     public DtoInputDateOnly ArrivalDate { get; set; }
     
     [Required]
-    public DtoInputDateOnly LeaveDateOnly { get; set; }
+    public DtoInputDateOnly LeaveDate { get; set; }
 }

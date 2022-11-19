@@ -46,8 +46,10 @@ public class UseCaseCreateReservation : IUseCaseWriter<DtoOutputReservation, Dto
 
         //Change the dateOnly to dateTime with the arrival and leave time 
         var dbAd = _adRepository.FetchById(dbReservation.AdId);
-        dbReservation.ArrivalDate = _dateService.DateAndTimeCombineur(_dateService.MapToDateOnly(input.ArrivalDate), dbAd.ArrivalTimeRangeStart);
-        dbReservation.LeaveDate = _dateService.DateAndTimeCombineur(_dateService.MapToDateOnly(input.LeaveDateOnly), dbAd.LeaveTime);
+        dbReservation.ArrivalDate = _dateService.DateAndTimeCombiner(_dateService.MapToDateOnly(input.ArrivalDate),
+            dbAd.ArrivalTimeRangeStart);
+        dbReservation.LeaveDate =
+            _dateService.DateAndTimeCombiner(_dateService.MapToDateOnly(input.LeaveDate), dbAd.LeaveTime);
 
         //check if the new reservation is available
         var newDomainReservation = mapper.Map<Reservation>(dbReservation);
@@ -57,13 +59,15 @@ public class UseCaseCreateReservation : IUseCaseWriter<DtoOutputReservation, Dto
             dbReservation.LeaveDate
         );
 
+        Reservation.ValidNewReservation(newDomainReservation);
+
         var reservationBook = _reservationBookService.FetchByAdId(input.AdId);
 
         //Keep only the accepted reservations
         var reservations = (reservationBook.Where(r => r.reservationStatus.Id == 3)).Entries();
 
         if (!Reservation.IsDateAvailable(reservations, newDomainReservation))
-            throw new Exception("This date range isn't available");
+            throw new Exception("Ces dates sont indisponibles");
 
         //If all the tests are validated
         _reservationRepository.Create(dbReservation);
