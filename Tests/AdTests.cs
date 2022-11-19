@@ -1,4 +1,5 @@
-﻿using Domain;
+﻿using System.Diagnostics;
+using Domain;
 
 namespace Tests;
 
@@ -14,7 +15,7 @@ public class AdTests
         Ad ad = new Ad();
         ReservationBook reservationBook = new ReservationBook();
 
-        reservationBook.AddReservation(new Reservation
+        reservationBook.Add(new Reservation
         {
             DateTimeRange = new DateTimeRange
             (
@@ -23,15 +24,17 @@ public class AdTests
             )
         });
 
-        Assert.That(reservationBook.AddReservation(new Reservation
+        bool testAddReservation = reservationBook.Add(new Reservation
         {
             DateTimeRange = new DateTimeRange
             (
                 DateTime.Parse(dateArrival),
                 DateTime.Parse(dateLeave)
             )
-        }), Is.EqualTo(expected));
+        });
+        
+        Assert.That(testAddReservation, Is.EqualTo(expected));
 
-        Assert.That(reservationBook.Reservations, Has.Exactly(size).Items);
+        Assert.That(reservationBook.Entries(), Has.Exactly(size).Items);
     }
 }

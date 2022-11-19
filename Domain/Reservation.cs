@@ -5,7 +5,7 @@ public class Reservation
     public int Id { get; set; }
     public DateTime Creation { get; set; }
 
-    public DateTimeRange dateTimeRange { get; set; }
+    public DateTimeRange DateTimeRange { get; set; }
     
     public ReservationStatus reservationStatus { get; set; }
     

@@ -16,9 +16,12 @@ public class ReservationBook
         return reservationBook;
     }
 
-    public void Add(Reservation reservation)
+    public bool Add(Reservation reservation)
     {
+        if(!Reservation.IsDateAvailable(_entries, reservation)) return false ;
+        
         _entries.Add(reservation);
+        return true;
     }
 
     public void AddRange(IEnumerable<Reservation> reservations)

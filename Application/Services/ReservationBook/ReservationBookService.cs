@@ -3,7 +3,7 @@ using Infrastructure.Ef.Repository.Reservation;
 
 namespace Application.Services.ReservationBook;
 
-public class ReservationBookService: IReservationBookService
+public class ReservationBookService : IReservationBookService
 {
     private readonly IReservationRepository _reservationRepository;
 
@@ -11,7 +11,7 @@ public class ReservationBookService: IReservationBookService
     {
         _reservationRepository = reservationRepository;
     }
-    
+
     public Domain.ReservationBook Fetch(int adId)
     {
         var dbReservations = _reservationRepository.FilterByAdId(adId);
@@ -20,11 +20,11 @@ public class ReservationBookService: IReservationBookService
         {
             Id = dbReservation.Id,
             Creation = dbReservation.Creation,
-            dateTimeRange = new DateTimeRange
-            {
-                _arrivalDate = dbReservation.ArrivalDate,
-                _leaveDate = dbReservation.LeaveDate
-            },
+            DateTimeRange = new DateTimeRange
+            (
+                dbReservation.ArrivalDate,
+                dbReservation.LeaveDate
+            ),
             reservationStatus = new ReservationStatus
             {
                 Id = dbReservation.ReservationStatusId
