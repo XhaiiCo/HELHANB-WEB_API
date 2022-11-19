@@ -32,7 +32,10 @@ public class UseCaseCreateReservation : IUseCaseWriter<DtoOutputReservation, Dto
     public DtoOutputReservation Execute(DtoInputCreateReservation input)
     {
         var mapper = Mapper.GetInstance();
+        
         var dbReservation = mapper.Map<DbReservation>(input);
+        
+        //Add default params
         dbReservation.ReservationStatusId = 1;
         dbReservation.Creation = DateTime.Now;
 
@@ -44,25 +47,29 @@ public class UseCaseCreateReservation : IUseCaseWriter<DtoOutputReservation, Dto
             dbReservation.LeaveDate
         );
 
-        var reservationBook = _reservationBookService.Fetch(input.AdId);
+        var reservationBook = _reservationBookService.FetchByAdId(input.AdId);
 
-        //on ne garde que celles qui ont le status accepté
+        //Keep only the accepted reservations
         var reservations = (reservationBook.Where(r => r.reservationStatus.Id == 3)).Entries();
 
         if (!Reservation.IsDateAvailable(reservations, newDomainReservation))
             throw new Exception("This date range isn't available");
 
-        //si tout s est bien passé
+        //If all the tests are validated
         _reservationRepository.Create(dbReservation);
 
+        //Prepare the return
         var dto = mapper.Map<DtoOutputReservation>(dbReservation);
 
+        //Add the renter
         var dbRenter = _userRepository.FetchById(dbReservation.RenterId);
         dto.Renter = mapper.Map<DtoOutputReservation.DtoRenter>(dbRenter);
 
+        //Add the reservation status
         var dbReservationStatus = _reservationStatusRepository.FetchById(dbReservation.ReservationStatusId);
         dto.Status = mapper.Map<DtoOutputReservation.DtoReservationStatus>(dbReservationStatus);
 
+        //Add the ad
         var dbAd = _adRepository.FetchById(dbReservation.AdId);
         dto.Ad = mapper.Map<DtoOutputReservation.DtoAd>(dbAd);
 

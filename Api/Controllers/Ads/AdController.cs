@@ -1,39 +1,38 @@
 ﻿using Application.UseCases.Ads;
 using Application.UseCases.Ads.Dtos;
-
 using Application.UseCases.Reservations;
 using Application.UseCases.Reservations.Dtos;
 using Microsoft.AspNetCore.Authorization;
-
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.Ads;
 
 [ApiController]
 [Route("api/v1/ad")]
-public class AdController: ControllerBase
+public class AdController : ControllerBase
 {
     private readonly UseCaseCreateAd _useCaseCreateAd;
     private readonly UseCaseDeleteAd _useCaseDeleteAd;
     private readonly UseCaseCreateReservation _useCaseCreateReservation;
 
-    public AdController(UseCaseCreateAd useCaseCreateAd,UseCaseDeleteAd useCaseDeleteAd, UseCaseCreateReservation useCaseCreateReservation)
+    public AdController(UseCaseCreateAd useCaseCreateAd, UseCaseDeleteAd useCaseDeleteAd,
+        UseCaseCreateReservation useCaseCreateReservation)
     {
         _useCaseCreateAd = useCaseCreateAd;
         _useCaseDeleteAd = useCaseDeleteAd;
         _useCaseCreateReservation = useCaseCreateReservation;
     }
 
-    
+
     [HttpPost]
     [Authorize(Roles = "hote")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public ActionResult<DtoOutputAd> Create(DtoInputCreateAd dto)
+    public ActionResult<DtoOutputAd> CreateAd(DtoInputCreateAd dto)
     {
         //Check that this is the id of the logged in user
         if ("" + dto.UserId != User.Identity?.Name) return Unauthorized();
-        
+
         try
         {
             return Ok(_useCaseCreateAd.Execute(dto));
@@ -44,20 +43,20 @@ public class AdController: ControllerBase
         }
         catch (KeyNotFoundException e)
         {
-            return Unauthorized(e.Message );
+            return Unauthorized(e.Message);
         }
     }
-    
+
     [HttpDelete]
     [Route("{id:int}")]
     [Authorize(Roles = "administrateur")]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public ActionResult<DtoOutputAd> Delete(int id)
+    public ActionResult<DtoOutputAd> DeleteAd(int id)
     {
         try
         {
-            var ad = _useCaseDeleteAd.Execute(id) ;
+            var ad = _useCaseDeleteAd.Execute(id);
             return Ok(ad);
         }
         catch (UnauthorizedAccessException e)
@@ -72,18 +71,16 @@ public class AdController: ControllerBase
 
     [HttpPost]
     [Route("{id:int}/reservation")]
-    [Authorize(Roles = "utilisateur,hote" )]
+    [Authorize(Roles = "utilisateur,hote")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public ActionResult<DtoOutputReservation> CreateReservation(int id, DtoInputCreateReservation dto)
     {
         //Check that this is the id of the logged in user
         if ("" + dto.RenterId != User.Identity?.Name) return Unauthorized();
-        
+
         dto.AdId = id;
 
         return StatusCode(201, _useCaseCreateReservation.Execute(dto));
     }
-
-
 }

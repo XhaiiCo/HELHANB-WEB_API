@@ -7,17 +7,20 @@ public class DateTimeRange
 
     public DateTimeRange(DateTime arrivalDate, DateTime leaveDate)
     {
-        this.ArrivalDate = arrivalDate;
-        this.LeaveDate = leaveDate;
-    } 
+        ArrivalDate = arrivalDate;
+        LeaveDate = leaveDate;
+    }
 
     public DateTime ArrivalDate
     {
         get => _arrivalDate;
         set
         {
-            if(value >= LeaveDate)
-                throw new ArgumentException($"Arrival date can't be after leaving date");
+            //If the date is already initialized
+            if (!_leaveDate.Equals(new DateTime(1, 1, 1)))
+                if (value.CompareTo(_leaveDate) >= 0)
+                    throw new ArgumentException(
+                        $"Arrival date can't be after leaving date");
 
             _arrivalDate = value;
         }
@@ -28,11 +31,12 @@ public class DateTimeRange
         get => _leaveDate;
         set
         {
-            if(value <= ArrivalDate)
-                throw new ArgumentException($"Leaving date can't be before arrival date");
+            //If the date is already initialized
+            if (!_arrivalDate.Equals(new DateTime(1, 1, 1)))
+                if (value.CompareTo(_arrivalDate) <= 0)
+                    throw new ArgumentException($"_arrival {_arrivalDate} value {value} Leaving date can't be before arrival date");
 
             _leaveDate = value;
         }
     }
-
 }

@@ -18,6 +18,7 @@ public class UseCaseDeleteAd : IUseCaseParameterizedQuery<DtoOutputAd, int>
     
     public DtoOutputAd Execute(int id)
     {
+        //TODO: Remove all reservation before
         var ad = _adRepository.FetchById(id);
         
         var dbAd = Mapper.GetInstance().Map<DbAd>(ad);

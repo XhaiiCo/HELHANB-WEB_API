@@ -2,5 +2,5 @@
 
 public interface IReservationBookService
 {
-     Domain.ReservationBook Fetch(int adId);
+     Domain.ReservationBook FetchByAdId(int adId);
 }

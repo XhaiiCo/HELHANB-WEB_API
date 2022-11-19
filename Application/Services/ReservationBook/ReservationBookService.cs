@@ -12,7 +12,14 @@ public class ReservationBookService : IReservationBookService
         _reservationRepository = reservationRepository;
     }
 
-    public Domain.ReservationBook Fetch(int adId)
+    /// <summary>
+    /// It fetches a list of reservations from the database, and then transforms them into a list of domain objects
+    /// </summary>
+    /// <param name="adId">The id of the ad that we want to fetch the reservations for.</param>
+    /// <returns>
+    /// A collection of reservations.
+    /// </returns>
+    public Domain.ReservationBook FetchByAdId(int adId)
     {
         var dbReservations = _reservationRepository.FilterByAdId(adId);
 
