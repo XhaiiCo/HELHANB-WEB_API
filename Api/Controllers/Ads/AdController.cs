@@ -14,13 +14,15 @@ public class AdController : ControllerBase
     private readonly UseCaseCreateAd _useCaseCreateAd;
     private readonly UseCaseDeleteAd _useCaseDeleteAd;
     private readonly UseCaseCreateReservation _useCaseCreateReservation;
+    private readonly UseCaseFetchAllAds _useCaseFetchAllAds;
 
     public AdController(UseCaseCreateAd useCaseCreateAd, UseCaseDeleteAd useCaseDeleteAd,
-        UseCaseCreateReservation useCaseCreateReservation)
+        UseCaseCreateReservation useCaseCreateReservation,UseCaseFetchAllAds useCaseFetchAllAds)
     {
         _useCaseCreateAd = useCaseCreateAd;
         _useCaseDeleteAd = useCaseDeleteAd;
         _useCaseCreateReservation = useCaseCreateReservation;
+        _useCaseFetchAllAds = useCaseFetchAllAds;
     }
 
 
@@ -67,6 +69,13 @@ public class AdController : ControllerBase
         {
             return Conflict(e.Message);
         }
+    }
+    
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public ActionResult<IEnumerable<DtoOutputAd>> FetchAll()
+    {
+        return Ok(_useCaseFetchAllAds.Execute());
     }
 
     [HttpPost]

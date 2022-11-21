@@ -17,7 +17,15 @@ public class AdService : IAdService
         var dbAd = _adRepository.FetchById(id);
         return MapToAd(dbAd);
     }
-    
+
+    public IEnumerable<Domain.Ad> FetchAll()
+    {
+        var dbAds = _adRepository.FetchAll();
+        var ads = dbAds.Select(MapToAd);
+        
+        return ads;
+    }
+
     public Domain.Ad MapToAd(DbAd dbAd)
     {
         var ad = Mapper.GetInstance().Map<Domain.Ad>(dbAd);
