@@ -1,5 +1,4 @@
 ﻿using API.Utils.Picture;
-using Application;
 using Application.Services.Token;
 using Application.Services.User;
 using Application.UseCases.Users;
@@ -15,10 +14,11 @@ namespace API.Controllers.User;
 public class UserController : ControllerBase
 {
     public static IWebHostEnvironment _environment;
+    private IConfiguration _config;
+
     private readonly ITokenService _tokenService;
     private readonly IUserService _userService;
-    private IConfiguration _config;
-    private IPictureService _pictureService;
+    private readonly IPictureService _pictureService;
 
     private readonly UseCaseFetchAllUsers _useCaseFetchAllUsers;
     private readonly UseCaseCreateUser _useCaseCreateUser;
@@ -27,6 +27,7 @@ public class UserController : ControllerBase
     private readonly UseCaseFetchUserById _useCaseFetchUserById;
     private readonly UseCaseDeleteUserById _useCaseDeleteUserById;
     private readonly UseCaseUpdatePasswordUser _useCaseUpdatePasswordUser;
+    private readonly UseCaseUpdateUser _useCaseUpdateUser;
 
     public UserController(
         UseCaseFetchAllUsers useCaseFetchAllUsers,
@@ -40,7 +41,8 @@ public class UserController : ControllerBase
         UseCaseFetchUserById useCaseFetchUserById,
         IPictureService pictureService,
         UseCaseDeleteUserById useCaseDeleteUserById,
-        UseCaseUpdatePasswordUser useCaseUpdatePasswordUser)
+        UseCaseUpdatePasswordUser useCaseUpdatePasswordUser,
+        UseCaseUpdateUser useCaseUpdateUser)
     {
         _useCaseFetchAllUsers = useCaseFetchAllUsers;
         _useCaseCreateUser = useCaseCreateUser;
@@ -54,6 +56,7 @@ public class UserController : ControllerBase
         _pictureService = pictureService;
         _useCaseDeleteUserById = useCaseDeleteUserById;
         _useCaseUpdatePasswordUser = useCaseUpdatePasswordUser;
+        _useCaseUpdateUser = useCaseUpdateUser;
     }
 
     private void AppendCookies(string token)
@@ -66,6 +69,11 @@ public class UserController : ControllerBase
         };
 
         Response.Cookies.Append("jwt", token, cookieOptions);
+    }
+    
+    private bool IsTheIdOfConnectedUser(int id)
+    {
+        return "" + id == User.Identity?.Name;
     }
 
     private string GenerateToken(DtoTokenUser tokenUser)
@@ -167,11 +175,31 @@ public class UserController : ControllerBase
     public ActionResult<DtoOutputUser> UpdatePassword(DtoInputUpdatePasswordUser dto)
     {
         //Check that this is the id of the logged in user
-        if ("" + dto.Id != User.Identity?.Name) return Unauthorized();
+        if (!IsTheIdOfConnectedUser(dto.Id)) return Unauthorized();
 
         return Ok(_useCaseUpdatePasswordUser.Execute(dto));
     }
 
+    [HttpPut]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public ActionResult<DtoOutputUser> UpdateUser(DtoInputUpdateUser dtoInputUpdateUser)
+    {
+        //Check that this is the id of the logged in user
+        if (!IsTheIdOfConnectedUser(dtoInputUpdateUser.Id)) return Unauthorized();
+
+        try
+        {
+            var user = _useCaseUpdateUser.Execute(dtoInputUpdateUser);
+            
+            return Ok(user);
+        }
+        catch (Exception e)
+        {
+            return Conflict(e.Message);
+        }
+    }
 
     [HttpPut]
     [Authorize]
@@ -181,7 +209,7 @@ public class UserController : ControllerBase
     public ActionResult<DtoOutputUser> UpdateProfilePicture(int id, IFormFile? profilePicture)
     {
         //Check that this is the id of the logged in user
-        if ("" + id != User.Identity?.Name) return Unauthorized();
+        if (!IsTheIdOfConnectedUser(id)) return Unauthorized();
 
         try
         {
@@ -242,7 +270,7 @@ public class UserController : ControllerBase
         }
         catch (Exception e)
         {
-            return Unauthorized(e.Message.ToString());
+            return Unauthorized(e.Message);
         }
 
         return Unauthorized("Failed");

@@ -84,8 +84,9 @@ builder.Services.AddScoped<UseCaseUpdateUserProfilePicture>();
 builder.Services.AddScoped<UseCaseFetchUserById>();
 builder.Services.AddScoped<UseCaseDeleteUserById>();
 builder.Services.AddScoped<UseCaseUpdatePasswordUser>();
+builder.Services.AddScoped<UseCaseUpdateUser>();
 
-//Resercation
+//Reservation
 builder.Services.AddScoped<UseCaseCreateReservation>();
 
 // Roles
