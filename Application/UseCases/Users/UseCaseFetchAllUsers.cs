@@ -1,32 +1,37 @@
 ﻿using Application.Services.User;
+using Application.UseCases.Roles;
 using Application.UseCases.Users.Dtos;
 using Application.UseCases.Utils;
 using Infrastructure.Ef;
+using Infrastructure.Ef.Repository.User;
 
 namespace Application.UseCases.Users;
 
-public class UseCaseFetchAllUsers: IUseCaseParameterizedQuery<IEnumerable<DtoOutputUser>, DtoInputFilteringUsers>
+public class UseCaseFetchAllUsers : IUseCaseParameterizedQuery<IEnumerable<DtoOutputUser>, DtoInputFilteringUsers>
 {
+    private readonly IUserRepository _userRepository;
+    private readonly UseCaseFetchAllRoles _useCaseFetchAllRoles;
 
-    private readonly IUserService _userService;
-
-    public UseCaseFetchAllUsers(IUserService userService)
+    public UseCaseFetchAllUsers(IUserRepository userRepository, UseCaseFetchAllRoles useCaseFetchAllRoles)
     {
-        _userService = userService;
+        _userRepository = userRepository;
+        _useCaseFetchAllRoles = useCaseFetchAllRoles;
     }
 
     public IEnumerable<DtoOutputUser> Execute(DtoInputFilteringUsers param)
     {
-        var users = _userService.FetchAll();
+        var roles = _useCaseFetchAllRoles.Execute();
         
-        if(param.Role != null)
-            users = users.Where(user => user.Role.Name == param.Role);
+        var roleId = roles.FirstOrDefault(role => role.Name == param.Role)?.Id;
 
-        if (param.Search != null)
-            users = users.Where(user => user.FirstName.ToLower().Contains(param.Search.ToLower()) ||
-                                        user.LastName.ToLower().Contains(param.Search.ToLower()) ||
-                                        user.Email.ToLower().Contains(param.Search.ToLower()));
-        
+        var filteringUser = new FilteringUser
+        {
+            RoleId =  roleId,
+            Search = param.Search 
+        };
+
+        var users = _userRepository.FetchAll(filteringUser);
+
         return Mapper.GetInstance().Map<IEnumerable<DtoOutputUser>>(users);
     }
 }

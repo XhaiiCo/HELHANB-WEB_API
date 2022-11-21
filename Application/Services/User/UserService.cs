@@ -53,7 +53,7 @@ public class UserService : IUserService
     /// </returns>
     public IEnumerable<User> FetchAll()
     {
-        var dbUsers = _userRepository.FetchAll();
+        var dbUsers = _userRepository.FetchAll(null);
         var users = dbUsers.Select(MapToUser);
 
         return users;

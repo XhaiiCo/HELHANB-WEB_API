@@ -186,7 +186,7 @@ public class UserController : ControllerBase
         try
         {
             var currentUser = _userService.FetchById(id);
-            
+
             //If the protilePicture is null remove it
             if (profilePicture == null)
             {
@@ -195,14 +195,14 @@ public class UserController : ControllerBase
                 {
                     _pictureService.RemoveFile(currentUser.ProfilePicturePath);
                 }
-                
+
                 var dtoInputUpdateProfilePictureUser = new DtoInputUpdateProfilePictureUser
                 {
                     Id = id,
                     ProfilePicturePath = null
                 };
                 var user = _useCaseUpdateUserProfilePicture.Execute(dtoInputUpdateProfilePictureUser);
-                
+
                 return Ok(user);
             }
 

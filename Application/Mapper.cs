@@ -5,6 +5,7 @@ using Application.UseCases.Users.Dtos;
 using AutoMapper;
 using Domain;
 using Infrastructure.Ef.DbEntities;
+using Infrastructure.Ef.Repository.User;
 
 namespace Application;
 
@@ -21,7 +22,6 @@ public class Mapper
     {
         var config = new MapperConfiguration(cfg =>
         {
-
             // User
             cfg.CreateMap<User, DtoOutputUser>();
             cfg.CreateMap<DtoInputCreateUser, DbUser>();
@@ -29,11 +29,11 @@ public class Mapper
             cfg.CreateMap<DbUser, User>();
             cfg.CreateMap<DtoOutputUser, DtoTokenUser>();
             cfg.CreateMap<User, DbUser>();
-            
+
             //Role
             cfg.CreateMap<DbRole, DtoOutputRole>();
             cfg.CreateMap<Role, DtoOutputRole>();
-            
+
             //Ad
             cfg.CreateMap<DtoInputCreateAd, Ad>();
             cfg.CreateMap<DtoInputCreateAd, DbAd>();
@@ -43,10 +43,10 @@ public class Mapper
 
             //Time
             cfg.CreateMap<DtoInputTime, TimeSpan>();
-            
+
             //Date
             cfg.CreateMap<DtoInputDateOnly, DateTime>();
-            
+
             //Reservations
             cfg.CreateMap<DtoInputCreateReservation, DbReservation>();
             cfg.CreateMap<DbReservation, DtoOutputReservation>();
@@ -54,7 +54,6 @@ public class Mapper
             cfg.CreateMap<DbReservationStatus, DtoOutputReservation.DtoReservationStatus>();
             cfg.CreateMap<DbAd, DtoOutputReservation.DtoAd>();
             cfg.CreateMap<DbReservation, Reservation>();
-            
         });
         return new AutoMapper.Mapper(config);
     }
