@@ -13,11 +13,11 @@ public class AdRepository : IAdRepository
     }
 
 
-    /*public IEnumerable<DbAd> FetchAll()
+    public IEnumerable<DbAd> FetchAll()
     {
         using var context = _contextProvider.NewContext();
         return context.Ads.ToList();
-    }*/
+    }
 
     public DbAd Create(DbAd ad)
     {

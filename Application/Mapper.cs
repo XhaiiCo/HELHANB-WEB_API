@@ -38,6 +38,7 @@ public class Mapper
             cfg.CreateMap<DtoInputCreateAd, Ad>();
             cfg.CreateMap<DtoInputCreateAd, DbAd>();
             cfg.CreateMap<DbAd, DtoOutputAd>();
+            cfg.CreateMap<Ad, DtoOutputAd>();
             cfg.CreateMap<Ad, DbAd>();
             cfg.CreateMap<DbAd, Ad>();
 
