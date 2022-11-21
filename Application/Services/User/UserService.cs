@@ -1,9 +1,11 @@
 ﻿using Application;
 using Application.Services.User;
+using Application.UseCases.Users.Dtos;
 using Domain;
 using Infrastructure.Ef;
 using Infrastructure.Ef.DbEntities;
 using Infrastructure.Ef.Repository;
+using Infrastructure.Ef.Repository.User;
 
 public class UserService : IUserService
 {
@@ -51,9 +53,23 @@ public class UserService : IUserService
     /// <returns>
     /// A collection of User objects.
     /// </returns>
-    public IEnumerable<User> FetchAll()
+    public IEnumerable<User> FetchAll(DtoInputFilteringUsers? dtoInputFilteringUsers)
     {
-        var dbUsers = _userRepository.FetchAll(null);
+        FilteringUser? filteringUser = null;
+        
+        if (dtoInputFilteringUsers != null)
+        {
+            var roles = _roleRepository.FetchAll();
+
+
+            filteringUser = new FilteringUser
+            {
+                RoleId = roles.FirstOrDefault(role => role.Name == dtoInputFilteringUsers.Role)?.Id,
+                Search = dtoInputFilteringUsers.Search
+            };
+        }
+
+        var dbUsers = _userRepository.FetchAll(filteringUser);
         var users = dbUsers.Select(MapToUser);
 
         return users;
@@ -63,7 +79,7 @@ public class UserService : IUserService
     /// Map the DbUser to a User and then set the Role property of the User to a Role object that is fetched from the
     /// RoleRepository
     /// </summary>
-    /// <param name="DbUser">The database entity that we are mapping from.</param>
+    /// <param name="dbUser">The database entity that we are mapping from.</param>
     /// <returns>
     /// A User object
     /// </returns>

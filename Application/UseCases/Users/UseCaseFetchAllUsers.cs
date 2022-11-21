@@ -9,29 +9,17 @@ namespace Application.UseCases.Users;
 
 public class UseCaseFetchAllUsers : IUseCaseParameterizedQuery<IEnumerable<DtoOutputUser>, DtoInputFilteringUsers>
 {
-    private readonly IUserRepository _userRepository;
-    private readonly UseCaseFetchAllRoles _useCaseFetchAllRoles;
 
-    public UseCaseFetchAllUsers(IUserRepository userRepository, UseCaseFetchAllRoles useCaseFetchAllRoles)
+    private readonly IUserService _userService;
+
+    public UseCaseFetchAllUsers(IUserService userService)
     {
-        _userRepository = userRepository;
-        _useCaseFetchAllRoles = useCaseFetchAllRoles;
+        _userService = userService;
     }
 
-    public IEnumerable<DtoOutputUser> Execute(DtoInputFilteringUsers param)
+    public IEnumerable<DtoOutputUser> Execute(DtoInputFilteringUsers? param)
     {
-        var roles = _useCaseFetchAllRoles.Execute();
-        
-        var roleId = roles.FirstOrDefault(role => role.Name == param.Role)?.Id;
-
-        var filteringUser = new FilteringUser
-        {
-            RoleId =  roleId,
-            Search = param.Search 
-        };
-
-        var users = _userRepository.FetchAll(filteringUser);
-
+        var users = _userService.FetchAll(param);
         return Mapper.GetInstance().Map<IEnumerable<DtoOutputUser>>(users);
     }
 }
