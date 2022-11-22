@@ -5,6 +5,8 @@ public class DateTimeRange
     private DateTime _arrivalDate;
     private DateTime _leaveDate;
 
+    public DateTimeRange(){}
+
     public DateTimeRange(DateTime arrivalDate, DateTime leaveDate)
     {
         ArrivalDate = arrivalDate;
@@ -47,7 +49,7 @@ public class DateTimeRange
     /// </returns>
     public int ComputeNbNight()
     {
-        var totalDays = (LeaveDate - ArrivalDate).TotalDays;
-        return (int) Math.Ceiling(totalDays);
+        decimal totalDays = LeaveDate.Day - ArrivalDate.Day;
+        return (int) Math.Floor(totalDays);
     }
 }

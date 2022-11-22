@@ -50,11 +50,11 @@ public class Reservation
             throw new Exception("La date d'arrivée ne peut pas être passée");
 
         //A reservation must be for at least the following day
-        if(IsNotAtLeastForTheFollowingDay(reservation))
+        if(IsForTheSameDay(reservation))
             throw new Exception("Une réservation doit être au minimum pour le lendemain");
             
         //The reservation must be for at least one night
-        if(IsNotBiggerThanOneNight(reservation))
+        if(IsLessThanOneNight(reservation))
             throw new Exception("La réservation doit au moins faire une nuit");
 
         return true;
@@ -67,7 +67,7 @@ public class Reservation
     /// <returns>
     /// A boolean value.
     /// </returns>
-    private static bool IsNotBiggerThanOneNight(Reservation reservation)
+    public static bool IsLessThanOneNight(Reservation reservation)
     {
         return reservation.DateTimeRange.ComputeNbNight() == 0;
     }
@@ -79,7 +79,7 @@ public class Reservation
     /// <returns>
     /// A boolean value.
     /// </returns>
-    private static bool IsNotAtLeastForTheFollowingDay(Reservation reservation)
+    public static bool IsForTheSameDay(Reservation reservation)
     {
         return reservation.DateTimeRange.ArrivalDate.Day == DateTime.Now.Day &&
                reservation.DateTimeRange.ArrivalDate.Month == DateTime.Now.Month &&
@@ -93,7 +93,7 @@ public class Reservation
     /// <returns>
     /// A boolean value.
     /// </returns>
-    private static bool IsInThePast(Reservation reservation)
+    public static bool IsInThePast(Reservation reservation)
     {
         return reservation.DateTimeRange.ArrivalDate.CompareTo(DateTime.Now) < 0;
     }

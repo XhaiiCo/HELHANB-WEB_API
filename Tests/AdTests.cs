@@ -5,6 +5,7 @@ namespace Tests;
 
 public class AdTests
 {
+    /*
     [Test]
     [TestCase("01/01/2022 07:00", "01/01/2022 11:00", false, 1)]
     [TestCase("25/12/2021 07:00", "01/01/2022 07:00", true, 2)]
@@ -36,5 +37,5 @@ public class AdTests
         Assert.That(testAddReservation, Is.EqualTo(expected));
 
         Assert.That(reservationBook.Entries(), Has.Exactly(size).Items);
-    }
+    }*/
 }
