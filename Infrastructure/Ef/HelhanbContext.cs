@@ -19,6 +19,7 @@ public class HelhanbContext : DbContext
      public DbSet<DbMessage> Messages { get; set; }
      
  */
+    public DbSet<DbHouseFeature> HouseFeatures { get; set; }
     public DbSet<DbAdPicture> AdPictures { get; set; }
 
     public DbSet<DbAd> Ads { get; set; }
@@ -59,6 +60,15 @@ public class HelhanbContext : DbContext
         }); 
         */
 
+        modelBuilder.Entity<DbHouseFeature>(entity =>
+        {
+            entity.ToTable("house_features");
+            entity.HasKey(hF => hF.HouseFeatureId);
+            entity.Property(hF => hF.HouseFeatureId).HasColumnName("house_feature_id");
+            entity.Property(hF => hF.Feature).HasColumnName("feature");
+            entity.Property(hF => hF.AdId).HasColumnName("ad_id");
+        });
+        
         modelBuilder.Entity<DbAdPicture>(entity =>
         {
             entity.ToTable("ad_pictures");
@@ -67,7 +77,7 @@ public class HelhanbContext : DbContext
             entity.Property(p => p.Path).HasColumnName("path");
             entity.Property(p => p.AdId).HasColumnName("ad_id");
         });
-        
+
         modelBuilder.Entity<DbAdStatus>(entity =>
         {
             entity.ToTable("ad_status");

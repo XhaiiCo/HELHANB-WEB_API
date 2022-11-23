@@ -19,6 +19,7 @@ using Infrastructure.Ef.Repository;
 using Infrastructure.Ef.Repository.Ad;
 using Infrastructure.Ef.Repository.AdPicture;
 using Infrastructure.Ef.Repository.AdStatus;
+using Infrastructure.Ef.Repository.HouseFeature;
 using Infrastructure.Ef.Repository.Reservation;
 using Infrastructure.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -77,6 +78,7 @@ builder.Services.AddScoped<IAdRepository, AdRepository>();
 builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
 builder.Services.AddScoped<IReservationStatusRepository, ReservationStatusRepository>();
 builder.Services.AddScoped<IAdPictureRepository, AdPictureRepository>();
+builder.Services.AddScoped<IHouseFeatureRepository, HouseFeatureRepository>();
 
 // Users
 builder.Services.AddScoped<UseCaseFetchAllUsers>();

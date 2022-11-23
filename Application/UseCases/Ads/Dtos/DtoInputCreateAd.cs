@@ -17,4 +17,6 @@ public class DtoInputCreateAd
     [Required] public DtoInputTime ArrivalTimeRangeStart { get; set; }
     [Required] public DtoInputTime ArrivalTimeRangeEnd { get; set; }
     [Required] public DtoInputTime LeaveTime { get; set; }
+
+    public IEnumerable<string> Features { get; set; }
 }
