@@ -17,6 +17,7 @@ public class Ad
     public string Country { get; set; }
     public string City { get; set; }
     public int AdStatusId { get; set; }
+    public User Owner { get; set; }
 
     private List<Picture> _pictures;
 

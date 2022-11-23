@@ -1,4 +1,6 @@
-﻿using Application.UseCases.Ads;
+﻿using API.Utils.Picture;
+using Application.Services.Ad;
+using Application.UseCases.Ads;
 using Application.UseCases.Ads.Dtos;
 using Application.UseCases.Reservations;
 using Application.UseCases.Reservations.Dtos;
@@ -11,18 +13,26 @@ namespace API.Controllers.Ads;
 [Route("api/v1/ad")]
 public class AdController : ControllerBase
 {
+    private readonly IAdService _adService;
+    private readonly IPictureService _pictureService;
+
     private readonly UseCaseCreateAd _useCaseCreateAd;
     private readonly UseCaseDeleteAd _useCaseDeleteAd;
     private readonly UseCaseCreateReservation _useCaseCreateReservation;
     private readonly UseCaseFetchAllAds _useCaseFetchAllAds;
+    private readonly UseCaseAddPictureAd _useCaseAddPictureAd;
 
     public AdController(UseCaseCreateAd useCaseCreateAd, UseCaseDeleteAd useCaseDeleteAd,
-        UseCaseCreateReservation useCaseCreateReservation,UseCaseFetchAllAds useCaseFetchAllAds)
+        UseCaseCreateReservation useCaseCreateReservation, UseCaseFetchAllAds useCaseFetchAllAds, IAdService adService,
+        IPictureService pictureService, UseCaseAddPictureAd useCaseAddPictureAd)
     {
         _useCaseCreateAd = useCaseCreateAd;
         _useCaseDeleteAd = useCaseDeleteAd;
         _useCaseCreateReservation = useCaseCreateReservation;
         _useCaseFetchAllAds = useCaseFetchAllAds;
+        _adService = adService;
+        _pictureService = pictureService;
+        _useCaseAddPictureAd = useCaseAddPictureAd;
     }
 
 
@@ -49,6 +59,54 @@ public class AdController : ControllerBase
         }
     }
 
+    [HttpPost]
+    [Authorize(Roles = "hote")]
+    [Route("{id:int}/picture")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public ActionResult<DtoOutputAdPicture> AddPictureForAd(int id, IFormFile? picture)
+    {
+        //Check that this is the id of the logged in user
+        var ad = _adService.FetchById(id);
+        if ("" + ad.Owner.Id != User.Identity?.Name) return Unauthorized();
+
+        try
+        {
+            //If the protilePicture is null remove it
+            if (picture == null)
+            {
+                return Unauthorized("Il faut une photo");
+            }
+
+            var basePath = "\\Upload\\AdPictures\\" + ad.Id + "\\";
+
+            //Check the file type
+            if (!_pictureService.ValidPictureType(picture.ContentType))
+            {
+                return Unauthorized("Extension d'image invalide acceptés: jpeg, png");
+            }
+
+            //Create a unique file name
+            var fileName = _pictureService.GenerateUniqueFileName(id, picture.FileName);
+
+            //Update the ad 
+            var dtoInputAddPictureAd = new DtoInputAddPictureAd
+            {
+                Path = basePath + fileName,
+                AdId = ad.Id
+            };
+            var dtoOutputAdPicture = _useCaseAddPictureAd.Execute(dtoInputAddPictureAd);
+
+            //Upload the new picture
+            _pictureService.UploadPicture(basePath, fileName, picture);
+            return Ok(dtoOutputAdPicture);
+        }
+        catch (Exception e)
+        {
+            return Unauthorized(e.Message);
+        }
+    }
+
     [HttpDelete]
     [Route("{id:int}")]
     [Authorize(Roles = "administrateur")]
@@ -70,7 +128,7 @@ public class AdController : ControllerBase
             return Conflict(e.Message);
         }
     }
-    
+
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public ActionResult<IEnumerable<DtoOutputAd>> FetchAll()

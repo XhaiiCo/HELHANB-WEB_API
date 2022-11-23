@@ -26,7 +26,6 @@ public class AdRepository : IAdRepository
         context.Ads.Add(ad);
         context.SaveChanges();
         return ad;
-
     }
     public DbAd FetchById(int id)
     {

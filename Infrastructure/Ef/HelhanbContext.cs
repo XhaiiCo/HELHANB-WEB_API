@@ -12,28 +12,27 @@ public class HelhanbContext : DbContext
     {
         _connectionStringProvider = connectionStringProvider;
     }
-   
-   /* 
-    public DbSet<DbConversation> Conversations { get; set; }
-    
-    public DbSet<DbMessage> Messages { get; set; }
-    
-    public DbSet<DbPicture> Pictures { get; set; }
-        
-*/
+
+    /* 
+     public DbSet<DbConversation> Conversations { get; set; }
+     
+     public DbSet<DbMessage> Messages { get; set; }
+     
+ */
+    public DbSet<DbAdPicture> AdPictures { get; set; }
+
     public DbSet<DbAd> Ads { get; set; }
     public DbSet<DbRole> Roles { get; set; }
     public DbSet<DbUser> Users { get; set; }
 
     public DbSet<DbReservation> Reservations { get; set; }
-    
+
     public DbSet<DbReservationStatus> ReservationStatus { get; set; }
-    
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (!optionsBuilder.IsConfigured)
             optionsBuilder.UseSqlServer(_connectionStringProvider.Get("db"));
-        
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -58,17 +57,16 @@ public class HelhanbContext : DbContext
             entity.Property(m => m.View).HasColumnName("view");
             entity.Property(m => m.SendTime).HasColumnName("send_time");
         }); 
-        
-        modelBuilder.Entity<DbPicture>(entity =>
+        */
+
+        modelBuilder.Entity<DbAdPicture>(entity =>
         {
-            entity.ToTable("pictures");
+            entity.ToTable("ad_pictures");
             entity.HasKey(p => p.Id);
             entity.Property(p => p.Id).HasColumnName("picture_id");
             entity.Property(p => p.Path).HasColumnName("path");
+            entity.Property(p => p.AdId).HasColumnName("ad_id");
         });
-
-
-        */
         
         modelBuilder.Entity<DbAdStatus>(entity =>
         {
@@ -77,7 +75,7 @@ public class HelhanbContext : DbContext
             entity.Property(adStatus => adStatus.Id).HasColumnName("ad_status_id");
             entity.Property(adStatus => adStatus.StatusName).HasColumnName("status_name");
         });
-        
+
         modelBuilder.Entity<DbAd>(entity =>
         {
             entity.ToTable("ads");
@@ -98,9 +96,8 @@ public class HelhanbContext : DbContext
             entity.Property(a => a.ArrivalTimeRangeStart).HasColumnName("arrival_time_range_start");
             entity.Property(a => a.ArrivalTimeRangeEnd).HasColumnName("arrival_time_range_end");
             entity.Property(a => a.LeaveTime).HasColumnName("leave_time");
-            
         });
-        
+
         modelBuilder.Entity<DbRole>(entity =>
         {
             entity.ToTable("roles");
@@ -108,7 +105,7 @@ public class HelhanbContext : DbContext
             entity.Property(r => r.Id).HasColumnName("role_id");
             entity.Property(r => r.Name).HasColumnName("name");
         });
-        
+
         modelBuilder.Entity<DbUser>(entity =>
         {
             entity.ToTable("users");
@@ -122,7 +119,7 @@ public class HelhanbContext : DbContext
             entity.Property(u => u.RoleId).HasColumnName("role_id");
             entity.Property(u => u.ProfilePicturePath).HasColumnName("profile_picture_path");
         });
-        
+
         modelBuilder.Entity<DbReservation>(entity =>
         {
             entity.ToTable("reservations");

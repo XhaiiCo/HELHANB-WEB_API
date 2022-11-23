@@ -55,6 +55,10 @@ public class Mapper
             cfg.CreateMap<DbReservationStatus, DtoOutputReservation.DtoReservationStatus>();
             cfg.CreateMap<DbAd, DtoOutputReservation.DtoAd>();
             cfg.CreateMap<DbReservation, Reservation>();
+            
+            //AdPicture
+            cfg.CreateMap<DtoInputAddPictureAd, DbAdPicture>();
+            cfg.CreateMap<DbAdPicture, DtoOutputAdPicture>();
         });
         return new AutoMapper.Mapper(config);
     }

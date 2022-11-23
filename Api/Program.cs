@@ -17,6 +17,7 @@ using Infrastructure.Ef;
 using Infrastructure.Ef.DbEntities;
 using Infrastructure.Ef.Repository;
 using Infrastructure.Ef.Repository.Ad;
+using Infrastructure.Ef.Repository.AdPicture;
 using Infrastructure.Ef.Repository.AdStatus;
 using Infrastructure.Ef.Repository.Reservation;
 using Infrastructure.Utils;
@@ -75,6 +76,7 @@ builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IAdRepository, AdRepository>();
 builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
 builder.Services.AddScoped<IReservationStatusRepository, ReservationStatusRepository>();
+builder.Services.AddScoped<IAdPictureRepository, AdPictureRepository>();
 
 // Users
 builder.Services.AddScoped<UseCaseFetchAllUsers>();
@@ -96,6 +98,7 @@ builder.Services.AddScoped<UseCaseFetchAllRoles>() ;
 builder.Services.AddScoped<UseCaseCreateAd>();
 builder.Services.AddScoped<UseCaseDeleteAd>();
 builder.Services.AddScoped<UseCaseFetchAllAds>();
+builder.Services.AddScoped<UseCaseAddPictureAd>();
 
 // Services
 builder.Services.AddScoped<IUserService, UserService>() ;
