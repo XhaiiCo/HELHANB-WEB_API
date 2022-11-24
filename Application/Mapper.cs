@@ -59,6 +59,8 @@ public class Mapper
             //AdPicture
             cfg.CreateMap<DtoInputAddPictureAd, DbAdPicture>();
             cfg.CreateMap<DbAdPicture, DtoOutputAdPicture>();
+            cfg.CreateMap<DbAdPicture, Picture>();
+            cfg.CreateMap<Picture, DtoOutputAdPicture>();
         });
         return new AutoMapper.Mapper(config);
     }

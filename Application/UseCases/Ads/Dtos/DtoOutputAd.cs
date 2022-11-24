@@ -21,4 +21,5 @@ public class DtoOutputAd
     public TimeSpan LeaveTime { get; set; }
     
     public IEnumerable<string> Features { get; set; }
+    public IEnumerable<DtoOutputAdPicture> Pictures { get; set; }
 }

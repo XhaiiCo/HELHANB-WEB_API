@@ -1,6 +1,8 @@
 ﻿using Application.Services.User;
+using Domain;
 using Infrastructure.Ef.DbEntities;
 using Infrastructure.Ef.Repository.Ad;
+using Infrastructure.Ef.Repository.AdPicture;
 using Infrastructure.Ef.Repository.HouseFeature;
 
 namespace Application.Services.Ad;
@@ -11,12 +13,17 @@ public class AdService : IAdService
     private readonly IUserService _userService;
 
     private readonly IHouseFeatureRepository _houseFeatureRepository;
+    private readonly IAdPictureRepository _adPictureRepository;
 
-    public AdService(IAdRepository adRepository, IUserService userService, IHouseFeatureRepository houseFeatureRepository)
+    public AdService(IAdRepository adRepository,
+        IUserService userService,
+        IHouseFeatureRepository houseFeatureRepository,
+        IAdPictureRepository adPictureRepository)
     {
         _adRepository = adRepository;
         _userService = userService;
         _houseFeatureRepository = houseFeatureRepository;
+        _adPictureRepository = adPictureRepository;
     }
 
     public Domain.Ad FetchById(int id)
@@ -29,7 +36,7 @@ public class AdService : IAdService
     {
         var dbAds = _adRepository.FetchAll();
         var ads = dbAds.Select(MapToAd);
-        
+
         return ads;
     }
 
@@ -37,9 +44,15 @@ public class AdService : IAdService
     {
         var ad = Mapper.GetInstance().Map<Domain.Ad>(dbAd);
         ad.Owner = _userService.FetchById(dbAd.UserId);
+
         foreach (var dbHouseFeature in _houseFeatureRepository.FetchByAdId(ad.Id))
         {
             ad.AddFeature(dbHouseFeature.Feature);
+        }
+        
+        foreach (var dbAdPicture in _adPictureRepository.FetchByAdId(ad.Id))
+        {
+            ad.AddPicture(Mapper.GetInstance().Map<Picture>(dbAdPicture));
         }
         
         return ad;

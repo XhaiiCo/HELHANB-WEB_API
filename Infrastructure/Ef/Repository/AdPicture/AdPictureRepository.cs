@@ -21,4 +21,11 @@ public class AdPictureRepository: IAdPictureRepository
         context.SaveChanges();
         return dbAdPicture;
     }
+
+    public IEnumerable<DbAdPicture> FetchByAdId(int adId)
+    {
+        using var context = _contextProvider.NewContext();
+
+        return context.AdPictures.Where(picture => picture.AdId == adId).ToList();
+    }
 }
