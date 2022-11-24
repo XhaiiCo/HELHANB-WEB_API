@@ -32,6 +32,8 @@ public class PictureService : IPictureService
 
     public void RemoveFile(string path)
     {
+        if(path == "\\Upload\\ProfilePicture\\default_user_pic.png") return ;
+        
         if (File.Exists(_environment.WebRootPath + path))
         {
             File.Delete(_environment.WebRootPath + path);

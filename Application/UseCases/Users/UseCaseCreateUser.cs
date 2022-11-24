@@ -36,6 +36,8 @@ public class UseCaseCreateUser: IUseCaseWriter<DtoOutputUser?, DtoInputCreateUse
             DbUser userToAdd = Mapper.GetInstance().Map<DbUser>(input);
             userToAdd.AccountCreation = DateTime.Now;
             userToAdd.RoleId = 1 ;
+            userToAdd.ProfilePicturePath = "\\Upload\\ProfilePicture\\default_user_pic.png";
+            
             //hash password
             userToAdd.Password = _authService.HashPassword(userToAdd.Password);
             

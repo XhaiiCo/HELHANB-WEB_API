@@ -219,7 +219,7 @@ public class UserController : ControllerBase
             if (profilePicture == null)
             {
                 //Remove the current profile picture if exist
-                if (currentUser.ProfilePicturePath != null)
+                if (currentUser.ProfilePicturePath != null && currentUser.ProfilePicturePath != "\\Upload\\ProfilePicture\\default_user_pic.png")
                 {
                     _pictureService.RemoveFile(currentUser.ProfilePicturePath);
                 }
@@ -227,7 +227,7 @@ public class UserController : ControllerBase
                 var dtoInputUpdateProfilePictureUser = new DtoInputUpdateProfilePictureUser
                 {
                     Id = id,
-                    ProfilePicturePath = null
+                    ProfilePicturePath = "\\Upload\\ProfilePicture\\default_user_pic.png"
                 };
                 var user = _useCaseUpdateUserProfilePicture.Execute(dtoInputUpdateProfilePictureUser);
 
