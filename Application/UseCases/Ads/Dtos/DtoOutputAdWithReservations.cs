@@ -1,10 +1,6 @@
-﻿using Application.UseCases.Roles.Dtos;
-using Application.UseCases.Users.Dtos;
-using Domain;
+﻿namespace Application.UseCases.Ads.Dtos;
 
-namespace Application.UseCases.Ads.Dtos;
-
-public class DtoOutputAd
+public class DtoOutputAdWithReservations
 {
     public int Id { get; set; }
     public string Name { get; set; }
@@ -26,5 +22,12 @@ public class DtoOutputAd
     public IEnumerable<string> Features { get; set; }
     public IEnumerable<DtoOutputAdPicture> Pictures { get; set; }
     public DtoOutputUserInAd Owner { get; set; }
+    public IEnumerable<DtoOutputAdReservation> Reservations { get; set; }
 
+    public class DtoOutputAdReservation
+    {
+        public DateTime ArrivalDate { get; set; }
+
+        public DateTime LeaveDate { get; set; }
+    }
 }

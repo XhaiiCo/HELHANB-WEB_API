@@ -21,10 +21,11 @@ public class AdController : ControllerBase
     private readonly UseCaseCreateReservation _useCaseCreateReservation;
     private readonly UseCaseFetchAllAds _useCaseFetchAllAds;
     private readonly UseCaseAddPictureAd _useCaseAddPictureAd;
+    private readonly UseCaseFetchAdById _useCaseFetchAdById;
 
     public AdController(UseCaseCreateAd useCaseCreateAd, UseCaseDeleteAd useCaseDeleteAd,
         UseCaseCreateReservation useCaseCreateReservation, UseCaseFetchAllAds useCaseFetchAllAds, IAdService adService,
-        IPictureService pictureService, UseCaseAddPictureAd useCaseAddPictureAd)
+        IPictureService pictureService, UseCaseAddPictureAd useCaseAddPictureAd, UseCaseFetchAdById useCaseFetchAdById)
     {
         _useCaseCreateAd = useCaseCreateAd;
         _useCaseDeleteAd = useCaseDeleteAd;
@@ -33,6 +34,7 @@ public class AdController : ControllerBase
         _adService = adService;
         _pictureService = pictureService;
         _useCaseAddPictureAd = useCaseAddPictureAd;
+        _useCaseFetchAdById = useCaseFetchAdById;
     }
 
 
@@ -135,6 +137,15 @@ public class AdController : ControllerBase
     {
         return Ok(_useCaseFetchAllAds.Execute());
     }
+
+    [HttpGet]
+    [Route("{id:int}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public ActionResult<DtoOutputAdWithReservations> FetchById(int id)
+    {
+        return Ok(_useCaseFetchAdById.Execute(id));
+    }
+    
 
     [HttpPost]
     [Route("{id:int}/reservation")]

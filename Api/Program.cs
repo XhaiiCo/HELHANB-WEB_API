@@ -101,6 +101,7 @@ builder.Services.AddScoped<UseCaseCreateAd>();
 builder.Services.AddScoped<UseCaseDeleteAd>();
 builder.Services.AddScoped<UseCaseFetchAllAds>();
 builder.Services.AddScoped<UseCaseAddPictureAd>();
+builder.Services.AddScoped<UseCaseFetchAdById>();
 
 // Services
 builder.Services.AddScoped<IUserService, UserService>() ;

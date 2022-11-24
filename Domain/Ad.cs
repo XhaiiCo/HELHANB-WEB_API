@@ -17,6 +17,10 @@ public class Ad
     public string Country { get; set; }
     public string City { get; set; }
     public int AdStatusId { get; set; }
+    
+    public TimeSpan ArrivalTimeRangeStart { get; set; }
+    public TimeSpan ArrivalTimeRangeEnd { get; set; }
+    public TimeSpan LeaveTime { get; set; }
     public User Owner { get; set; }
 
     private List<string> _features;
