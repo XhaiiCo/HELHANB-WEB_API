@@ -3,18 +3,19 @@ using Application.Services.ReservationBook;
 using Application.UseCases.Ads.Dtos;
 using Application.UseCases.Utils;
 using Infrastructure.Ef.Repository.Ad;
+using Infrastructure.Ef.Repository.Reservation;
 
 namespace Application.UseCases.Ads;
 
 public class UseCaseFetchAdById : IUseCaseParameterizedQuery<DtoOutputAdWithReservations, int>
 {
     private readonly IAdService _adService;
-    private readonly IReservationBookService _reservationBookService;
+    private readonly IReservationRepository _reservationRepository;
 
-    public UseCaseFetchAdById(IAdService adService, IReservationBookService reservationBookService)
+    public UseCaseFetchAdById(IAdService adService, IReservationRepository reservationRepository)
     {
         _adService = adService;
-        _reservationBookService = reservationBookService;
+        _reservationRepository = reservationRepository;
     }
 
     public DtoOutputAdWithReservations Execute(int id)
@@ -23,13 +24,13 @@ public class UseCaseFetchAdById : IUseCaseParameterizedQuery<DtoOutputAdWithRese
 
         var dto = Mapper.GetInstance().Map<DtoOutputAdWithReservations>(ad);
 
-        var reservations = _reservationBookService.FetchByAdId(id);
+        var reservations = _reservationRepository.FilterByAdId(id);
 
-        var reservationsList = reservations.Entries().Select(reservation =>
+        var reservationsList = reservations.Select(reservation =>
             new DtoOutputAdWithReservations.DtoOutputAdReservation
             {
-                ArrivalDate = reservation.DateTimeRange.ArrivalDate,
-                LeaveDate = reservation.DateTimeRange.LeaveDate
+                ArrivalDate = reservation.ArrivalDate,
+                LeaveDate = reservation.LeaveDate
             }).ToList();
 
         dto.Reservations = reservationsList;
