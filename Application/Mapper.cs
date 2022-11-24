@@ -41,10 +41,12 @@ public class Mapper
             cfg.CreateMap<Ad, DtoOutputAd>();
             cfg.CreateMap<Ad, DbAd>();
             cfg.CreateMap<DbAd, Ad>();
-            cfg.CreateMap<User, DtoOutputAd.DtoOutputUserInAd>();
+            cfg.CreateMap<User, DtoOutputUserInAd>();
+            cfg.CreateMap<Ad, DtoOutputAdWithReservations>();
 
             //Time
             cfg.CreateMap<DtoInputTime, TimeSpan>();
+            cfg.CreateMap<TimeSpan, TimeSpan>();
 
             //Date
             cfg.CreateMap<DtoInputDateOnly, DateTime>();
