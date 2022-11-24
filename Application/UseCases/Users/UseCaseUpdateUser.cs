@@ -1,6 +1,7 @@
 ﻿using Application.Services.User;
 using Application.UseCases.Users.Dtos;
 using Application.UseCases.Utils;
+using Domain;
 using Infrastructure.Ef;
 using Infrastructure.Ef.DbEntities;
 
@@ -27,28 +28,28 @@ public class UseCaseUpdateUser : IUseCaseWriter<DtoOutputUser, DtoInputUpdateUse
     /// </returns>
     public DtoOutputUser Execute(DtoInputUpdateUser input)
     {
+        User user;
+
+        //Check if the email isn't already used
         try
         {
-            //Check if the email isn't already used
-            _userService.FetchByEmail(input.Email);
-            throw new Exception("Cette adresse email est déjà utilisée");
+            user = _userService.FetchByEmail(input.Email);
+            if (user != null && user.Id != input.Id)
+                throw new Exception("Cette adresse email est déjà utilisée");
         }
-
-        //If the email isn't used
         catch (KeyNotFoundException e)
         {
-            //Get the user
-            var user = _userService.FetchById(input.Id);
-
-            //Set the new data
-            user.Email = input.Email;
-            user.FirstName = input.FirstName;
-            user.LastName = input.LastName;
-
-            //Update the user
-            _userRepository.Update(Mapper.GetInstance().Map<DbUser>(user));
-
-            return Mapper.GetInstance().Map<DtoOutputUser>(user);
+            user = _userService.FetchById(input.Id);
         }
+
+        //Set the new data
+        user.Email = input.Email;
+        user.FirstName = input.FirstName;
+        user.LastName = input.LastName;
+
+        //Update the user
+        _userRepository.Update(Mapper.GetInstance().Map<DbUser>(user));
+
+        return Mapper.GetInstance().Map<DtoOutputUser>(user);
     }
 }
