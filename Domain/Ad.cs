@@ -19,8 +19,14 @@ public class Ad
     public int AdStatusId { get; set; }
     public User Owner { get; set; }
 
-    private List<Picture> _pictures;
+    private List<string> _features;
+    public List<string> Features
+    {
+        get => _features;
+        set { value.ForEach(feature => AddFeature(feature)); }
+    }
 
+    private List<Picture> _pictures;
     public List<Picture> Pictures
     {
         get => _pictures;
@@ -30,6 +36,7 @@ public class Ad
     public Ad()
     {
         _pictures = new List<Picture>();
+        _features = new List<string>();
     }
 
     public bool AddPicture(Picture picture)
@@ -39,7 +46,15 @@ public class Ad
             if (p.Equals(picture)) return false;
         }
 
-        _pictures.Add(picture) ;
+        _pictures.Add(picture);
+        return true;
+    }
+
+    public bool AddFeature(string feature)
+    {
+        if (_features.Contains(feature)) return false;
+
+        _features.Add(feature);
         return true;
     }
 }

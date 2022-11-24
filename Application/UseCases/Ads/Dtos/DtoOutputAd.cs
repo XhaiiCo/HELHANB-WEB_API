@@ -19,4 +19,6 @@ public class DtoOutputAd
     public TimeSpan ArrivalTimeRangeStart { get; set; }
     public TimeSpan ArrivalTimeRangeEnd { get; set; }
     public TimeSpan LeaveTime { get; set; }
+    
+    public IEnumerable<string> Features { get; set; }
 }

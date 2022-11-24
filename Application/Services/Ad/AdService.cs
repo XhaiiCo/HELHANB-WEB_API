@@ -1,6 +1,7 @@
 ﻿using Application.Services.User;
 using Infrastructure.Ef.DbEntities;
 using Infrastructure.Ef.Repository.Ad;
+using Infrastructure.Ef.Repository.HouseFeature;
 
 namespace Application.Services.Ad;
 
@@ -9,10 +10,13 @@ public class AdService : IAdService
     private readonly IAdRepository _adRepository;
     private readonly IUserService _userService;
 
-    public AdService(IAdRepository adRepository, IUserService userService)
+    private readonly IHouseFeatureRepository _houseFeatureRepository;
+
+    public AdService(IAdRepository adRepository, IUserService userService, IHouseFeatureRepository houseFeatureRepository)
     {
         _adRepository = adRepository;
         _userService = userService;
+        _houseFeatureRepository = houseFeatureRepository;
     }
 
     public Domain.Ad FetchById(int id)
@@ -33,6 +37,10 @@ public class AdService : IAdService
     {
         var ad = Mapper.GetInstance().Map<Domain.Ad>(dbAd);
         ad.Owner = _userService.FetchById(dbAd.UserId);
+        foreach (var dbHouseFeature in _houseFeatureRepository.FetchByAdId(ad.Id))
+        {
+            ad.AddFeature(dbHouseFeature.Feature);
+        }
         
         return ad;
     }

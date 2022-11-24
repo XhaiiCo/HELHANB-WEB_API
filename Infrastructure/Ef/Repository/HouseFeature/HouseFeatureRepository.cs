@@ -3,7 +3,7 @@ using Infrastructure.Utils;
 
 namespace Infrastructure.Ef.Repository.HouseFeature;
 
-public class HouseFeatureRepository: IHouseFeatureRepository
+public class HouseFeatureRepository : IHouseFeatureRepository
 {
     private readonly HelhanbContextProvider _contextProvider;
 
@@ -18,5 +18,12 @@ public class HouseFeatureRepository: IHouseFeatureRepository
         context.HouseFeatures.Add(dbHouseFeature);
         context.SaveChanges();
         return dbHouseFeature;
+    }
+
+    public IEnumerable<DbHouseFeature> FetchByAdId(int adId)
+    {
+        using var context = _contextProvider.NewContext();
+
+        return context.HouseFeatures.Where(feature => feature.AdId == adId).ToList();
     }
 }
