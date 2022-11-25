@@ -3,6 +3,7 @@ using Application.Services.Token;
 using Application.Services.User;
 using Application.UseCases.Users;
 using Application.UseCases.Users.Dtos;
+using Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static System.Int32;
@@ -28,6 +29,7 @@ public class UserController : ControllerBase
     private readonly UseCaseDeleteUserById _useCaseDeleteUserById;
     private readonly UseCaseUpdatePasswordUser _useCaseUpdatePasswordUser;
     private readonly UseCaseUpdateUser _useCaseUpdateUser;
+    private readonly UseCaseChangeRoleToHostUser _useCaseChangeRoleToHostUser;
 
     public UserController(
         UseCaseFetchAllUsers useCaseFetchAllUsers,
@@ -42,7 +44,7 @@ public class UserController : ControllerBase
         IPictureService pictureService,
         UseCaseDeleteUserById useCaseDeleteUserById,
         UseCaseUpdatePasswordUser useCaseUpdatePasswordUser,
-        UseCaseUpdateUser useCaseUpdateUser)
+        UseCaseUpdateUser useCaseUpdateUser, UseCaseChangeRoleToHostUser useCaseChangeRoleToHostUser)
     {
         _useCaseFetchAllUsers = useCaseFetchAllUsers;
         _useCaseCreateUser = useCaseCreateUser;
@@ -57,6 +59,7 @@ public class UserController : ControllerBase
         _useCaseDeleteUserById = useCaseDeleteUserById;
         _useCaseUpdatePasswordUser = useCaseUpdatePasswordUser;
         _useCaseUpdateUser = useCaseUpdateUser;
+        _useCaseChangeRoleToHostUser = useCaseChangeRoleToHostUser;
     }
 
     private void AppendCookies(string token)
@@ -70,7 +73,7 @@ public class UserController : ControllerBase
 
         Response.Cookies.Append("jwt", token, cookieOptions);
     }
-    
+
     private bool IsTheIdOfConnectedUser(int id)
     {
         return "" + id == User.Identity?.Name;
@@ -192,7 +195,7 @@ public class UserController : ControllerBase
         try
         {
             var user = _useCaseUpdateUser.Execute(dtoInputUpdateUser);
-            
+
             return Ok(user);
         }
         catch (Exception e)
@@ -219,7 +222,8 @@ public class UserController : ControllerBase
             if (profilePicture == null)
             {
                 //Remove the current profile picture if exist
-                if (currentUser.ProfilePicturePath != null && currentUser.ProfilePicturePath != "\\Upload\\ProfilePicture\\default_user_pic.png")
+                if (currentUser.ProfilePicturePath != null && currentUser.ProfilePicturePath !=
+                    "\\Upload\\ProfilePicture\\default_user_pic.png")
                 {
                     _pictureService.RemoveFile(currentUser.ProfilePicturePath);
                 }
@@ -310,5 +314,34 @@ public class UserController : ControllerBase
     public void Disconnect()
     {
         Response.Cookies.Delete("jwt");
+    }
+
+    [HttpPut]
+    [Authorize(Roles = "utilisateur")]
+    [Route("{id:int}/becomeHost")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public ActionResult<DtoOutputUser> BecomeHost(int id)
+    {
+        try
+        {
+            var user = _useCaseChangeRoleToHostUser.Execute(id);
+
+            //Change the cookie with the role
+            DtoTokenUser tokenUser = new DtoTokenUser
+            {
+                Id = user.Id,
+                RoleName = user.Role.Name
+            };
+
+            var generatedToken = this.GenerateToken(tokenUser);
+            this.AppendCookies(generatedToken);
+            
+            return Ok(user);
+        }
+        catch (Exception e)
+        {
+            return Unauthorized();
+        }
     }
 }

@@ -11,4 +11,5 @@ public interface IUserService
     IEnumerable<Domain.User> FetchAll(DtoInputFilteringUsers? dtoInputFilteringUsers);
     
    Domain.User MapToUser(DbUser dbUser) ;
+   Domain.User ChangeRole(int userId, int roleId) ;
 }
