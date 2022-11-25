@@ -5,7 +5,8 @@ using Infrastructure.Ef.Repository.Ad;
 
 namespace Application.UseCases.Ads;
 
-public class UseCaseFetchAdsForPagination:IUseCaseParameterizedQuery<IEnumerable<DtoOutputAdsSummary>, DtoInputFilterAdsForPagination>
+public class UseCaseFetchAdsForPagination : IUseCaseParameterizedQuery<IEnumerable<DtoOutputAdsSummary>,
+    DtoInputFilterAdsForPagination>
 {
     private readonly IAdService _adService;
 
@@ -17,9 +18,21 @@ public class UseCaseFetchAdsForPagination:IUseCaseParameterizedQuery<IEnumerable
     public IEnumerable<DtoOutputAdsSummary> Execute(DtoInputFilterAdsForPagination param)
     {
         var ads = _adService.FetchAll();
-        
-        ads = param.Limit.HasValue && param.Offset.HasValue ? ads.Skip(param.Offset.Value).Take(param.Limit.Value) : ads;
-        
-        return Mapper.GetInstance().Map<IEnumerable<DtoOutputAdsSummary>>(ads);
+
+        ads = param.Limit.HasValue && param.Offset.HasValue
+            ? ads.Skip(param.Offset.Value).Take(param.Limit.Value)
+            : ads;
+
+        var result = Mapper.GetInstance().Map<IEnumerable<DtoOutputAdsSummary>>(ads);
+        foreach (var dtoOutputAdsSummary in result)
+        {
+            var pictures = new List<string>();
+            ads.FirstOrDefault(ad => ad.Id == dtoOutputAdsSummary.Id)
+                ?.Pictures
+                .ForEach(picture => pictures.Add(picture.Path));
+            dtoOutputAdsSummary.Pictures = pictures;
+        }
+
+        return result;
     }
 }

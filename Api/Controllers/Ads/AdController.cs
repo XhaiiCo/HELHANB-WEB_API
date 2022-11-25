@@ -183,7 +183,7 @@ public class AdController : ControllerBase
     [HttpGet]
     [Route("summary")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public ActionResult<IEnumerable<DtoOutputAdsSummary>> FetchForPagination(int? limit, int? offset)
+    public ActionResult<IEnumerable<DtoOutputAdsSummary>> FetchForPagination([FromQuery] int? limit,[FromQuery] int? offset)
     {
         return Ok(_useCaseFetchAdsForPagination.Execute(new DtoInputFilterAdsForPagination
         {
