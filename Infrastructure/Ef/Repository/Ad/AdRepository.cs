@@ -16,6 +16,14 @@ public class AdRepository : IAdRepository
     {
         using var context = _contextProvider.NewContext();
         return context.Ads.ToList();
+        
+    }
+
+    public IEnumerable<DbAd> FetchRange(int offset, int limit)
+    {
+        using var context = _contextProvider.NewContext();
+        
+        return context.Ads.Skip(offset).Take(limit).ToList();
     }
 
     public DbAd Create(DbAd ad)
@@ -36,6 +44,7 @@ public class AdRepository : IAdRepository
 
         return ad;
     }
+    
     public DbAd Delete(DbAd ad)
     {
         using var context = _contextProvider.NewContext();

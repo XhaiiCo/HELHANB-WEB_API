@@ -39,6 +39,14 @@ public class AdService : IAdService
 
         return ads;
     }
+    
+    public IEnumerable<Domain.Ad> FetchRange(int offset, int limit)
+    {
+        var dbAds = _adRepository.FetchRange(offset, limit);
+        var ads = dbAds.Select(MapToAd);
+
+        return ads;
+    }
 
     public Domain.Ad MapToAd(DbAd dbAd)
     {
