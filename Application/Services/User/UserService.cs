@@ -95,4 +95,14 @@ public class UserService : IUserService
 
         return user;
     }
+
+    public User ChangeRole(int userId, int roleId)
+    {
+        var user = FetchById(userId);
+        var dbUser = Mapper.GetInstance().Map<DbUser>(user);
+
+        dbUser.RoleId = roleId;
+
+        return MapToUser(_userRepository.Update(dbUser)) ;
+    }
 }

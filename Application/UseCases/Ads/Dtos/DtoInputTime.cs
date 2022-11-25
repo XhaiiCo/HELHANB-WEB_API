@@ -1,7 +1,9 @@
-﻿namespace Application.UseCases.Ads.Dtos;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Application.UseCases.Ads.Dtos;
 
 public class DtoInputTime
 {
-    public int Hours { get; set; }
-    public int Minutes { get; set; }
+    [Required] public int Hours { get; set; }
+    [Required] public int Minutes { get; set; }
 }

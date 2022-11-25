@@ -89,6 +89,7 @@ builder.Services.AddScoped<UseCaseFetchUserById>();
 builder.Services.AddScoped<UseCaseDeleteUserById>();
 builder.Services.AddScoped<UseCaseUpdatePasswordUser>();
 builder.Services.AddScoped<UseCaseUpdateUser>();
+builder.Services.AddScoped<UseCaseChangeRoleToHostUser>();
 
 //Reservation
 builder.Services.AddScoped<UseCaseCreateReservation>();
