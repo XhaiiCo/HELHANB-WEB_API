@@ -46,8 +46,7 @@ public class AdRepository : IAdRepository
 
         return ad;
     }
-
-
+    
     /*public DbAd FetchByCountry(string country)
     {
         using var context = _contextProvider.NewContext();
@@ -57,4 +56,12 @@ public class AdRepository : IAdRepository
         
         
     }*/
+    
+    public int Count()
+    {
+        using var context = _contextProvider.NewContext();
+
+        return context.Ads.Count();
+    }
+
 }

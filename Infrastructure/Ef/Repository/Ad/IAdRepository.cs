@@ -13,4 +13,5 @@ public interface IAdRepository
     DbAd Delete(DbAd ad);
 
     // DbAd FetchByCountry(string country);
+    int Count();
 }
