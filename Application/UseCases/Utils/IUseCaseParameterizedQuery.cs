@@ -1,6 +1,6 @@
 ﻿namespace Application.UseCases.Utils;
 
-public interface IUseCaseParameterizedQuery<out TOutput, in TInput>
+public interface IUseCaseParameterizedQuery<out TOutput, in TParam>
 {
-    TOutput Execute(TInput input);
+    TOutput Execute(TParam param);
 }

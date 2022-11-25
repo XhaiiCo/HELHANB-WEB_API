@@ -23,10 +23,11 @@ public class AdController : ControllerBase
     private readonly UseCaseAddPictureAd _useCaseAddPictureAd;
     private readonly UseCaseFetchAdById _useCaseFetchAdById;
     private readonly UseCaseCountAds _useCaseCountAds;
+    private readonly UseCaseFetchAdsForPagination _useCaseFetchAdsForPagination;
 
     public AdController(UseCaseCreateAd useCaseCreateAd, UseCaseDeleteAd useCaseDeleteAd,
         UseCaseCreateReservation useCaseCreateReservation, UseCaseFetchAllAds useCaseFetchAllAds, IAdService adService,
-        IPictureService pictureService, UseCaseAddPictureAd useCaseAddPictureAd, UseCaseFetchAdById useCaseFetchAdById, UseCaseCountAds useCaseCountAds)
+        IPictureService pictureService, UseCaseAddPictureAd useCaseAddPictureAd, UseCaseFetchAdById useCaseFetchAdById, UseCaseCountAds useCaseCountAds, UseCaseFetchAdsForPagination useCaseFetchAdsForPagination)
     {
         _useCaseCreateAd = useCaseCreateAd;
         _useCaseDeleteAd = useCaseDeleteAd;
@@ -37,6 +38,7 @@ public class AdController : ControllerBase
         _useCaseAddPictureAd = useCaseAddPictureAd;
         _useCaseFetchAdById = useCaseFetchAdById;
         _useCaseCountAds = useCaseCountAds;
+        _useCaseFetchAdsForPagination = useCaseFetchAdsForPagination;
     }
 
 
@@ -178,4 +180,15 @@ public class AdController : ControllerBase
         return Ok(_useCaseCountAds.Execute());
     }
 
+    [HttpGet]
+    [Route("summary")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public ActionResult<IEnumerable<DtoOutputAdsSummary>> FetchForPagination(int? limit, int? offset)
+    {
+        return Ok(_useCaseFetchAdsForPagination.Execute(new DtoInputFilterAdsForPagination
+        {
+            Limit = limit,
+            Offset = offset
+        }));
+    }
 }

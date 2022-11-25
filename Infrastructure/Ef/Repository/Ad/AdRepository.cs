@@ -11,8 +11,7 @@ public class AdRepository : IAdRepository
     {
         _contextProvider = contextProvider;
     }
-
-
+    
     public IEnumerable<DbAd> FetchAll()
     {
         using var context = _contextProvider.NewContext();
@@ -63,5 +62,4 @@ public class AdRepository : IAdRepository
 
         return context.Ads.Count();
     }
-
 }

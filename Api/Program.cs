@@ -103,6 +103,7 @@ builder.Services.AddScoped<UseCaseFetchAllAds>();
 builder.Services.AddScoped<UseCaseAddPictureAd>();
 builder.Services.AddScoped<UseCaseFetchAdById>();
 builder.Services.AddScoped<UseCaseCountAds>();
+builder.Services.AddScoped<UseCaseFetchAdsForPagination>();
 
 // Services
 builder.Services.AddScoped<IUserService, UserService>() ;
