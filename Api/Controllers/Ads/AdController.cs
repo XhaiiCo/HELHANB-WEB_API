@@ -89,7 +89,7 @@ public class AdController : ControllerBase
             //Check the file type
             if (!_pictureService.ValidPictureType(picture.ContentType))
             {
-                return Unauthorized("Extension d'image invalide acceptés: jpeg, png");
+                return Unauthorized("Extension d'image invalide acceptés: jpeg, png, webp");
             }
 
             //Create a unique file name
