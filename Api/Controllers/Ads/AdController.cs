@@ -201,7 +201,7 @@ public class AdController : ControllerBase
     }
 
     [HttpPut]
-    [Route("/idstatus")]
+    [Route("status")]
     [Authorize(Roles = "administrateur")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public ActionResult<DtoOutputAd> UpdateStatus(DtoInputUpdateStatusAd dto)
