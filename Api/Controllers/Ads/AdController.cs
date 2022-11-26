@@ -27,7 +27,8 @@ public class AdController : ControllerBase
 
     public AdController(UseCaseCreateAd useCaseCreateAd, UseCaseDeleteAd useCaseDeleteAd,
         UseCaseCreateReservation useCaseCreateReservation, UseCaseFetchAllAds useCaseFetchAllAds, IAdService adService,
-        IPictureService pictureService, UseCaseAddPictureAd useCaseAddPictureAd, UseCaseFetchAdById useCaseFetchAdById, UseCaseCountAds useCaseCountAds, UseCaseFetchAdsForPagination useCaseFetchAdsForPagination)
+        IPictureService pictureService, UseCaseAddPictureAd useCaseAddPictureAd, UseCaseFetchAdById useCaseFetchAdById,
+        UseCaseCountAds useCaseCountAds, UseCaseFetchAdsForPagination useCaseFetchAdsForPagination)
     {
         _useCaseCreateAd = useCaseCreateAd;
         _useCaseDeleteAd = useCaseDeleteAd;
@@ -136,10 +137,14 @@ public class AdController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Roles = "administrateur")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public ActionResult<IEnumerable<DtoOutputAd>> FetchAll()
+    public ActionResult<IEnumerable<DtoOutputAd>> FetchAll([FromQuery] int? statusId)
     {
-        return Ok(_useCaseFetchAllAds.Execute());
+        return Ok(_useCaseFetchAllAds.Execute(new DtoInputFilteringAds
+        {
+            StatusId = statusId 
+        }));
     }
 
     [HttpGet]
@@ -149,7 +154,7 @@ public class AdController : ControllerBase
     {
         return Ok(_useCaseFetchAdById.Execute(id));
     }
-    
+
     [HttpPost]
     [Route("{id:int}/reservation")]
     [Authorize(Roles = "utilisateur,hote")]
@@ -183,7 +188,8 @@ public class AdController : ControllerBase
     [HttpGet]
     [Route("summary")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public ActionResult<IEnumerable<DtoOutputAdsSummary>> FetchForPagination([FromQuery] int? limit,[FromQuery] int? offset)
+    public ActionResult<IEnumerable<DtoOutputAdsSummary>> FetchForPagination([FromQuery] int? limit,
+        [FromQuery] int? offset)
     {
         return Ok(_useCaseFetchAdsForPagination.Execute(new DtoInputFilterAdsForPagination
         {

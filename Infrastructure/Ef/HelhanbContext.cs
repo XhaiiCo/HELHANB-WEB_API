@@ -23,6 +23,7 @@ public class HelhanbContext : DbContext
     public DbSet<DbAdPicture> AdPictures { get; set; }
 
     public DbSet<DbAd> Ads { get; set; }
+    public DbSet<DbAdStatus> AdStatus { get; set; }
     public DbSet<DbRole> Roles { get; set; }
     public DbSet<DbUser> Users { get; set; }
 

@@ -5,6 +5,7 @@ using Application.UseCases.Users.Dtos;
 using AutoMapper;
 using Domain;
 using Infrastructure.Ef.DbEntities;
+using Infrastructure.Ef.Repository.Ad;
 using Infrastructure.Ef.Repository.User;
 
 namespace Application;
@@ -44,6 +45,11 @@ public class Mapper
             cfg.CreateMap<User, DtoOutputUserInAd>();
             cfg.CreateMap<Ad, DtoOutputAdWithReservations>();
             cfg.CreateMap<Ad, DtoOutputAdsSummary>();
+            cfg.CreateMap<DtoInputFilteringAds, FilteringAd>();
+            
+            //AdStatus
+            cfg.CreateMap<DbAdStatus, AdStatus>();
+            cfg.CreateMap<AdStatus, DtoOutputAd.DtoOutputAdStatus>();
             
             //Time
             cfg.CreateMap<DtoInputTime, TimeSpan>();

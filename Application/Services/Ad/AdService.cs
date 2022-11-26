@@ -1,7 +1,9 @@
 ﻿using Application.Services.User;
+using Application.UseCases.Ads.Dtos;
 using Domain;
 using Infrastructure.Ef.DbEntities;
 using Infrastructure.Ef.Repository.Ad;
+using Infrastructure.Ef.Repository.Ad.AdStatus;
 using Infrastructure.Ef.Repository.AdPicture;
 using Infrastructure.Ef.Repository.HouseFeature;
 
@@ -14,16 +16,18 @@ public class AdService : IAdService
 
     private readonly IHouseFeatureRepository _houseFeatureRepository;
     private readonly IAdPictureRepository _adPictureRepository;
+    private readonly IAdStatusRepository _adStatusRepository;
 
     public AdService(IAdRepository adRepository,
         IUserService userService,
         IHouseFeatureRepository houseFeatureRepository,
-        IAdPictureRepository adPictureRepository)
+        IAdPictureRepository adPictureRepository, IAdStatusRepository adStatusRepository)
     {
         _adRepository = adRepository;
         _userService = userService;
         _houseFeatureRepository = houseFeatureRepository;
         _adPictureRepository = adPictureRepository;
+        _adStatusRepository = adStatusRepository;
     }
 
     public Domain.Ad FetchById(int id)
@@ -32,17 +36,17 @@ public class AdService : IAdService
         return MapToAd(dbAd);
     }
 
-    public IEnumerable<Domain.Ad> FetchAll()
+    public IEnumerable<Domain.Ad> FetchAll(DtoInputFilteringAds dto)
     {
-        var dbAds = _adRepository.FetchAll();
+        var dbAds = _adRepository.FetchAll(Mapper.GetInstance().Map<FilteringAd>(dto));
         var ads = dbAds.Select(MapToAd);
 
         return ads;
     }
-    
-    public IEnumerable<Domain.Ad> FetchRange(int offset, int limit)
+
+    public IEnumerable<Domain.Ad> FetchRange(int offset, int limit, DtoInputFilteringAds filter)
     {
-        var dbAds = _adRepository.FetchRange(offset, limit);
+        var dbAds = _adRepository.FetchRange(offset, limit, Mapper.GetInstance().Map<FilteringAd>(filter));
         var ads = dbAds.Select(MapToAd);
 
         return ads;
@@ -62,7 +66,8 @@ public class AdService : IAdService
         {
             ad.AddPicture(Mapper.GetInstance().Map<Picture>(dbAdPicture));
         }
-        
+
+        ad.Status = Mapper.GetInstance().Map<AdStatus>(_adStatusRepository.FetchById(dbAd.AdStatusId));
         return ad;
     }
 }

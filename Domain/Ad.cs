@@ -22,6 +22,8 @@ public class Ad
     public TimeSpan ArrivalTimeRangeEnd { get; set; }
     public TimeSpan LeaveTime { get; set; }
     public User Owner { get; set; }
+    
+    public AdStatus Status { get; set; }
 
     private List<string> _features;
     public List<string> Features

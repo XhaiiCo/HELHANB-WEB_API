@@ -1,4 +1,5 @@
-﻿using Infrastructure.Ef.DbEntities;
+﻿using Application.UseCases.Ads.Dtos;
+using Infrastructure.Ef.DbEntities;
 
 namespace Application.Services.Ad;
 
@@ -6,8 +7,8 @@ public interface IAdService
 {
     Domain.Ad FetchById(int id);
     
-    IEnumerable<Domain.Ad> FetchAll();
-    IEnumerable<Domain.Ad> FetchRange(int offset, int limit);
+    IEnumerable<Domain.Ad> FetchAll(DtoInputFilteringAds dto);
+    IEnumerable<Domain.Ad> FetchRange(int offset, int limit, DtoInputFilteringAds filter);
 
     Domain.Ad MapToAd(DbAd dbAd);
 }

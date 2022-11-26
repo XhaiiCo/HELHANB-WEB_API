@@ -11,29 +11,34 @@ public class AdRepository : IAdRepository
     {
         _contextProvider = contextProvider;
     }
-    
-    public IEnumerable<DbAd> FetchAll()
+
+    public IEnumerable<DbAd> FetchAll(FilteringAd filter)
     {
         using var context = _contextProvider.NewContext();
-        return context.Ads.ToList();
-        
+
+        return filter.StatusId.HasValue
+            ? context.Ads.Where(ad => ad.AdStatusId == filter.StatusId).ToList()
+            : context.Ads.ToList();
     }
 
-    public IEnumerable<DbAd> FetchRange(int offset, int limit)
+    public IEnumerable<DbAd> FetchRange(int offset, int limit, FilteringAd filter)
     {
         using var context = _contextProvider.NewContext();
-        
-        return context.Ads.Skip(offset).Take(limit).ToList();
+
+        return filter.StatusId.HasValue
+            ? context.Ads.Where(ad => ad.AdStatusId == filter.StatusId).Skip(offset).Take(limit).ToList()
+            : context.Ads.Skip(offset).Take(limit).ToList();
     }
 
     public DbAd Create(DbAd ad)
     {
         using var context = _contextProvider.NewContext();
-        
+
         context.Ads.Add(ad);
         context.SaveChanges();
         return ad;
     }
+
     public DbAd FetchById(int id)
     {
         using var context = _contextProvider.NewContext();
@@ -44,7 +49,7 @@ public class AdRepository : IAdRepository
 
         return ad;
     }
-    
+
     public DbAd Delete(DbAd ad)
     {
         using var context = _contextProvider.NewContext();
@@ -54,7 +59,7 @@ public class AdRepository : IAdRepository
 
         return ad;
     }
-    
+
     /*public DbAd FetchByCountry(string country)
     {
         using var context = _contextProvider.NewContext();
@@ -64,7 +69,7 @@ public class AdRepository : IAdRepository
         
         
     }*/
-    
+
     public int Count()
     {
         using var context = _contextProvider.NewContext();

@@ -4,9 +4,9 @@ namespace Infrastructure.Ef.Repository.Ad;
 
 public interface IAdRepository
 {
-    IEnumerable<DbAd> FetchAll();
+    IEnumerable<DbAd> FetchAll(FilteringAd filter);
     
-    IEnumerable<DbAd> FetchRange(int offset, int limit);
+    IEnumerable<DbAd> FetchRange(int offset, int limit, FilteringAd filter);
 
     DbAd Create(DbAd ad);
 
