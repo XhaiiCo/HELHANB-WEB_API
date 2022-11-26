@@ -24,11 +24,12 @@ public class AdController : ControllerBase
     private readonly UseCaseFetchAdById _useCaseFetchAdById;
     private readonly UseCaseCountAds _useCaseCountAds;
     private readonly UseCaseFetchAdsForPagination _useCaseFetchAdsForPagination;
+    private readonly UseCaseUpdateStatusAd _useCaseUpdateStatusAd ;
 
     public AdController(UseCaseCreateAd useCaseCreateAd, UseCaseDeleteAd useCaseDeleteAd,
         UseCaseCreateReservation useCaseCreateReservation, UseCaseFetchAllAds useCaseFetchAllAds, IAdService adService,
         IPictureService pictureService, UseCaseAddPictureAd useCaseAddPictureAd, UseCaseFetchAdById useCaseFetchAdById,
-        UseCaseCountAds useCaseCountAds, UseCaseFetchAdsForPagination useCaseFetchAdsForPagination)
+        UseCaseCountAds useCaseCountAds, UseCaseFetchAdsForPagination useCaseFetchAdsForPagination, UseCaseUpdateStatusAd useCaseUpdateStatusAd)
     {
         _useCaseCreateAd = useCaseCreateAd;
         _useCaseDeleteAd = useCaseDeleteAd;
@@ -40,6 +41,7 @@ public class AdController : ControllerBase
         _useCaseFetchAdById = useCaseFetchAdById;
         _useCaseCountAds = useCaseCountAds;
         _useCaseFetchAdsForPagination = useCaseFetchAdsForPagination;
+        _useCaseUpdateStatusAd = useCaseUpdateStatusAd;
     }
 
 
@@ -197,4 +199,14 @@ public class AdController : ControllerBase
             Offset = offset
         }));
     }
+
+    [HttpPut]
+    [Route("/idstatus")]
+    [Authorize(Roles = "administrateur")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public ActionResult<DtoOutputAd> UpdateStatus(DtoInputUpdateStatusAd dto)
+    {
+        return Ok(_useCaseUpdateStatusAd.Execute(dto));
+    }
+
 }

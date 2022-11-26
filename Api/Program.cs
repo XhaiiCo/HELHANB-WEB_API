@@ -107,6 +107,7 @@ builder.Services.AddScoped<UseCaseAddPictureAd>();
 builder.Services.AddScoped<UseCaseFetchAdById>();
 builder.Services.AddScoped<UseCaseCountAds>();
 builder.Services.AddScoped<UseCaseFetchAdsForPagination>();
+builder.Services.AddScoped<UseCaseUpdateStatusAd>();
 
 // Services
 builder.Services.AddScoped<IUserService, UserService>() ;

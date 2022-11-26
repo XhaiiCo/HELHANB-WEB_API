@@ -13,6 +13,7 @@ public interface IAdRepository
     DbAd FetchById(int id);
 
     DbAd Delete(DbAd ad);
+    DbAd Update(DbAd ad);
 
     // DbAd FetchByCountry(string country);
     int CountValidatedAd();

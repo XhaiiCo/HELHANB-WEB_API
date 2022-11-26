@@ -1,5 +1,6 @@
 ﻿using Infrastructure.Ef.DbEntities;
 using Infrastructure.Utils;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Ef.Repository.Ad;
 
@@ -60,6 +61,17 @@ public class AdRepository : IAdRepository
         return ad;
     }
 
+    public DbAd Update(DbAd ad)
+    {
+        using var context = _contextProvider.NewContext();
+
+        context.Attach(ad);
+        context.Entry(ad).State = EntityState.Modified;
+        context.SaveChanges();
+
+        return ad;
+    }
+
     /*public DbAd FetchByCountry(string country)
     {
         using var context = _contextProvider.NewContext();
@@ -74,6 +86,6 @@ public class AdRepository : IAdRepository
     {
         using var context = _contextProvider.NewContext();
 
-        return context.Ads.Where(dbAd => dbAd.AdStatusId == 3).Count();
+        return context.Ads.Count(dbAd => dbAd.AdStatusId == 3);
     }
 }
