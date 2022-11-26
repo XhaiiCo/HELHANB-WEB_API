@@ -180,7 +180,7 @@ public class AdController : ControllerBase
     [HttpGet]
     [Route("count")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public ActionResult<int> Count()
+    public ActionResult<int> CountValidatedAd()
     {
         return Ok(_useCaseCountAds.Execute());
     }

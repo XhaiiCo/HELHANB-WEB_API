@@ -70,10 +70,10 @@ public class AdRepository : IAdRepository
         
     }*/
 
-    public int Count()
+    public int CountValidatedAd()
     {
         using var context = _contextProvider.NewContext();
 
-        return context.Ads.Count();
+        return context.Ads.Where(dbAd => dbAd.AdStatusId == 3).Count();
     }
 }

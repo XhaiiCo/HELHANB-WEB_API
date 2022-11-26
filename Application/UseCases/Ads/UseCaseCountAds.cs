@@ -14,6 +14,6 @@ public class UseCaseCountAds:IUseCaseQuery<int>
 
     public int Execute()
     {
-        return _adRepository.Count();
+        return _adRepository.CountValidatedAd();
     }
 }
