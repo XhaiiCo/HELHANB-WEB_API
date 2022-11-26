@@ -3,7 +3,7 @@
 public class PictureService : IPictureService
 {
     public static IWebHostEnvironment _environment;
-    public static readonly string[] AllowedFileTypes = { "image/jpeg", "image/png" };
+    public static readonly string[] AllowedFileTypes = { "image/jpeg", "image/png", "image/webp" };
 
     public PictureService(
         IWebHostEnvironment environment
