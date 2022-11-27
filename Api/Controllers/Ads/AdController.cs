@@ -22,14 +22,14 @@ public class AdController : ControllerBase
     private readonly UseCaseFetchAllAds _useCaseFetchAllAds;
     private readonly UseCaseAddPictureAd _useCaseAddPictureAd;
     private readonly UseCaseFetchAdById _useCaseFetchAdById;
-    private readonly UseCaseCountAds _useCaseCountAds;
+    private readonly UseCaseCountValidatedAds _useCaseCountValidatedAds;
     private readonly UseCaseFetchAdsForPagination _useCaseFetchAdsForPagination;
     private readonly UseCaseUpdateStatusAd _useCaseUpdateStatusAd ;
 
     public AdController(UseCaseCreateAd useCaseCreateAd, UseCaseDeleteAd useCaseDeleteAd,
         UseCaseCreateReservation useCaseCreateReservation, UseCaseFetchAllAds useCaseFetchAllAds, IAdService adService,
         IPictureService pictureService, UseCaseAddPictureAd useCaseAddPictureAd, UseCaseFetchAdById useCaseFetchAdById,
-        UseCaseCountAds useCaseCountAds, UseCaseFetchAdsForPagination useCaseFetchAdsForPagination, UseCaseUpdateStatusAd useCaseUpdateStatusAd)
+        UseCaseCountValidatedAds useCaseCountValidatedAds, UseCaseFetchAdsForPagination useCaseFetchAdsForPagination, UseCaseUpdateStatusAd useCaseUpdateStatusAd)
     {
         _useCaseCreateAd = useCaseCreateAd;
         _useCaseDeleteAd = useCaseDeleteAd;
@@ -39,7 +39,7 @@ public class AdController : ControllerBase
         _pictureService = pictureService;
         _useCaseAddPictureAd = useCaseAddPictureAd;
         _useCaseFetchAdById = useCaseFetchAdById;
-        _useCaseCountAds = useCaseCountAds;
+        _useCaseCountValidatedAds = useCaseCountValidatedAds;
         _useCaseFetchAdsForPagination = useCaseFetchAdsForPagination;
         _useCaseUpdateStatusAd = useCaseUpdateStatusAd;
     }
@@ -182,9 +182,9 @@ public class AdController : ControllerBase
     [HttpGet]
     [Route("count")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public ActionResult<int> CountValidatedAd()
+    public ActionResult<int> CountValidatedAds()
     {
-        return Ok(_useCaseCountAds.Execute());
+        return Ok(_useCaseCountValidatedAds.Execute());
     }
 
     [HttpGet]

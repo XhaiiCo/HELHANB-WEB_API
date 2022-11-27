@@ -16,5 +16,5 @@ public interface IAdRepository
     DbAd Update(DbAd ad);
 
     // DbAd FetchByCountry(string country);
-    int CountValidatedAd();
+    int Count(FilteringAd filter);
 }

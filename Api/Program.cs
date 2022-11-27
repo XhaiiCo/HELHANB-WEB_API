@@ -105,7 +105,7 @@ builder.Services.AddScoped<UseCaseDeleteAd>();
 builder.Services.AddScoped<UseCaseFetchAllAds>();
 builder.Services.AddScoped<UseCaseAddPictureAd>();
 builder.Services.AddScoped<UseCaseFetchAdById>();
-builder.Services.AddScoped<UseCaseCountAds>();
+builder.Services.AddScoped<UseCaseCountValidatedAds>();
 builder.Services.AddScoped<UseCaseFetchAdsForPagination>();
 builder.Services.AddScoped<UseCaseUpdateStatusAd>();
 

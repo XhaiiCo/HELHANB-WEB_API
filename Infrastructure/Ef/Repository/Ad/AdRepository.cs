@@ -82,10 +82,12 @@ public class AdRepository : IAdRepository
         
     }*/
 
-    public int CountValidatedAd()
+    public int Count(FilteringAd filter)
     {
         using var context = _contextProvider.NewContext();
 
-        return context.Ads.Count(dbAd => dbAd.AdStatusId == 3);
+        return filter.StatusId.HasValue
+            ? context.Ads.Count(ad => ad.AdStatusId == filter.StatusId)
+            : context.Ads.Count();
     }
 }
