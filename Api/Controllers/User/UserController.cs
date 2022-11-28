@@ -323,6 +323,9 @@ public class UserController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public ActionResult<DtoOutputUser> BecomeHost(int id)
     {
+        //Check that this is the id of the logged in user
+        if (!IsTheIdOfConnectedUser(id)) return Unauthorized();
+        
         try
         {
             var user = _useCaseChangeRoleToHostUser.Execute(id);
