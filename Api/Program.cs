@@ -1,5 +1,6 @@
 using System.Text;
 using API;
+using API.ChatController;
 using API.Utils.Picture;
 using Application.Services.Ad;
 using Application.Services.Auth;
@@ -65,6 +66,7 @@ builder.Services.AddCors(options =>
     });
 });
 builder.Services.AddControllers();
+builder.Services.AddSignalR(); 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -137,5 +139,6 @@ app.UseAuthorization();
 app.UseStaticFiles();
 
 app.MapControllers();
+app.MapHub<ChatHub>("/chatsocket"); 
 
 app.Run();
