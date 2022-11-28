@@ -30,4 +30,16 @@ public class RoleRepository: IRoleRepository
         
         return role ;
     }
+
+    public DbRole FetchByName(string roleName)
+    {
+        using var context = _contextProvider.NewContext();
+        
+        var role = context.Roles.FirstOrDefault(role => role.Name == roleName);
+
+        if (role == null)
+            throw new KeyNotFoundException($"Le role {roleName} n'a pas été trouvé");
+        
+        return role;
+    }
 }

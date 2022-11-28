@@ -30,6 +30,7 @@ public class UserController : ControllerBase
     private readonly UseCaseUpdatePasswordUser _useCaseUpdatePasswordUser;
     private readonly UseCaseUpdateUser _useCaseUpdateUser;
     private readonly UseCaseChangeRoleToHostUser _useCaseChangeRoleToHostUser;
+    private readonly UseCaseChangeRole _useCaseChangeRole;
 
     public UserController(
         UseCaseFetchAllUsers useCaseFetchAllUsers,
@@ -44,7 +45,8 @@ public class UserController : ControllerBase
         IPictureService pictureService,
         UseCaseDeleteUserById useCaseDeleteUserById,
         UseCaseUpdatePasswordUser useCaseUpdatePasswordUser,
-        UseCaseUpdateUser useCaseUpdateUser, UseCaseChangeRoleToHostUser useCaseChangeRoleToHostUser)
+        UseCaseUpdateUser useCaseUpdateUser, UseCaseChangeRoleToHostUser useCaseChangeRoleToHostUser,
+        UseCaseChangeRole useCaseChangeRole)
     {
         _useCaseFetchAllUsers = useCaseFetchAllUsers;
         _useCaseCreateUser = useCaseCreateUser;
@@ -60,6 +62,7 @@ public class UserController : ControllerBase
         _useCaseUpdatePasswordUser = useCaseUpdatePasswordUser;
         _useCaseUpdateUser = useCaseUpdateUser;
         _useCaseChangeRoleToHostUser = useCaseChangeRoleToHostUser;
+        _useCaseChangeRole = useCaseChangeRole;
     }
 
     private void AppendCookies(string token)
@@ -344,4 +347,31 @@ public class UserController : ControllerBase
             return Unauthorized();
         }
     }
+
+    [HttpPut]
+    [Authorize(Roles = "administrateur")]
+    [Route("{id:int}/changeRole")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status406NotAcceptable)]
+    public ActionResult<DtoOutputUser> ChangeRole(int id, [FromQuery] string role)
+    {
+        try
+        {
+            var user = _useCaseChangeRoleToHostUser.Execute(id);
+            
+            DtoUserNewRole userNewRole = new DtoUserNewRole
+            {
+                Id = id,
+                RoleName = role
+            };
+            
+            return Ok(_useCaseChangeRole.Execute(userNewRole));
+        }
+        catch (Exception e)
+        {
+            return Unauthorized();
+        }
+    }
+
 }
