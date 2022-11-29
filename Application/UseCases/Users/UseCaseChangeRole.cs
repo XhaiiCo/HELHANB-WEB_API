@@ -1,25 +1,48 @@
-﻿using Application.Services.User;
+﻿using Application.Services.Role;
+using Application.Services.User;
 using Application.UseCases.Users.Dtos;
 using Application.UseCases.Utils;
 using Infrastructure.Ef;
 using Infrastructure.Ef.DbEntities;
+using Infrastructure.Ef.Repository.Ad;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Application.UseCases.Users;
 
-public class UseCaseChangeRole : IUseCaseWriter<DbUser, DtoUserNewRole>
+public class UseCaseChangeRole : IUseCaseWriter<bool, DtoUserNewRole>
 {
     private readonly IUserService _userService;
     private readonly IUserRepository _userRepository;
+    private readonly IRoleService _roleService;
+    private readonly IAdRepository _adRepository;
 
     public UseCaseChangeRole(IUserService userService,
-        IUserRepository userRepository)
+        IUserRepository userRepository,
+        IRoleService roleService,
+        IAdRepository adRepository)
     {
         _userService = userService;
         _userRepository = userRepository;
+        _roleService = roleService;
+        _adRepository = adRepository;
     }
     
-    public DbUser Execute(DtoUserNewRole userNewRole)
+    public bool Execute(DtoUserNewRole userNewRole)
     {
-        return _userRepository.Update(Mapper.GetInstance().Map<DbUser>(_userService.ChangeRole(userNewRole.Id, userNewRole.RoleId)));
+        var user = _userService.FetchById(userNewRole.Id);
+
+        // TODO: Tester si l'id du role correspond à un role
+        
+        // if user has host role and switch to user role
+        if (user.Role.Name == "hote" && 
+            _roleService.FetchById(user.Id).Name == "utilisateur")
+            // if he has rentings
+            if (!_adRepository.FetchByUserId(user.Id).IsNullOrEmpty())
+                return false;
+
+        if (userNewRole.RoleId == user.Role.Id) return false;
+
+        _userRepository.Update(Mapper.GetInstance().Map<DbUser>(_userService.ChangeRole(userNewRole.Id, userNewRole.RoleId)));
+        return true;
     }
 }

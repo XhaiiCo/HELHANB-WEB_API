@@ -6,6 +6,7 @@ using Application.Services.Ad;
 using Application.Services.Auth;
 using Application.Services.Date;
 using Application.Services.ReservationBook;
+using Application.Services.Role;
 using Application.Services.Time;
 using Application.Services.Token;
 using Application.Services.User;
@@ -122,6 +123,7 @@ builder.Services.AddScoped<ITimeService, TimeService>();
 builder.Services.AddScoped<IAdService, AdService>();
 builder.Services.AddScoped<IReservationBookService, ReservationBookService>();
 builder.Services.AddScoped<IDateService, DateService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
 
 var app = builder.Build();
 

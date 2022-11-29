@@ -32,8 +32,6 @@ public class UserController : ControllerBase
     private readonly UseCaseUpdateUser _useCaseUpdateUser;
     private readonly UseCaseChangeRoleToHostUser _useCaseChangeRoleToHostUser;
     private readonly UseCaseChangeRole _useCaseChangeRole;
-    private readonly UseCaseHasHostRenting _useCaseHasHostRenting;
-    private readonly UseCaseFetchRoleNameById _useCaseFetchRoleNameById;
 
     public UserController(
         UseCaseFetchAllUsers useCaseFetchAllUsers,
@@ -49,9 +47,7 @@ public class UserController : ControllerBase
         UseCaseDeleteUserById useCaseDeleteUserById,
         UseCaseUpdatePasswordUser useCaseUpdatePasswordUser,
         UseCaseUpdateUser useCaseUpdateUser, UseCaseChangeRoleToHostUser useCaseChangeRoleToHostUser,
-        UseCaseChangeRole useCaseChangeRole,
-        UseCaseHasHostRenting useCaseHasHostRenting,
-        UseCaseFetchRoleNameById useCaseFetchRoleNameById)
+        UseCaseChangeRole useCaseChangeRole)
     {
         _useCaseFetchAllUsers = useCaseFetchAllUsers;
         _useCaseCreateUser = useCaseCreateUser;
@@ -68,8 +64,6 @@ public class UserController : ControllerBase
         _useCaseUpdateUser = useCaseUpdateUser;
         _useCaseChangeRoleToHostUser = useCaseChangeRoleToHostUser;
         _useCaseChangeRole = useCaseChangeRole;
-        _useCaseHasHostRenting = useCaseHasHostRenting;
-        _useCaseFetchRoleNameById = useCaseFetchRoleNameById;
     }
 
     private void AppendCookies(string token)
@@ -368,15 +362,6 @@ public class UserController : ControllerBase
     {
         try
         {
-            var user = _useCaseFetchUserById.Execute(id);
-            
-            // if user has host role
-            if (user.Role.Name == "hote")
-                // if host has rentings
-                if (_useCaseFetchRoleNameById.Execute(newRoleId) == "utilisateur" && 
-                    _useCaseHasHostRenting.Execute(user.Id))
-                    return Unauthorized(); // NotAllowed ou NotAcceptable serait mais ça existe pas
-                    
             DtoUserNewRole userNewRole = new DtoUserNewRole
             {
                 Id = id,
