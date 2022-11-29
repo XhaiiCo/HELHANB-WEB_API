@@ -65,18 +65,18 @@ public class Ad
         return true;
     }
 
-    public static bool validHours(TimeSpan arrivalStart, TimeSpan arrivalEnd, TimeSpan leave)
+    public static bool ValidHours(TimeSpan arrivalStart, TimeSpan arrivalEnd, TimeSpan leave)
     {
-        if (!isHour2isAfterHour1(leave, arrivalStart))
+        if (!IsHour2isAfterHour1(leave, arrivalStart))
             throw new Exception("L'heure de départ doit être avant l'heure d'arrivée");
 
-        if (!isHour2isAfterHour1(arrivalStart, arrivalEnd))
-            throw new Exception("Heures d'arrivée incorrects");
+        if (!IsHour2isAfterHour1(arrivalStart, arrivalEnd))
+            throw new Exception("Heures d'arrivée incorrectes");
 
         return true;
     }
 
-    public static bool isHour2isAfterHour1(TimeSpan hour1, TimeSpan hour2)
+    public static bool IsHour2isAfterHour1(TimeSpan hour1, TimeSpan hour2)
     {
         return hour1 < hour2;
     }

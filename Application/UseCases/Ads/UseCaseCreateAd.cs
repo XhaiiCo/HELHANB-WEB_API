@@ -44,7 +44,7 @@ public class UseCaseCreateAd : IUseCaseWriter<DtoOutputAd, DtoInputCreateAd>
         dbAd.ArrivalTimeRangeEnd = _timeService.ToTimeSpan(input.ArrivalTimeRangeEnd);
         dbAd.LeaveTime = _timeService.ToTimeSpan(input.LeaveTime);
 
-        Ad.validHours(dbAd.ArrivalTimeRangeStart, dbAd.ArrivalTimeRangeEnd, dbAd.LeaveTime);
+        Ad.ValidHours(dbAd.ArrivalTimeRangeStart, dbAd.ArrivalTimeRangeEnd, dbAd.LeaveTime);
 
         var newAd = _adRepository.Create(dbAd);
 
