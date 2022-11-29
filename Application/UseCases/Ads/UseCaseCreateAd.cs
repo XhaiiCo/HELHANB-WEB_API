@@ -2,6 +2,7 @@
 using Application.Services.User;
 using Application.UseCases.Ads.Dtos;
 using Application.UseCases.Utils;
+using Domain;
 using Infrastructure.Ef.DbEntities;
 using Infrastructure.Ef.Repository.Ad;
 using Infrastructure.Ef.Repository.HouseFeature;
@@ -42,6 +43,8 @@ public class UseCaseCreateAd : IUseCaseWriter<DtoOutputAd, DtoInputCreateAd>
         dbAd.ArrivalTimeRangeStart = _timeService.ToTimeSpan(input.ArrivalTimeRangeStart);
         dbAd.ArrivalTimeRangeEnd = _timeService.ToTimeSpan(input.ArrivalTimeRangeEnd);
         dbAd.LeaveTime = _timeService.ToTimeSpan(input.LeaveTime);
+
+        Ad.validHours(dbAd.ArrivalTimeRangeStart, dbAd.ArrivalTimeRangeEnd, dbAd.LeaveTime);
 
         var newAd = _adRepository.Create(dbAd);
 
