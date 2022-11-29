@@ -1,5 +1,6 @@
 using System.Text;
 using API;
+using API.ChatController;
 using API.Utils.Picture;
 using Application.Services.Ad;
 using Application.Services.Auth;
@@ -65,6 +66,7 @@ builder.Services.AddCors(options =>
     });
 });
 builder.Services.AddControllers();
+builder.Services.AddSignalR(); 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -92,6 +94,7 @@ builder.Services.AddScoped<UseCaseDeleteUserById>();
 builder.Services.AddScoped<UseCaseUpdatePasswordUser>();
 builder.Services.AddScoped<UseCaseUpdateUser>();
 builder.Services.AddScoped<UseCaseChangeRoleToHostUser>();
+builder.Services.AddScoped<UseCaseChangeRole>();
 
 //Reservation
 builder.Services.AddScoped<UseCaseCreateReservation>();
@@ -105,9 +108,10 @@ builder.Services.AddScoped<UseCaseDeleteAd>();
 builder.Services.AddScoped<UseCaseFetchAllAds>();
 builder.Services.AddScoped<UseCaseAddPictureAd>();
 builder.Services.AddScoped<UseCaseFetchAdById>();
-builder.Services.AddScoped<UseCaseCountAds>();
+builder.Services.AddScoped<UseCaseCountValidatedAds>();
 builder.Services.AddScoped<UseCaseFetchAdsForPagination>();
 builder.Services.AddScoped<UseCaseUpdateStatusAd>();
+builder.Services.AddScoped<UseCaseFetchByUserIdAd>();
 
 // Services
 builder.Services.AddScoped<IUserService, UserService>() ;
@@ -136,5 +140,6 @@ app.UseAuthorization();
 app.UseStaticFiles();
 
 app.MapControllers();
+app.MapHub<ChatHub>("/chatsocket"); 
 
 app.Run();
