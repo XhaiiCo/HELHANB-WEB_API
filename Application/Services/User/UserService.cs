@@ -61,7 +61,6 @@ public class UserService : IUserService
         {
             var roles = _roleRepository.FetchAll();
 
-
             filteringUser = new FilteringUser
             {
                 RoleId = roles.FirstOrDefault(role => role.Name == dtoInputFilteringUsers.Role)?.Id,

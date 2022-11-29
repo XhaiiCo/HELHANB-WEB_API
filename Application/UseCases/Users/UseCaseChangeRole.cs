@@ -1,23 +1,25 @@
 ﻿using Application.Services.User;
 using Application.UseCases.Users.Dtos;
 using Application.UseCases.Utils;
-using Infrastructure.Ef.Repository;
+using Infrastructure.Ef;
+using Infrastructure.Ef.DbEntities;
 
 namespace Application.UseCases.Users;
 
-public class UseCaseChangeRole : IUseCaseWriter<DtoOutputUser, DtoUserNewRole>
+public class UseCaseChangeRole : IUseCaseWriter<DbUser, DtoUserNewRole>
 {
     private readonly IUserService _userService;
-    private readonly IRoleRepository _roleRepository;
+    private readonly IUserRepository _userRepository;
 
-    public UseCaseChangeRole(IUserService userService, IRoleRepository roleRepository)
+    public UseCaseChangeRole(IUserService userService,
+        IUserRepository userRepository)
     {
         _userService = userService;
-        _roleRepository = roleRepository;
+        _userRepository = userRepository;
     }
     
-    public DtoOutputUser Execute(DtoUserNewRole userNewRole)
+    public DbUser Execute(DtoUserNewRole userNewRole)
     {
-        return Mapper.GetInstance().Map<DtoOutputUser>(_userService.ChangeRole(userNewRole.Id, _roleRepository.FetchByName(userNewRole.RoleName).Id));
+        return _userRepository.Update(Mapper.GetInstance().Map<DbUser>(_userService.ChangeRole(userNewRole.Id, userNewRole.RoleId)));
     }
 }
