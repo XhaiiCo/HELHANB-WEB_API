@@ -94,6 +94,7 @@ builder.Services.AddScoped<UseCaseDeleteUserById>();
 builder.Services.AddScoped<UseCaseUpdatePasswordUser>();
 builder.Services.AddScoped<UseCaseUpdateUser>();
 builder.Services.AddScoped<UseCaseChangeRoleToHostUser>();
+builder.Services.AddScoped<UseCaseChangeRole>();
 
 //Reservation
 builder.Services.AddScoped<UseCaseCreateReservation>();
@@ -110,7 +111,7 @@ builder.Services.AddScoped<UseCaseFetchAdById>();
 builder.Services.AddScoped<UseCaseCountValidatedAds>();
 builder.Services.AddScoped<UseCaseFetchAdsForPagination>();
 builder.Services.AddScoped<UseCaseUpdateStatusAd>();
-builder.Services.AddScoped<UseCaseChangeRole>();
+builder.Services.AddScoped<UseCaseFetchByUserIdAd>();
 
 // Services
 builder.Services.AddScoped<IUserService, UserService>() ;

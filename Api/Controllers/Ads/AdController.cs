@@ -25,11 +25,15 @@ public class AdController : ControllerBase
     private readonly UseCaseCountValidatedAds _useCaseCountValidatedAds;
     private readonly UseCaseFetchAdsForPagination _useCaseFetchAdsForPagination;
     private readonly UseCaseUpdateStatusAd _useCaseUpdateStatusAd ;
+    private readonly UseCaseFetchByUserIdAd _useCaseFetchByUserIdAd ;
 
     public AdController(UseCaseCreateAd useCaseCreateAd, UseCaseDeleteAd useCaseDeleteAd,
         UseCaseCreateReservation useCaseCreateReservation, UseCaseFetchAllAds useCaseFetchAllAds, IAdService adService,
         IPictureService pictureService, UseCaseAddPictureAd useCaseAddPictureAd, UseCaseFetchAdById useCaseFetchAdById,
-        UseCaseCountValidatedAds useCaseCountValidatedAds, UseCaseFetchAdsForPagination useCaseFetchAdsForPagination, UseCaseUpdateStatusAd useCaseUpdateStatusAd)
+        UseCaseCountValidatedAds useCaseCountValidatedAds,
+        UseCaseFetchAdsForPagination useCaseFetchAdsForPagination,
+        UseCaseUpdateStatusAd useCaseUpdateStatusAd,
+        UseCaseFetchByUserIdAd useCaseFetchByUserIdAd)
     {
         _useCaseCreateAd = useCaseCreateAd;
         _useCaseDeleteAd = useCaseDeleteAd;
@@ -42,6 +46,7 @@ public class AdController : ControllerBase
         _useCaseCountValidatedAds = useCaseCountValidatedAds;
         _useCaseFetchAdsForPagination = useCaseFetchAdsForPagination;
         _useCaseUpdateStatusAd = useCaseUpdateStatusAd;
+        _useCaseFetchByUserIdAd = useCaseFetchByUserIdAd;
     }
 
 
@@ -155,6 +160,19 @@ public class AdController : ControllerBase
     public ActionResult<DtoOutputAdWithReservations> FetchById(int id)
     {
         return Ok(_useCaseFetchAdById.Execute(id));
+    }
+    
+    [HttpGet]
+    [Authorize(Roles = "hote")]
+    [Route("{id:int}/myAds")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public ActionResult<DtoOutputMyAdsAd> FetchByUserId(int id)
+    {
+        //Check that this is the id of the logged in user
+        if ("" + id != User.Identity?.Name) return Unauthorized();
+        
+        return Ok(_useCaseFetchByUserIdAd.Execute(id));
     }
 
     [HttpPost]

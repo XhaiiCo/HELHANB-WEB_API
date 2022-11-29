@@ -11,6 +11,7 @@ public interface IAdRepository
     DbAd Create(DbAd ad);
 
     DbAd FetchById(int id);
+    IEnumerable<DbAd> FetchByUserId(int id);
 
     DbAd Delete(DbAd ad);
     DbAd Update(DbAd ad);

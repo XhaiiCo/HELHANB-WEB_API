@@ -30,6 +30,7 @@ public class Mapper
             cfg.CreateMap<DbUser, User>();
             cfg.CreateMap<DtoOutputUser, DtoTokenUser>();
             cfg.CreateMap<User, DbUser>();
+            cfg.CreateMap<DbUser, DtoOutputMyAdsAd.DtoOutputAdReservationMyAds.DtoRenterMyAds>();
 
             //Role
             cfg.CreateMap<DbRole, DtoOutputRole>();
@@ -45,6 +46,7 @@ public class Mapper
             cfg.CreateMap<User, DtoOutputUserInAd>();
             cfg.CreateMap<Ad, DtoOutputAdWithReservations>();
             cfg.CreateMap<Ad, DtoOutputAdsSummary>();
+            cfg.CreateMap<Ad, DtoOutputMyAdsAd>();
             cfg.CreateMap<DtoInputFilteringAds, FilteringAd>();
             
             //AdStatus
@@ -65,6 +67,7 @@ public class Mapper
             cfg.CreateMap<DbReservationStatus, DtoOutputReservation.DtoReservationStatus>();
             cfg.CreateMap<DbAd, DtoOutputReservation.DtoAd>();
             cfg.CreateMap<DbReservation, Reservation>();
+            cfg.CreateMap<DbReservationStatus, DtoOutputMyAdsAd.DtoOutputAdReservationMyAds.DtoReservationStatusMyAds>();
             
             //AdPicture
             cfg.CreateMap<DtoInputAddPictureAd, DbAdPicture>();
