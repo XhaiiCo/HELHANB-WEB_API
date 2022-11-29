@@ -27,10 +27,4 @@ public class DtoOutputAd
     public DtoOutputUserInAd Owner { get; set; }
 
     public DtoOutputAdStatus Status { get; set; }
-
-    public class DtoOutputAdStatus
-    {
-        public int Id { get; set; }
-        public string StatusName { get; set; }
-    }
 }

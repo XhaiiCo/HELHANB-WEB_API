@@ -51,7 +51,7 @@ public class Mapper
             
             //AdStatus
             cfg.CreateMap<DbAdStatus, AdStatus>();
-            cfg.CreateMap<AdStatus, DtoOutputAd.DtoOutputAdStatus>();
+            cfg.CreateMap<AdStatus, DtoOutputAdStatus>();
             
             //Time
             cfg.CreateMap<DtoInputTime, TimeSpan>();

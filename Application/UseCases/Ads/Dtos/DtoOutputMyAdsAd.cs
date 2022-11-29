@@ -13,7 +13,6 @@ public class DtoOutputMyAdsAd
     public int PostalCode { get; set; }
     public string Country { get; set; }
     public string City { get; set; }
-    public int AdStatusId { get; set; }
 
     public TimeSpan ArrivalTimeRangeStart { get; set; }
     public TimeSpan ArrivalTimeRangeEnd { get; set; }
@@ -22,6 +21,7 @@ public class DtoOutputMyAdsAd
     public IEnumerable<string> Features { get; set; }
     public IEnumerable<DtoOutputAdPicture> Pictures { get; set; }
     public DtoOutputUserInAd Owner { get; set; }
+    public DtoOutputAdStatus status { get; set; }
     public IEnumerable<DtoOutputAdReservationMyAds> Reservations { get; set; }
 
     public class DtoOutputAdReservationMyAds
