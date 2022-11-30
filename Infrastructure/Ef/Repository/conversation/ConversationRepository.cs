@@ -34,4 +34,15 @@ public class ConversationRepository : IConversationRepository
 
         return dbConversation;
     }
+
+    public DbConversation FetchById(int id)
+    {
+        using var context = _contextProvider.NewContext();
+
+        var dbConversation = context.Conversations.FirstOrDefault(conv => conv.Id == id);
+        
+        if (dbConversation == null) throw new KeyNotFoundException($"La conversation n'a pas été trouvée");
+
+        return dbConversation;
+    }
 }

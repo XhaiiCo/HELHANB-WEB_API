@@ -1,8 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿namespace Application.UseCases.Conversation.Dtos;
 
-namespace Infrastructure.Ef.DbEntities;
-
-public class DbMessage
+public class DtoOutputCreatedMessage
 {
     public int Id { get; set; }
     
@@ -12,7 +10,4 @@ public class DbMessage
    
     public bool View { get; set; }
     public DateTime SendTime { get; set; }
-    
-    public int ConversationId { get; set; }
-    
 }

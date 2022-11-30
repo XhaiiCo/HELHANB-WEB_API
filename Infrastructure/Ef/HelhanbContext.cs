@@ -39,7 +39,7 @@ public class HelhanbContext : DbContext
     {
         modelBuilder.Entity<DbConversation>(entity =>
         {
-            entity.ToTable("conversation");
+            entity.ToTable("conversations");
             entity.HasKey(c => c.Id);
             entity.Property(c => c.Id).HasColumnName("conversation_id");
             entity.Property(c => c.IdUser1).HasColumnName("id_user_1");
@@ -48,13 +48,14 @@ public class HelhanbContext : DbContext
 
         modelBuilder.Entity<DbMessage>(entity =>
         {
-            entity.ToTable("Messages");
+            entity.ToTable("messages");
             entity.HasKey(m => m.Id);
             entity.Property(m => m.Id).HasColumnName("message_id");
             entity.Property(m => m.SenderId).HasColumnName("sender_id");
             entity.Property(m => m.Content).HasColumnName("content");
-            entity.Property(m => m.View).HasColumnName("view");
+            entity.Property(m => m.View).HasColumnName("view_message");
             entity.Property(m => m.SendTime).HasColumnName("send_time");
+            entity.Property(m => m.ConversationId).HasColumnName("conversation_id");
         });
 
         modelBuilder.Entity<DbHouseFeature>(entity =>

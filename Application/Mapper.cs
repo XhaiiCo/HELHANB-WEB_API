@@ -79,6 +79,10 @@ public class Mapper
             //Conversation
             cfg.CreateMap<DtoInputCreateConversation, DbConversation>();
             cfg.CreateMap<DbConversation, DtoOutputCreatedConversation>();
+            
+            //Message
+            cfg.CreateMap<DtoInputCreateMessage, DbMessage>();
+            cfg.CreateMap<DbMessage, DtoOutputCreatedMessage>();
         });
         return new AutoMapper.Mapper(config);
     }
