@@ -15,9 +15,7 @@ public class HelhanbContext : DbContext
 
     public DbSet<DbConversation> Conversations { get; set; }
 
-    /* 
-     public DbSet<DbMessage> Messages { get; set; }
-    */
+    public DbSet<DbMessage> Messages { get; set; }
 
     public DbSet<DbHouseFeature> HouseFeatures { get; set; }
     public DbSet<DbAdPicture> AdPictures { get; set; }
@@ -48,7 +46,6 @@ public class HelhanbContext : DbContext
             entity.Property(c => c.IdUser2).HasColumnName("id_user_2");
         });
 
-        /*
         modelBuilder.Entity<DbMessage>(entity =>
         {
             entity.ToTable("Messages");
@@ -58,8 +55,7 @@ public class HelhanbContext : DbContext
             entity.Property(m => m.Content).HasColumnName("content");
             entity.Property(m => m.View).HasColumnName("view");
             entity.Property(m => m.SendTime).HasColumnName("send_time");
-        }); 
-        */
+        });
 
         modelBuilder.Entity<DbHouseFeature>(entity =>
         {

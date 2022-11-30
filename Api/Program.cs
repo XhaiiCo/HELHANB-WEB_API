@@ -24,6 +24,7 @@ using Infrastructure.Ef.Repository.Ad.AdStatus;
 using Infrastructure.Ef.Repository.AdPicture;
 using Infrastructure.Ef.Repository.AdStatus;
 using Infrastructure.Ef.Repository.conversation;
+using Infrastructure.Ef.Repository.conversation.Message;
 using Infrastructure.Ef.Repository.HouseFeature;
 using Infrastructure.Ef.Repository.Reservation;
 using Infrastructure.Utils;
@@ -88,6 +89,7 @@ builder.Services.AddScoped<IAdPictureRepository, AdPictureRepository>();
 builder.Services.AddScoped<IHouseFeatureRepository, HouseFeatureRepository>();
 builder.Services.AddScoped<IAdStatusRepository, AdStatusRepository>();
 builder.Services.AddScoped<IConversationRepository, ConversationRepository>();
+builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 
 // Users
 builder.Services.AddScoped<UseCaseFetchAllUsers>();
