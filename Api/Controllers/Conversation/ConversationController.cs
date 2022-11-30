@@ -11,12 +11,14 @@ public class ConversationController : ControllerBase
 {
     private readonly UseCaseCreateConversation _useCaseCreateConversation;
     private readonly UseCaseCreateMessage _useCaseCreateMessage;
+    private readonly UseCaseFetchMyConversation _useCaseFetchMyConversation ;
 
     public ConversationController(UseCaseCreateConversation useCaseCreateConversation,
-        UseCaseCreateMessage useCaseCreateMessage)
+        UseCaseCreateMessage useCaseCreateMessage, UseCaseFetchMyConversation useCaseFetchMyConversation)
     {
         _useCaseCreateConversation = useCaseCreateConversation;
         _useCaseCreateMessage = useCaseCreateMessage;
+        _useCaseFetchMyConversation = useCaseFetchMyConversation;
     }
 
     private bool IsTheIdOfConnectedUser(int id)
@@ -35,8 +37,7 @@ public class ConversationController : ControllerBase
         return Ok(_useCaseCreateConversation.Execute(dto));
     }
 
-    [HttpPost]
-    [Route("messages")]
+    [HttpPost("messages")]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -52,5 +53,16 @@ public class ConversationController : ControllerBase
         {
             return Unauthorized(e.Message);
         }
+    }
+
+    [HttpGet("{id:int}/myConversations")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public ActionResult<IEnumerable<DtoOutputMyConversation>> FetchMyConversations(int id)
+    {
+        if (!IsTheIdOfConnectedUser(id)) return Unauthorized() ;
+        
+        return Ok(_useCaseFetchMyConversation.Execute(id));
     }
 }

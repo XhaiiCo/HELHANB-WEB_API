@@ -134,6 +134,7 @@ builder.Services.AddScoped<IRoleService, RoleService>();
 //conversation
 builder.Services.AddScoped<UseCaseCreateConversation>();
 builder.Services.AddScoped<UseCaseCreateMessage>();
+builder.Services.AddScoped<UseCaseFetchMyConversation>();
 
 var app = builder.Build();
 
