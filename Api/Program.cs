@@ -26,6 +26,7 @@ using Infrastructure.Ef.Repository.HouseFeature;
 using Infrastructure.Ef.Repository.Reservation;
 using Infrastructure.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -125,6 +126,7 @@ builder.Services.AddScoped<IReservationBookService, ReservationBookService>();
 builder.Services.AddScoped<IDateService, DateService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 
+builder.Services.AddScoped<ChatHub>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
