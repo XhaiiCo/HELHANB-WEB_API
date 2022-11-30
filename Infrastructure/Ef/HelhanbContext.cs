@@ -13,12 +13,12 @@ public class HelhanbContext : DbContext
         _connectionStringProvider = connectionStringProvider;
     }
 
+    public DbSet<DbConversation> Conversations { get; set; }
+
     /* 
-     public DbSet<DbConversation> Conversations { get; set; }
-     
      public DbSet<DbMessage> Messages { get; set; }
-     
- */
+    */
+
     public DbSet<DbHouseFeature> HouseFeatures { get; set; }
     public DbSet<DbAdPicture> AdPictures { get; set; }
 
@@ -39,7 +39,6 @@ public class HelhanbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        /*
         modelBuilder.Entity<DbConversation>(entity =>
         {
             entity.ToTable("conversation");
@@ -49,6 +48,7 @@ public class HelhanbContext : DbContext
             entity.Property(c => c.IdUser2).HasColumnName("id_user_2");
         });
 
+        /*
         modelBuilder.Entity<DbMessage>(entity =>
         {
             entity.ToTable("Messages");
@@ -69,7 +69,7 @@ public class HelhanbContext : DbContext
             entity.Property(hF => hF.Feature).HasColumnName("feature");
             entity.Property(hF => hF.AdId).HasColumnName("ad_id");
         });
-        
+
         modelBuilder.Entity<DbAdPicture>(entity =>
         {
             entity.ToTable("ad_pictures");

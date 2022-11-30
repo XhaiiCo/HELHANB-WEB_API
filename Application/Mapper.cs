@@ -1,4 +1,5 @@
 ﻿using Application.UseCases.Ads.Dtos;
+using Application.UseCases.Conversation.Dtos;
 using Application.UseCases.Reservations.Dtos;
 using Application.UseCases.Roles.Dtos;
 using Application.UseCases.Users.Dtos;
@@ -74,6 +75,10 @@ public class Mapper
             cfg.CreateMap<DbAdPicture, DtoOutputAdPicture>();
             cfg.CreateMap<DbAdPicture, Picture>();
             cfg.CreateMap<Picture, DtoOutputAdPicture>();
+            
+            //Conversation
+            cfg.CreateMap<DtoInputCreateConversation, DbConversation>();
+            cfg.CreateMap<DbConversation, DtoOutputCreatedConversation>();
         });
         return new AutoMapper.Mapper(config);
     }

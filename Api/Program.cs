@@ -11,6 +11,7 @@ using Application.Services.Time;
 using Application.Services.Token;
 using Application.Services.User;
 using Application.UseCases.Ads;
+using Application.UseCases.Conversation;
 using Application.UseCases.Reservations;
 using Application.UseCases.Roles;
 using Application.UseCases.Users;
@@ -22,6 +23,7 @@ using Infrastructure.Ef.Repository.Ad;
 using Infrastructure.Ef.Repository.Ad.AdStatus;
 using Infrastructure.Ef.Repository.AdPicture;
 using Infrastructure.Ef.Repository.AdStatus;
+using Infrastructure.Ef.Repository.conversation;
 using Infrastructure.Ef.Repository.HouseFeature;
 using Infrastructure.Ef.Repository.Reservation;
 using Infrastructure.Utils;
@@ -85,6 +87,7 @@ builder.Services.AddScoped<IReservationStatusRepository, ReservationStatusReposi
 builder.Services.AddScoped<IAdPictureRepository, AdPictureRepository>();
 builder.Services.AddScoped<IHouseFeatureRepository, HouseFeatureRepository>();
 builder.Services.AddScoped<IAdStatusRepository, AdStatusRepository>();
+builder.Services.AddScoped<IConversationRepository, ConversationRepository>();
 
 // Users
 builder.Services.AddScoped<UseCaseFetchAllUsers>();
@@ -126,7 +129,9 @@ builder.Services.AddScoped<IReservationBookService, ReservationBookService>();
 builder.Services.AddScoped<IDateService, DateService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 
-builder.Services.AddScoped<ChatHub>();
+//conversation
+builder.Services.AddScoped<UseCaseCreateConversation>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
