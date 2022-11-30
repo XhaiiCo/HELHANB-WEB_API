@@ -80,6 +80,7 @@ public class Mapper
             cfg.CreateMap<DtoInputCreateConversation, DbConversation>();
             cfg.CreateMap<DbConversation, DtoOutputCreatedConversation>();
             cfg.CreateMap<User, DtoOutputMyConversation.DtoOutputUserInMyConversation>();
+            cfg.CreateMap<DbMessage, DtoOutputMessage>();
             
             //Message
             cfg.CreateMap<DtoInputCreateMessage, DbMessage>();

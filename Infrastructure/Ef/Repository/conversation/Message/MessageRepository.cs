@@ -3,7 +3,7 @@ using Infrastructure.Utils;
 
 namespace Infrastructure.Ef.Repository.conversation.Message;
 
-public class MessageRepository: IMessageRepository
+public class MessageRepository : IMessageRepository
 {
     private readonly HelhanbContextProvider _contextProvider;
 
@@ -20,5 +20,12 @@ public class MessageRepository: IMessageRepository
         context.SaveChanges();
 
         return dbMessage;
+    }
+
+    public IEnumerable<DbMessage> FetchByConversationid(int id)
+    {
+        using var context = _contextProvider.NewContext();
+
+        return context.Messages.Where(mess => mess.ConversationId == id).ToList();
     }
 }
