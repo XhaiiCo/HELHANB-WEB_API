@@ -18,6 +18,7 @@ public class ChatHub : Hub // inherit this
         return Clients.Group("" + recipientId).SendAsync("ReceiveOne", message, senderId);
     }
 
+    [Authorize]
     public override Task OnDisconnectedAsync(Exception? exception)
     {
         Groups.RemoveFromGroupAsync(Context.ConnectionId, Context.User.Identity.Name);
