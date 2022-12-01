@@ -13,9 +13,9 @@ public class ChatHub : Hub // inherit this
     }
 
     [Authorize]
-    public Task SendMessage1(string message, int recipientId)
+    public Task SendMessage1(string message, int recipientId, int senderId)
     {
-        return Clients.Group("" + recipientId).SendAsync("ReceiveOne", message, recipientId);
+        return Clients.Group("" + recipientId).SendAsync("ReceiveOne", message, senderId);
     }
 
     public override Task OnDisconnectedAsync(Exception? exception)
