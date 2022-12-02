@@ -91,9 +91,9 @@ public class AdController : ControllerBase
             {
                 return Unauthorized("Il faut une photo");
             }
-
+            
             var basePath = "\\Upload\\AdPictures\\" + ad.Id + "\\";
-
+            
             //Check the file type
             if (!_pictureService.ValidPictureType(picture.ContentType))
             {
@@ -225,6 +225,14 @@ public class AdController : ControllerBase
     public ActionResult<DtoOutputAd> UpdateStatus(DtoInputUpdateStatusAd dto)
     {
         return Ok(_useCaseUpdateStatusAd.Execute(dto));
+    }
+
+    [HttpPut]
+    [Route("adUpdate")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public ActionResult UpdateAd(DtoInputUpdateAd dto)//<DtoOutputAd>
+    {
+        return Ok();
     }
 
 }
