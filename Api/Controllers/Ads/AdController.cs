@@ -72,55 +72,7 @@ public class AdController : ControllerBase
             return Unauthorized(e.Message);
         }
     }
-/*
-    [HttpPost]
-    [Authorize(Roles = "hote")]
-    [Route("{id:int}/picture")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public ActionResult<DtoOutputAdPicture> AddPictureForAd(int id, IFormFile? picture)
-    {
-        //Check that this is the id of the logged in user
-        var ad = _adService.FetchById(id);
-        if ("" + ad.Owner.Id != User.Identity?.Name) return Unauthorized();
-
-        try
-        {
-            //If the protilePicture is null remove it
-            if (picture == null)
-            {
-                return Unauthorized("Il faut une photo");
-            }
-            
-            var basePath = "\\Upload\\AdPictures\\" + ad.Id + "\\";
-            
-            //Check the file type
-            if (!_pictureService.ValidPictureType(picture.ContentType))
-            {
-                return Unauthorized("Extension d'image invalide acceptés: jpeg, png, webp");
-            }
-
-            //Create a unique file name
-            var fileName = _pictureService.GenerateUniqueFileName(id, picture.FileName);
-
-            //Update the ad 
-            var dtoInputAddPictureAd = new DtoInputAddPictureAd
-            {
-                Path = basePath + fileName,
-                AdId = ad.Id
-            };
-            var dtoOutputAdPicture = _useCaseAddPictureAd.Execute(dtoInputAddPictureAd);
-
-            //Upload the new picture
-            _pictureService.UploadPicture(basePath, fileName, picture);
-            return Ok(dtoOutputAdPicture);
-        }
-        catch (Exception e)
-        {
-            return Unauthorized(e.Message);
-        }
-    }*/
-
+    
     [HttpDelete]
     [Route("{id:int}")]
     [Authorize(Roles = "administrateur")]

@@ -40,6 +40,12 @@ public class UseCaseCreateAd : IUseCaseWriter<DtoOutputAd, DtoInputCreateAd>
         if (user.Role.Id != 2)
             throw new UnauthorizedAccessException("L'utilisateur doit être un hôte");
 
+        var size = input.PicturesToAdd.ToArray().Length;
+        if (size < 3 || size > 15)
+        {
+            throw new Exception("Le nombre d'images doit être compris entre 3 et 15");
+        }
+        
         //on fait déjà une verif pour les images ici
         if (_pictureService.ValidExtensions(input.PicturesToAdd))
         {
@@ -72,23 +78,23 @@ public class UseCaseCreateAd : IUseCaseWriter<DtoOutputAd, DtoInputCreateAd>
         }
 
         var basePath = "\\Upload\\AdPictures\\" + newAd.Id + "\\";
-        var fullpath = "";
+        var filePath = "";
 
         
         foreach (var pic in input.PicturesToAdd)
         {
-            fullpath = basePath + _pictureService.GenerateUniqueFileName(newAd.UserId) + _pictureService.GetExtension(pic);
+            filePath = basePath + _pictureService.GenerateUniqueFileName(newAd.UserId) + _pictureService.GetExtension(pic);
             
             var dtoInputAddPictureAd = new DtoInputAddPictureAd
             {
-                Path = fullpath,
+                Path = filePath,
                 AdId = newAd.Id
             };
             var dbAdPicture = Mapper.GetInstance().Map<DbAdPicture>(dtoInputAddPictureAd);
             
             _adPictureRepository.Create(dbAdPicture);
             
-            _pictureService.UploadBase64Picture(basePath, fullpath, pic);
+            _pictureService.UploadBase64Picture(basePath, filePath, pic);
         }
 
 

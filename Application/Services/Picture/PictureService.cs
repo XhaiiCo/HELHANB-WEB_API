@@ -85,12 +85,12 @@ public class PictureService : IPictureService
         fileStream.Flush();
     }
 
-    public void UploadBase64Picture(string basepath, string fullpath, string base64Picture)
+    public void UploadBase64Picture(string basepath, string filePath, string base64Picture)
     {
         this.CreateDirectory(basepath);
         
         var bytes = Convert.FromBase64String(base64Picture);
         
-        File.WriteAllBytes(_environment.WebRootPath + fullpath, bytes);
+        File.WriteAllBytes(_environment.WebRootPath + filePath, bytes);
     }
 }
