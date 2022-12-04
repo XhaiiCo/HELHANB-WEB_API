@@ -117,6 +117,7 @@ public class HelhanbContext : DbContext
         modelBuilder.Entity<DbUser>(entity =>
         {
             entity.ToTable("users");
+            entity.ToTable(tb => tb.HasTrigger("DELETE-USER"));
             entity.HasKey(u => u.Id);
             entity.Property(u => u.Id).HasColumnName("user_id");
             entity.Property(u => u.FirstName).HasColumnName("first_name");
