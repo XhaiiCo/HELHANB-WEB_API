@@ -109,6 +109,7 @@ public class UserController : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public ActionResult<DtoOutputUser> Delete(int id)
     {
+        if (IsTheIdOfConnectedUser(id)) return Unauthorized("Vous ne pouvez pas vous supprimer"); 
         var currentUser = _userService.FetchById(id);
 
         //Remove the current profile picture if exist
