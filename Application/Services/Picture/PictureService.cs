@@ -1,10 +1,15 @@
-﻿namespace API.Utils.Picture;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+
+namespace API.Utils.Picture;
 
 public class PictureService : IPictureService
 {
     public static IWebHostEnvironment _environment;
     public static readonly string[] AllowedFileTypes = { "image/jpeg", "image/png", "image/webp" };
-
+    //'/' for jpeg, 'i' for png, 'U' for webp
+    public static readonly string AllowedBase64Extensions = "/iU";
+    
     public PictureService(
         IWebHostEnvironment environment
     )
@@ -17,9 +22,37 @@ public class PictureService : IPictureService
         return AllowedFileTypes.Contains(contentType);
     }
 
-    public string GenerateUniqueFileName(int userId, string fileName)
+    public bool ValidExtensions(IEnumerable<string> picturesBase64)
     {
-        return userId + "_" + DateTime.Now.Ticks + "_" + fileName.Replace(" ", "");
+        foreach (var pic in picturesBase64)
+        {
+            if (!AllowedBase64Extensions.Contains(pic[0]));
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public string GenerateUniqueFileName(int userId)
+    {
+        return userId + "_" + DateTime.Now.Ticks;
+    }
+
+    public string GetExtension(string base64)
+    {
+        char firstChar = base64[0];
+
+        if (firstChar == '/')
+        {
+            return ".jpeg";
+        }
+        else if(firstChar == 'i')
+        {
+            return ".png";
+        }
+
+        return ".webp";
     }
 
     public void CreateDirectory(string path)
@@ -50,5 +83,14 @@ public class PictureService : IPictureService
         //Copy the file to the directory
         picture.CopyTo(fileStream);
         fileStream.Flush();
+    }
+
+    public void UploadBase64Picture(string basepath, string fullpath, string base64Picture)
+    {
+        this.CreateDirectory(basepath);
+        
+        var bytes = Convert.FromBase64String(base64Picture);
+        
+        File.WriteAllBytes(_environment.WebRootPath + fullpath, bytes);
     }
 }

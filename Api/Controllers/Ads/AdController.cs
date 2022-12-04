@@ -72,7 +72,7 @@ public class AdController : ControllerBase
             return Unauthorized(e.Message);
         }
     }
-
+/*
     [HttpPost]
     [Authorize(Roles = "hote")]
     [Route("{id:int}/picture")]
@@ -119,7 +119,7 @@ public class AdController : ControllerBase
         {
             return Unauthorized(e.Message);
         }
-    }
+    }*/
 
     [HttpDelete]
     [Route("{id:int}")]

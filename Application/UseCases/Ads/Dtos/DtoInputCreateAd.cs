@@ -26,4 +26,6 @@ public class DtoInputCreateAd
     [Required] public DtoInputTime LeaveTime { get; set; }
 
     [Required] public IEnumerable<string> Features { get; set; }
+    
+    [Required] public IEnumerable<string> PicturesToAdd { get; set; }
 }

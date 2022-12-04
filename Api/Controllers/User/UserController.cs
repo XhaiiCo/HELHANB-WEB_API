@@ -254,7 +254,7 @@ public class UserController : ControllerBase
                 }
 
                 //Create a unique file name
-                var fileName = _pictureService.GenerateUniqueFileName(id, profilePicture.FileName);
+                var fileName = _pictureService.GenerateUniqueFileName(id);
 
 
                 //Remove the current profile picture if exist
