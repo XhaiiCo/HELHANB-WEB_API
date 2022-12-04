@@ -26,6 +26,7 @@ public class AdController : ControllerBase
     private readonly UseCaseFetchAdsForPagination _useCaseFetchAdsForPagination;
     private readonly UseCaseUpdateStatusAd _useCaseUpdateStatusAd ;
     private readonly UseCaseFetchByUserIdAd _useCaseFetchByUserIdAd ;
+    private readonly UseCaseUpdateAd _useCaseUpdateAd;
 
     public AdController(UseCaseCreateAd useCaseCreateAd, UseCaseDeleteAd useCaseDeleteAd,
         UseCaseCreateReservation useCaseCreateReservation, UseCaseFetchAllAds useCaseFetchAllAds, IAdService adService,
@@ -33,7 +34,8 @@ public class AdController : ControllerBase
         UseCaseCountValidatedAds useCaseCountValidatedAds,
         UseCaseFetchAdsForPagination useCaseFetchAdsForPagination,
         UseCaseUpdateStatusAd useCaseUpdateStatusAd,
-        UseCaseFetchByUserIdAd useCaseFetchByUserIdAd)
+        UseCaseFetchByUserIdAd useCaseFetchByUserIdAd, 
+        UseCaseUpdateAd useCaseUpdateAd)
     {
         _useCaseCreateAd = useCaseCreateAd;
         _useCaseDeleteAd = useCaseDeleteAd;
@@ -47,6 +49,7 @@ public class AdController : ControllerBase
         _useCaseFetchAdsForPagination = useCaseFetchAdsForPagination;
         _useCaseUpdateStatusAd = useCaseUpdateStatusAd;
         _useCaseFetchByUserIdAd = useCaseFetchByUserIdAd;
+        _useCaseUpdateAd = useCaseUpdateAd;
     }
 
 
@@ -182,9 +185,9 @@ public class AdController : ControllerBase
     [HttpPut]
     [Route("adUpdate")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public ActionResult UpdateAd(DtoInputUpdateAd dto)//<DtoOutputAd>
+    public ActionResult<DtoOutputAd> UpdateAd(DtoInputUpdateAd dto)//<DtoOutputAd>
     {
-        return Ok();
+        return Ok(_useCaseUpdateAd.Execute(dto));
     }
 
 }

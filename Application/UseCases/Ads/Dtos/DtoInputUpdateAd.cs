@@ -4,7 +4,7 @@ namespace Application.UseCases.Ads.Dtos;
 
 public class DtoInputUpdateAd
 {
-    [Required] public int id { get; set; }
+    [Required] public int Id { get; set; }
     
     [Required] public string Name { get; set; }
     
@@ -25,9 +25,9 @@ public class DtoInputUpdateAd
 
     [Required] public IEnumerable<string> Features { get; set; }
 
-    [Required] public IEnumerable<string> picturesToAdd { get; set; }
+    [Required] public IEnumerable<string> PicturesToAdd { get; set; }
     
-    [Required] public IEnumerable<string> picturesToDelete { get; set; }
+    [Required] public IEnumerable<string> PicturesToDelete { get; set; }
 
     
     
