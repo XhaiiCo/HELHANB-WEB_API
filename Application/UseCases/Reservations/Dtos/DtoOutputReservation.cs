@@ -12,6 +12,7 @@ public class DtoOutputReservation
     
     public DtoAd Ad { get; set; }
     public DtoReservationStatus ReservationStatus { get; set; }
+    public string picture { get; set; }
     
     public class DtoRenter
     {
