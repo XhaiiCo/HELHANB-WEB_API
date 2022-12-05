@@ -11,7 +11,7 @@ public class DtoOutputReservation
     public DtoRenter Renter { get; set; }
     
     public DtoAd Ad { get; set; }
-    public DtoReservationStatus Status { get; set; }
+    public DtoReservationStatus ReservationStatus { get; set; }
     
     public class DtoRenter
     {

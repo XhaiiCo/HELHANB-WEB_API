@@ -7,7 +7,8 @@ public class Reservation
 
     public DateTimeRange DateTimeRange;
 
-    public ReservationStatus reservationStatus { get; set; }
+    public ReservationStatus ReservationStatus { get; set; }
+    public Ad Ad { get; set; }
 
     public User Renter { get; set; }
 

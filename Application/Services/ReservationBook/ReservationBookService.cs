@@ -32,7 +32,7 @@ public class ReservationBookService : IReservationBookService
                 dbReservation.ArrivalDate,
                 dbReservation.LeaveDate
             ),
-            reservationStatus = new ReservationStatus
+            ReservationStatus = new ReservationStatus
             {
                 Id = dbReservation.ReservationStatusId
             }

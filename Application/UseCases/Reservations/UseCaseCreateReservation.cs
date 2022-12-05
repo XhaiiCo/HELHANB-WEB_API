@@ -1,4 +1,5 @@
-﻿using Application.Services.Date;
+﻿using Application.Services;
+using Application.Services.Date;
 using Application.Services.ReservationBook;
 using Application.UseCases.Ads;
 using Application.UseCases.Reservations.Dtos;
@@ -15,22 +16,24 @@ namespace Application.UseCases.Reservations;
 public class UseCaseCreateReservation : IUseCaseWriter<DtoOutputReservation, DtoInputCreateReservation>
 {
     private readonly IReservationRepository _reservationRepository;
-    private readonly IUserRepository _userRepository;
-    private readonly IReservationStatusRepository _reservationStatusRepository;
     private readonly IAdRepository _adRepository;
     private readonly IReservationBookService _reservationBookService;
     private readonly IDateService _dateService;
+    private readonly IReservationService _reservationService;
 
-    public UseCaseCreateReservation(IReservationRepository reservationRepository, IUserRepository userRepository,
-        IReservationStatusRepository reservationStatusRepository, IAdRepository adRepository,
-        IReservationBookService reservationBookService, IDateService dateService)
+    public UseCaseCreateReservation(
+        IReservationRepository reservationRepository,
+        IAdRepository adRepository,
+        IReservationBookService reservationBookService,
+        IDateService dateService,
+        IReservationService reservationService
+    )
     {
         _reservationRepository = reservationRepository;
-        _userRepository = userRepository;
-        _reservationStatusRepository = reservationStatusRepository;
         _adRepository = adRepository;
         _reservationBookService = reservationBookService;
         _dateService = dateService;
+        _reservationService = reservationService;
     }
 
 
@@ -64,7 +67,7 @@ public class UseCaseCreateReservation : IUseCaseWriter<DtoOutputReservation, Dto
         var reservationBook = _reservationBookService.FetchByAdId(input.AdId);
 
         //Keep only the accepted reservations
-        var reservations = (reservationBook.Where(r => r.reservationStatus.Id == 3)).Entries();
+        var reservations = (reservationBook.Where(r => r.ReservationStatus.Id == 3)).Entries();
 
         if (!Reservation.IsDateAvailable(reservations, newDomainReservation))
             throw new Exception("Ces dates sont indisponibles");
@@ -72,20 +75,7 @@ public class UseCaseCreateReservation : IUseCaseWriter<DtoOutputReservation, Dto
         //If all the tests are validated
         _reservationRepository.Create(dbReservation);
 
-        //Prepare the return
-        var dto = mapper.Map<DtoOutputReservation>(dbReservation);
-
-        //Add the renter
-        var dbRenter = _userRepository.FetchById(dbReservation.RenterId);
-        dto.Renter = mapper.Map<DtoOutputReservation.DtoRenter>(dbRenter);
-
-        //Add the reservation status
-        var dbReservationStatus = _reservationStatusRepository.FetchById(dbReservation.ReservationStatusId);
-        dto.Status = mapper.Map<DtoOutputReservation.DtoReservationStatus>(dbReservationStatus);
-
-        //Add the ad
-        dto.Ad = mapper.Map<DtoOutputReservation.DtoAd>(dbAd);
-
+        var dto = Mapper.GetInstance().Map<DtoOutputReservation>(_reservationService.MapToReservation(dbReservation));
         return dto;
     }
 }
