@@ -8,7 +8,7 @@ namespace Application.Services.Token;
 
 public class TokenService : ITokenService
 {
-    private const double EXPIRY_DURATION_MINUTES = 30;
+    private const double EXPIRY_DURATION_MINUTES = 180;
 
     /// <summary>
     /// Returns a JWT token
