@@ -44,7 +44,7 @@ public class UseCaseUpdateAd : IUseCaseWriter<DtoOutputAd, DtoInputUpdateAd>
         var result = _adRepository.Update(dbAd);
 
         //features
-        var dbFeatures = _houseFeatureRepository.FetchByAdId(input.Id);
+        var dbFeatures = _houseFeatureRepository.FetchByAdId(dbAd.Id);
         
         foreach (var dbFeature in dbFeatures)
         {
@@ -55,7 +55,7 @@ public class UseCaseUpdateAd : IUseCaseWriter<DtoOutputAd, DtoInputUpdateAd>
             }
         }
         
-        var dbFeaturesFeatures = _houseFeatureRepository.FetchByAdId(input.Id).Select(dbFeature => dbFeature.Feature);
+        var dbFeaturesFeatures = _houseFeatureRepository.FetchByAdId(dbAd.Id).Select(dbFeature => dbFeature.Feature);
 
         var diff = input.Features.Except(dbFeaturesFeatures);
 
@@ -64,7 +64,7 @@ public class UseCaseUpdateAd : IUseCaseWriter<DtoOutputAd, DtoInputUpdateAd>
             _houseFeatureRepository.Create(new DbHouseFeature
             {
                 Feature = newFeature,
-                AdId = input.Id
+                AdId = dbAd.Id
             });
         }
         
@@ -79,6 +79,26 @@ public class UseCaseUpdateAd : IUseCaseWriter<DtoOutputAd, DtoInputUpdateAd>
                 
                 _pictureService.RemoveFile(dbAdPicture.Path);
             }
+        }
+        
+        var basePath = "\\Upload\\AdPictures\\" + dbAd.Id + "\\";
+        var filePath = "";
+
+        
+        foreach (var pic in input.PicturesToAdd)
+        {
+            filePath = basePath + _pictureService.GenerateUniqueFileName(dbAd.UserId) + _pictureService.GetExtension(pic);
+            
+            var dtoInputAddPictureAd = new DtoInputAddPictureAd
+            {
+                Path = filePath,
+                AdId = dbAd.Id
+            };
+            var dbAdPicture = Mapper.GetInstance().Map<DbAdPicture>(dtoInputAddPictureAd);
+            
+            _adPictureRepository.Create(dbAdPicture);
+            
+            _pictureService.UploadBase64Picture(basePath, filePath, pic);
         }
         
         
