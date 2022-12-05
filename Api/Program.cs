@@ -2,6 +2,7 @@ using System.Text;
 using API;
 using API.ChatController;
 using API.Utils.Picture;
+using Application.Services;
 using Application.Services.Ad;
 using Application.Services.Auth;
 using Application.Services.Date;
@@ -16,6 +17,7 @@ using Application.UseCases.Reservations;
 using Application.UseCases.Roles;
 using Application.UseCases.Users;
 using Application.UseCases.Users.Dtos;
+using Domain;
 using Infrastructure.Ef;
 using Infrastructure.Ef.DbEntities;
 using Infrastructure.Ef.Repository;
@@ -120,6 +122,7 @@ builder.Services.AddScoped<UseCaseFetchAdsForPagination>();
 builder.Services.AddScoped<UseCaseUpdateStatusAd>();
 builder.Services.AddScoped<UseCaseFetchByUserIdAd>();
 builder.Services.AddScoped<UseCaseUpdateAd>();
+builder.Services.AddScoped<UseCaseFetchMyReservations>();
 
 // Services
 builder.Services.AddScoped<IUserService, UserService>() ;
@@ -131,6 +134,7 @@ builder.Services.AddScoped<IAdService, AdService>();
 builder.Services.AddScoped<IReservationBookService, ReservationBookService>();
 builder.Services.AddScoped<IDateService, DateService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IReservationService, ReservationService>();
 
 //conversation
 builder.Services.AddScoped<UseCaseCreateConversation>();

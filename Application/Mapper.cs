@@ -49,11 +49,11 @@ public class Mapper
             cfg.CreateMap<Ad, DtoOutputAdsSummary>();
             cfg.CreateMap<Ad, DtoOutputMyAdsAd>();
             cfg.CreateMap<DtoInputFilteringAds, FilteringAd>();
-            
+
             //AdStatus
             cfg.CreateMap<DbAdStatus, AdStatus>();
             cfg.CreateMap<AdStatus, DtoOutputAdStatus>();
-            
+
             //Time
             cfg.CreateMap<DtoInputTime, TimeSpan>();
             cfg.CreateMap<TimeSpan, TimeSpan>();
@@ -68,20 +68,26 @@ public class Mapper
             cfg.CreateMap<DbReservationStatus, DtoOutputReservation.DtoReservationStatus>();
             cfg.CreateMap<DbAd, DtoOutputReservation.DtoAd>();
             cfg.CreateMap<DbReservation, Reservation>();
-            cfg.CreateMap<DbReservationStatus, DtoOutputMyAdsAd.DtoOutputAdReservationMyAds.DtoReservationStatusMyAds>();
-            
+            cfg.CreateMap<DbReservationStatus,
+                DtoOutputMyAdsAd.DtoOutputAdReservationMyAds.DtoReservationStatusMyAds>();
+            cfg.CreateMap<Reservation, DtoOutputReservation>();
+            cfg.CreateMap<User, DtoOutputReservation.DtoRenter>();
+            cfg.CreateMap<Ad, DtoOutputReservation.DtoAd>();
+            cfg.CreateMap<ReservationStatus, DtoOutputReservation.DtoReservationStatus>();
+            cfg.CreateMap<DbReservationStatus, ReservationStatus>();
+
             //AdPicture
             cfg.CreateMap<DtoInputAddPictureAd, DbAdPicture>();
             cfg.CreateMap<DbAdPicture, DtoOutputAdPicture>();
             cfg.CreateMap<DbAdPicture, Picture>();
             cfg.CreateMap<Picture, DtoOutputAdPicture>();
-            
+
             //Conversation
             cfg.CreateMap<DtoInputCreateConversation, DbConversation>();
             cfg.CreateMap<DbConversation, DtoOutputCreatedConversation>();
             cfg.CreateMap<User, DtoOutputMyConversation.DtoOutputUserInMyConversation>();
             cfg.CreateMap<DbMessage, DtoOutputMessage>();
-            
+
             //Message
             cfg.CreateMap<DtoInputCreateMessage, DbMessage>();
             cfg.CreateMap<DbMessage, DtoOutputCreatedMessage>();

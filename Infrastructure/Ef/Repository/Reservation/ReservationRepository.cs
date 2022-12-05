@@ -38,4 +38,23 @@ public class ReservationRepository : IReservationRepository
 
         return reservations;
     }
+    
+    /// <summary>
+    /// It returns a list of reservations for a given renter
+    /// </summary>
+    /// <param name="renterId">The id of the renter to filter by.</param>
+    /// <returns>
+    /// A list of reservations
+    /// </returns>
+    public IEnumerable<DbReservation> FilterByRenterId(int renterId)
+    {
+        using var context = _contextProvider.NewContext();
+
+        var reservations =
+            context.Reservations
+                .Where(dbR => dbR.RenterId == renterId)
+                .ToList();
+
+        return reservations;
+    }
 }
