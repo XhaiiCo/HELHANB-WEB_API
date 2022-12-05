@@ -6,10 +6,12 @@ namespace API.Utils.Picture;
 public class PictureService : IPictureService
 {
     public static IWebHostEnvironment _environment;
+
     public static readonly string[] AllowedFileTypes = { "image/jpeg", "image/png", "image/webp" };
+
     //'/' for jpeg, 'i' for png, 'U' for webp
     public static readonly string AllowedBase64Extensions = "/iU";
-    
+
     public PictureService(
         IWebHostEnvironment environment
     )
@@ -26,11 +28,12 @@ public class PictureService : IPictureService
     {
         foreach (var pic in picturesBase64)
         {
-            if (!AllowedBase64Extensions.Contains(pic[0]));
+            if (!AllowedBase64Extensions.Contains(pic[0])) ;
             {
                 return false;
             }
         }
+
         return true;
     }
 
@@ -47,7 +50,7 @@ public class PictureService : IPictureService
         {
             return ".jpeg";
         }
-        else if(firstChar == 'i')
+        else if (firstChar == 'i')
         {
             return ".png";
         }
@@ -65,8 +68,8 @@ public class PictureService : IPictureService
 
     public void RemoveFile(string path)
     {
-        if(path == "\\Upload\\ProfilePicture\\default_user_pic.png") return ;
-        
+        if (path == "\\Upload\\ProfilePicture\\default_user_pic.png") return;
+
         if (File.Exists(_environment.WebRootPath + path))
         {
             File.Delete(_environment.WebRootPath + path);
@@ -88,9 +91,9 @@ public class PictureService : IPictureService
     public void UploadBase64Picture(string basepath, string filePath, string base64Picture)
     {
         this.CreateDirectory(basepath);
-        
+
         var bytes = Convert.FromBase64String(base64Picture);
-        
+
         File.WriteAllBytes(_environment.WebRootPath + filePath, bytes);
     }
 }

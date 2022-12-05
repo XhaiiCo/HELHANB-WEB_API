@@ -13,9 +13,6 @@ namespace API.Controllers.Ads;
 [Route("api/v1/ad")]
 public class AdController : ControllerBase
 {
-    private readonly IAdService _adService;
-    private readonly IPictureService _pictureService;
-
     private readonly UseCaseCreateAd _useCaseCreateAd;
     private readonly UseCaseDeleteAd _useCaseDeleteAd;
     private readonly UseCaseCreateReservation _useCaseCreateReservation;
@@ -24,25 +21,28 @@ public class AdController : ControllerBase
     private readonly UseCaseFetchAdById _useCaseFetchAdById;
     private readonly UseCaseCountValidatedAds _useCaseCountValidatedAds;
     private readonly UseCaseFetchAdsForPagination _useCaseFetchAdsForPagination;
-    private readonly UseCaseUpdateStatusAd _useCaseUpdateStatusAd ;
-    private readonly UseCaseFetchByUserIdAd _useCaseFetchByUserIdAd ;
+    private readonly UseCaseUpdateStatusAd _useCaseUpdateStatusAd;
+    private readonly UseCaseFetchByUserIdAd _useCaseFetchByUserIdAd;
     private readonly UseCaseUpdateAd _useCaseUpdateAd;
 
-    public AdController(UseCaseCreateAd useCaseCreateAd, UseCaseDeleteAd useCaseDeleteAd,
-        UseCaseCreateReservation useCaseCreateReservation, UseCaseFetchAllAds useCaseFetchAllAds, IAdService adService,
-        IPictureService pictureService, UseCaseAddPictureAd useCaseAddPictureAd, UseCaseFetchAdById useCaseFetchAdById,
+    public AdController(
+        UseCaseCreateAd useCaseCreateAd,
+        UseCaseDeleteAd useCaseDeleteAd,
+        UseCaseCreateReservation useCaseCreateReservation,
+        UseCaseFetchAllAds useCaseFetchAllAds,
+        UseCaseAddPictureAd useCaseAddPictureAd,
+        UseCaseFetchAdById useCaseFetchAdById,
         UseCaseCountValidatedAds useCaseCountValidatedAds,
         UseCaseFetchAdsForPagination useCaseFetchAdsForPagination,
         UseCaseUpdateStatusAd useCaseUpdateStatusAd,
-        UseCaseFetchByUserIdAd useCaseFetchByUserIdAd, 
-        UseCaseUpdateAd useCaseUpdateAd)
+        UseCaseFetchByUserIdAd useCaseFetchByUserIdAd,
+        UseCaseUpdateAd useCaseUpdateAd
+    )
     {
         _useCaseCreateAd = useCaseCreateAd;
         _useCaseDeleteAd = useCaseDeleteAd;
         _useCaseCreateReservation = useCaseCreateReservation;
         _useCaseFetchAllAds = useCaseFetchAllAds;
-        _adService = adService;
-        _pictureService = pictureService;
         _useCaseAddPictureAd = useCaseAddPictureAd;
         _useCaseFetchAdById = useCaseFetchAdById;
         _useCaseCountValidatedAds = useCaseCountValidatedAds;
@@ -75,7 +75,7 @@ public class AdController : ControllerBase
             return Unauthorized(e.Message);
         }
     }
-    
+
     [HttpDelete]
     [Route("{id:int}")]
     [Authorize(Roles = "administrateur")]
@@ -105,7 +105,7 @@ public class AdController : ControllerBase
     {
         return Ok(_useCaseFetchAllAds.Execute(new DtoInputFilteringAds
         {
-            StatusId = statusId 
+            StatusId = statusId
         }));
     }
 
@@ -116,7 +116,7 @@ public class AdController : ControllerBase
     {
         return Ok(_useCaseFetchAdById.Execute(id));
     }
-    
+
     [HttpGet]
     [Authorize(Roles = "hote")]
     [Route("{id:int}/myAds")]
@@ -126,7 +126,7 @@ public class AdController : ControllerBase
     {
         //Check that this is the id of the logged in user
         if ("" + id != User.Identity?.Name) return Unauthorized();
-        
+
         return Ok(_useCaseFetchByUserIdAd.Execute(id));
     }
 
@@ -185,9 +185,8 @@ public class AdController : ControllerBase
     [HttpPut]
     [Route("adUpdate")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public ActionResult<DtoOutputAd> UpdateAd(DtoInputUpdateAd dto)//<DtoOutputAd>
+    public ActionResult<DtoOutputAd> UpdateAd(DtoInputUpdateAd dto) //<DtoOutputAd>
     {
         return Ok(_useCaseUpdateAd.Execute(dto));
     }
-
 }

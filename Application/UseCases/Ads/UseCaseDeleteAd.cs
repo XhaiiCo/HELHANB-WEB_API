@@ -8,24 +8,21 @@ namespace Application.UseCases.Ads;
 public class UseCaseDeleteAd : IUseCaseParameterizedQuery<DtoOutputAd, int>
 {
     private readonly IAdRepository _adRepository;
-    
+
 
     public UseCaseDeleteAd(IAdRepository adRepository)
     {
         _adRepository = adRepository;
-        
     }
-    
+
     public DtoOutputAd Execute(int id)
     {
-        //TODO: Remove all reservation before
         var ad = _adRepository.FetchById(id);
-        
+
         var dbAd = Mapper.GetInstance().Map<DbAd>(ad);
 
         _adRepository.Delete(dbAd);
 
         return Mapper.GetInstance().Map<DtoOutputAd>(ad);
-        
     }
 }
