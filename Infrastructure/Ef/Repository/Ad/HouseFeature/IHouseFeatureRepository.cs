@@ -6,4 +6,5 @@ public interface IHouseFeatureRepository
 {
     public DbHouseFeature Create(DbHouseFeature dbHouseFeature) ;
     public IEnumerable<DbHouseFeature> FetchByAdId(int adId);
+    public DbHouseFeature Delete(DbHouseFeature dbHouseFeature);
 }

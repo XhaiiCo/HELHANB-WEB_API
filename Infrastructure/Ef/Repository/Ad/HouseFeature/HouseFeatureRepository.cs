@@ -26,4 +26,14 @@ public class HouseFeatureRepository : IHouseFeatureRepository
 
         return context.HouseFeatures.Where(feature => feature.AdId == adId).ToList();
     }
+    
+    public DbHouseFeature Delete(DbHouseFeature dbHouseFeature)
+    {
+        using var context = _contextProvider.NewContext();
+
+        context.HouseFeatures.Remove(dbHouseFeature);
+        context.SaveChanges();
+
+        return dbHouseFeature;
+    }
 }

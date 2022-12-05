@@ -28,4 +28,14 @@ public class AdPictureRepository: IAdPictureRepository
 
         return context.AdPictures.Where(picture => picture.AdId == adId).ToList();
     }
+    
+    public DbAdPicture Delete(DbAdPicture dbAdPicture)
+    {
+        using var context = _contextProvider.NewContext();
+
+        context.AdPictures.Remove(dbAdPicture);
+        context.SaveChanges();
+
+        return dbAdPicture;
+    }
 }
