@@ -38,7 +38,7 @@ public class ReservationRepository : IReservationRepository
 
         return reservations;
     }
-    
+
     /// <summary>
     /// It returns a list of reservations for a given renter
     /// </summary>
@@ -56,5 +56,26 @@ public class ReservationRepository : IReservationRepository
                 .ToList();
 
         return reservations;
+    }
+
+    public DbReservation FindById(int id)
+    {
+        using var context = _contextProvider.NewContext();
+        var reservation = context.Reservations.FirstOrDefault(reservation => reservation.Id == id);
+
+        if (reservation == null)
+            throw new KeyNotFoundException($"Reservation with id {id} has not been found");
+
+        return reservation;
+    }
+
+    public DbReservation Delete(DbReservation reservation)
+    {
+        using var context = _contextProvider.NewContext();
+
+        context.Reservations.Remove(reservation);
+        context.SaveChanges();
+
+        return reservation;
     }
 }

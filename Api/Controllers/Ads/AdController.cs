@@ -25,6 +25,7 @@ public class AdController : ControllerBase
     private readonly UseCaseFetchByUserIdAd _useCaseFetchByUserIdAd;
     private readonly UseCaseUpdateAd _useCaseUpdateAd;
     private readonly UseCaseFetchMyReservations _useCaseFetchMyReservations;
+    private readonly UseCaseRemoveReservation _useCaseRemoveReservation;
 
     public AdController(
         UseCaseCreateAd useCaseCreateAd,
@@ -38,7 +39,9 @@ public class AdController : ControllerBase
         UseCaseUpdateStatusAd useCaseUpdateStatusAd,
         UseCaseFetchByUserIdAd useCaseFetchByUserIdAd,
         UseCaseUpdateAd useCaseUpdateAd,
-        UseCaseFetchMyReservations useCaseFetchMyReservations)
+        UseCaseFetchMyReservations useCaseFetchMyReservations,
+        UseCaseRemoveReservation useCaseRemoveReservation
+    )
     {
         _useCaseCreateAd = useCaseCreateAd;
         _useCaseDeleteAd = useCaseDeleteAd;
@@ -52,6 +55,7 @@ public class AdController : ControllerBase
         _useCaseFetchByUserIdAd = useCaseFetchByUserIdAd;
         _useCaseUpdateAd = useCaseUpdateAd;
         _useCaseFetchMyReservations = useCaseFetchMyReservations;
+        _useCaseRemoveReservation = useCaseRemoveReservation;
     }
 
 
@@ -199,9 +203,33 @@ public class AdController : ControllerBase
 
     [HttpPut]
     [Route("adUpdate")]
+    [Authorize(Roles = "hote")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public ActionResult<DtoOutputAd> UpdateAd(DtoInputUpdateAd dto) //<DtoOutputAd>
     {
         return Ok(_useCaseUpdateAd.Execute(dto));
+    }
+
+    [HttpDelete]
+    [Route("{id:int}/reservation")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public ActionResult<DtoOutputReservation> DeleteReservation(int id)
+    {
+        try
+        {
+            return Ok(_useCaseRemoveReservation.Execute(
+                new DtoInputRemoveReservation
+                {
+                    reservationId = id,
+                    userId = Int32.Parse(User.Identity?.Name)
+                }
+            ));
+        }
+        catch (Exception e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
 }
