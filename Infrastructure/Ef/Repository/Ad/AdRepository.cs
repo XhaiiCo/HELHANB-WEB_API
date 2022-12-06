@@ -1,4 +1,5 @@
-﻿using Infrastructure.Ef.DbEntities;
+﻿using System.Runtime.CompilerServices;
+using Infrastructure.Ef.DbEntities;
 using Infrastructure.Utils;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,6 +21,20 @@ public class AdRepository : IAdRepository
         return filter.StatusId.HasValue
             ? context.Ads.Where(ad => ad.AdStatusId == filter.StatusId).ToList()
             : context.Ads.ToList();
+    }
+
+    public IEnumerable<string> FetchDistinctByCountry()
+    {
+        using var context = _contextProvider.NewContext();
+
+        return context.Ads.Select(item => item.Country).ToList();
+    }
+
+    public IEnumerable<string> FetchByCountryDistinctCity(string country)
+    {
+        using var context = _contextProvider.NewContext();
+
+        return context.Ads.Where(item => item.Country == country).Select(item => item.City).ToList();
     }
 
     public IEnumerable<DbAd> FetchRange(int offset, int limit, FilteringAd filter)
@@ -57,6 +72,7 @@ public class AdRepository : IAdRepository
 
         return ad;
     }
+
     public DbAd Delete(DbAd ad)
     {
         using var context = _contextProvider.NewContext();

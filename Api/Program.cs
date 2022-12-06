@@ -124,6 +124,7 @@ builder.Services.AddScoped<UseCaseFetchByUserIdAd>();
 builder.Services.AddScoped<UseCaseUpdateAd>();
 builder.Services.AddScoped<UseCaseFetchMyReservations>();
 builder.Services.AddScoped<UseCaseRemoveReservation>();
+builder.Services.AddScoped<UseCaseFetchFilterData>();
 
 // Services
 builder.Services.AddScoped<IUserService, UserService>() ;

@@ -26,6 +26,7 @@ public class AdController : ControllerBase
     private readonly UseCaseUpdateAd _useCaseUpdateAd;
     private readonly UseCaseFetchMyReservations _useCaseFetchMyReservations;
     private readonly UseCaseRemoveReservation _useCaseRemoveReservation;
+    private readonly UseCaseFetchFilterData _useCaseFetchFilterData;
 
     public AdController(
         UseCaseCreateAd useCaseCreateAd,
@@ -40,7 +41,8 @@ public class AdController : ControllerBase
         UseCaseFetchByUserIdAd useCaseFetchByUserIdAd,
         UseCaseUpdateAd useCaseUpdateAd,
         UseCaseFetchMyReservations useCaseFetchMyReservations,
-        UseCaseRemoveReservation useCaseRemoveReservation
+        UseCaseRemoveReservation useCaseRemoveReservation,
+        UseCaseFetchFilterData useCaseFetchFilterData
     )
     {
         _useCaseCreateAd = useCaseCreateAd;
@@ -56,6 +58,7 @@ public class AdController : ControllerBase
         _useCaseUpdateAd = useCaseUpdateAd;
         _useCaseFetchMyReservations = useCaseFetchMyReservations;
         _useCaseRemoveReservation = useCaseRemoveReservation;
+        _useCaseFetchFilterData = useCaseFetchFilterData;
     }
 
 
@@ -231,5 +234,14 @@ public class AdController : ControllerBase
         {
             return Unauthorized(e.Message);
         }
+    }
+
+    [HttpGet]
+    [Route("filterData")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public ActionResult<DtoOutputFilterData> FetchFilterData()
+    {
+        return Ok(_useCaseFetchFilterData.Execute());
     }
 }
