@@ -92,8 +92,29 @@ public class PictureService : IPictureService
     {
         this.CreateDirectory(basepath);
 
-        var bytes = Convert.FromBase64String(base64Picture);
+        var bytes = Base64ToBytes(base64Picture);
 
         File.WriteAllBytes(_environment.WebRootPath + filePath, bytes);
+    }
+
+    public byte[] Base64ToBytes(string base64Picture)
+    {
+        return Convert.FromBase64String(base64Picture);
+    }
+
+    public byte[] PathToBytes(string path)
+    {
+        return System.IO.File.ReadAllBytes(_environment.WebRootPath + path);
+    }
+    public bool ContainsImage(IEnumerable<byte[]> images, byte[] image)
+    {
+        foreach (var img in images)
+        {
+            if (image.SequenceEqual(img))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

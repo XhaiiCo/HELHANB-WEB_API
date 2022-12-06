@@ -84,9 +84,13 @@ public class UseCaseUpdateAd : IUseCaseWriter<DtoOutputAd, DtoInputUpdateAd>
         var basePath = "\\Upload\\AdPictures\\" + dbAd.Id + "\\";
         var filePath = "";
 
+        var existingPics = dbAdPictures.Select(dbAdPicture => _pictureService.PathToBytes(dbAdPicture.Path));
         
         foreach (var pic in input.PicturesToAdd)
         {
+            //on vérifie qu on essaye pas de remettre une deuxieme fois la meme image
+            if (_pictureService.ContainsImage(existingPics, _pictureService.Base64ToBytes(pic))) continue;
+            
             filePath = basePath + _pictureService.GenerateUniqueFileName(dbAd.UserId) + _pictureService.GetExtension(pic);
             
             var dtoInputAddPictureAd = new DtoInputAddPictureAd
@@ -100,7 +104,6 @@ public class UseCaseUpdateAd : IUseCaseWriter<DtoOutputAd, DtoInputUpdateAd>
             
             _pictureService.UploadBase64Picture(basePath, filePath, pic);
         }
-        
         
         return mapper.Map<DtoOutputAd>(result);
     }

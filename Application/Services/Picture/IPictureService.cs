@@ -18,4 +18,10 @@ public interface IPictureService
     public string GetExtension(string base64);
 
     public void UploadBase64Picture(string basepath, string fullpath, string base64Picture);
+
+    public byte[] Base64ToBytes(string base64Picture);
+
+    public byte[] PathToBytes(string path);
+
+    public bool ContainsImage(IEnumerable<byte[]> images, byte[] image);
 }
