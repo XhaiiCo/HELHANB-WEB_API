@@ -1,5 +1,6 @@
 ﻿using API.Utils.Picture;
 using Application.Services.Ad;
+using Application.UseCases;
 using Application.UseCases.Ads;
 using Application.UseCases.Ads.Dtos;
 using Application.UseCases.Reservations;
@@ -26,8 +27,9 @@ public class AdController : ControllerBase
     private readonly UseCaseUpdateAd _useCaseUpdateAd;
     private readonly UseCaseFetchMyReservations _useCaseFetchMyReservations;
     private readonly UseCaseRemoveReservation _useCaseRemoveReservation;
-    private readonly UseCaseFetchFilterData _useCaseFetchFilterData;
-
+    private readonly UseCaseFetchDistinctsCountries _useCaseFetchDistinctsCountries;
+    private readonly UseCaseFetchDistinctsCitiesByCountry _useCaseFetchDistinctsCitiesByCountry;
+    
     public AdController(
         UseCaseCreateAd useCaseCreateAd,
         UseCaseDeleteAd useCaseDeleteAd,
@@ -41,9 +43,9 @@ public class AdController : ControllerBase
         UseCaseFetchByUserIdAd useCaseFetchByUserIdAd,
         UseCaseUpdateAd useCaseUpdateAd,
         UseCaseFetchMyReservations useCaseFetchMyReservations,
-        UseCaseRemoveReservation useCaseRemoveReservation,
-        UseCaseFetchFilterData useCaseFetchFilterData
-    )
+        UseCaseRemoveReservation useCaseRemoveReservation, 
+        UseCaseFetchDistinctsCountries useCaseFetchDistinctsCountries, 
+        UseCaseFetchDistinctsCitiesByCountry useCaseFetchDistinctsCitiesByCountry)
     {
         _useCaseCreateAd = useCaseCreateAd;
         _useCaseDeleteAd = useCaseDeleteAd;
@@ -58,7 +60,8 @@ public class AdController : ControllerBase
         _useCaseUpdateAd = useCaseUpdateAd;
         _useCaseFetchMyReservations = useCaseFetchMyReservations;
         _useCaseRemoveReservation = useCaseRemoveReservation;
-        _useCaseFetchFilterData = useCaseFetchFilterData;
+        _useCaseFetchDistinctsCountries = useCaseFetchDistinctsCountries;
+        _useCaseFetchDistinctsCitiesByCountry = useCaseFetchDistinctsCitiesByCountry;
     }
 
 
@@ -237,11 +240,19 @@ public class AdController : ControllerBase
     }
 
     [HttpGet]
-    [Route("filterData")]
+    [Route("countries")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public ActionResult<DtoOutputFilterData> FetchFilterData()
+    public ActionResult<IEnumerable<string>> FetchDistinctsCountries()
     {
-        return Ok(_useCaseFetchFilterData.Execute());
+        return Ok(_useCaseFetchDistinctsCountries.Execute());
     }
+
+    [HttpGet]
+    [Route("cities")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public ActionResult<IEnumerable<string>> FetchDistinctsCitiesByCountry(string country)
+    {
+        return Ok(_useCaseFetchDistinctsCitiesByCountry.Execute(country));
+    }
+
 }

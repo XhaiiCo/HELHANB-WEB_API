@@ -23,18 +23,18 @@ public class AdRepository : IAdRepository
             : context.Ads.ToList();
     }
 
-    public IEnumerable<string> FetchDistinctByCountry()
+    public IEnumerable<string> FetchDistinctsCountries()
     {
         using var context = _contextProvider.NewContext();
 
-        return context.Ads.Select(item => item.Country).ToList();
+        return context.Ads.Select(item => item.Country).Distinct().ToList();
     }
 
-    public IEnumerable<string> FetchByCountryDistinctCity(string country)
+    public IEnumerable<string> FetchDistinctsCitiesByCountry(string country)
     {
         using var context = _contextProvider.NewContext();
 
-        return context.Ads.Where(item => item.Country == country).Select(item => item.City).ToList();
+        return context.Ads.Where(item => item.Country == country).Select(item => item.City).Distinct().ToList();
     }
 
     public IEnumerable<DbAd> FetchRange(int offset, int limit, FilteringAd filter)

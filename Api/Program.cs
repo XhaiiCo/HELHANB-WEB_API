@@ -11,13 +11,13 @@ using Application.Services.Role;
 using Application.Services.Time;
 using Application.Services.Token;
 using Application.Services.User;
+using Application.UseCases;
 using Application.UseCases.Ads;
 using Application.UseCases.Conversation;
 using Application.UseCases.Reservations;
 using Application.UseCases.Roles;
 using Application.UseCases.Users;
 using Application.UseCases.Users.Dtos;
-using Domain;
 using Infrastructure.Ef;
 using Infrastructure.Ef.DbEntities;
 using Infrastructure.Ef.Repository;
@@ -31,7 +31,6 @@ using Infrastructure.Ef.Repository.HouseFeature;
 using Infrastructure.Ef.Repository.Reservation;
 using Infrastructure.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -124,7 +123,8 @@ builder.Services.AddScoped<UseCaseFetchByUserIdAd>();
 builder.Services.AddScoped<UseCaseUpdateAd>();
 builder.Services.AddScoped<UseCaseFetchMyReservations>();
 builder.Services.AddScoped<UseCaseRemoveReservation>();
-builder.Services.AddScoped<UseCaseFetchFilterData>();
+builder.Services.AddScoped<UseCaseFetchDistinctsCountries>();
+builder.Services.AddScoped<UseCaseFetchDistinctsCitiesByCountry>();
 
 // Services
 builder.Services.AddScoped<IUserService, UserService>() ;
