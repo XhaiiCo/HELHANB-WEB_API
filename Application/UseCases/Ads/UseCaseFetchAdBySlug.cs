@@ -23,9 +23,8 @@ public class UseCaseFetchAdBySlug : IUseCaseParameterizedQuery<DtoOutputAdWithRe
         var ad = _adService.FetchBySlug(slug);
 
         var dto = Mapper.GetInstance().Map<DtoOutputAdWithReservations>(ad);
-
-        /*
-        var reservations = _reservationRepository.FilterByAdId(id);
+        
+        var reservations = _reservationRepository.FilterByAdId(ad.Id);
 
         var reservationsList = reservations.Select(reservation =>
             new DtoOutputAdWithReservations.DtoOutputAdReservation
@@ -34,7 +33,7 @@ public class UseCaseFetchAdBySlug : IUseCaseParameterizedQuery<DtoOutputAdWithRe
                 LeaveDate = reservation.LeaveDate
             }).ToList();
 
-        dto.Reservations = reservationsList;*/
+        dto.Reservations = reservationsList;
 
         return dto;
     }
