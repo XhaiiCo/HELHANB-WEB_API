@@ -197,10 +197,10 @@ public class AdController : ControllerBase
             Offset = offset
         }));
     }
-
+    
     [HttpPut]
     [Route("status")]
-    [Authorize(Roles = "administrateur,super-administrateur")]
+    [Authorize(Roles = "administrateur, super-administrateur")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public ActionResult<DtoOutputAd> UpdateStatus(DtoInputUpdateStatusAd dto)
     {
