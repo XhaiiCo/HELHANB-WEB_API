@@ -6,7 +6,7 @@ using Infrastructure.Ef.DbEntities;
 
 namespace Application.UseCases.Users;
 
-public class UseCaseDeleteUserById: IUseCaseParameterizedQuery<DtoOutputUser, int>
+public class UseCaseDeleteUserById : IUseCaseParameterizedQuery<DtoOutputUser, int>
 {
     private readonly IUserRepository _userRepository;
     private readonly IUserService _userService;
@@ -25,6 +25,6 @@ public class UseCaseDeleteUserById: IUseCaseParameterizedQuery<DtoOutputUser, in
 
         _userRepository.Delete(dbUser);
 
-        return Mapper.GetInstance().Map<DtoOutputUser>(user) ;
+        return Mapper.GetInstance().Map<DtoOutputUser>(user);
     }
 }

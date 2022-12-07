@@ -30,8 +30,6 @@ public class UseCaseChangeRole : IUseCaseWriter<bool, DtoUserNewRole>
     public bool Execute(DtoUserNewRole userNewRole)
     {
         var user = _userService.FetchById(userNewRole.Id);
-
-        // TODO: Tester si l'id du role correspond à un role
         
         // if user has host role and switch to user role
         if (user.Role.Name == "hote" && 
