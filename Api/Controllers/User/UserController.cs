@@ -89,7 +89,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Roles = "administrateur")]
+    [Authorize(Roles = "administrateur,super-administrateur")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public ActionResult<IEnumerable<DtoOutputUser>> FetchAll([FromQuery] string? role, [FromQuery] string? search)
@@ -103,7 +103,7 @@ public class UserController : ControllerBase
 
     [HttpDelete]
     [Route("{id}")]
-    [Authorize(Roles = "administrateur")]
+    [Authorize(Roles = "administrateur,super-administrateur")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
@@ -354,7 +354,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPut]
-    [Authorize(Roles = "administrateur")]
+    [Authorize(Roles = "super-administrateur")]
     [Route("{id:int}/changeRole/{newRoleId:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]

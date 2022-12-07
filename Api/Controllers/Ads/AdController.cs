@@ -87,7 +87,7 @@ public class AdController : ControllerBase
 
     [HttpDelete]
     [Route("{id:int}")]
-    [Authorize(Roles = "administrateur")]
+    [Authorize(Roles = "administrateur,super-administrateur")]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public ActionResult<DtoOutputAd> DeleteAd(int id)
@@ -108,7 +108,7 @@ public class AdController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Roles = "administrateur")]
+    [Authorize(Roles = "administrateur,super-administrateur")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public ActionResult<IEnumerable<DtoOutputAd>> FetchAll([FromQuery] int? statusId)
     {
@@ -197,7 +197,7 @@ public class AdController : ControllerBase
 
     [HttpPut]
     [Route("status")]
-    [Authorize(Roles = "administrateur")]
+    [Authorize(Roles = "administrateur,super-administrateur")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public ActionResult<DtoOutputAd> UpdateStatus(DtoInputUpdateStatusAd dto)
     {

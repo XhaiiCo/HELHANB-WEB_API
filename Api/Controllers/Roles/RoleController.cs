@@ -18,7 +18,7 @@ public class RoleController: ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Roles = "administrateur")]
+    [Authorize(Roles = "administrateur,super-administrateur")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public ActionResult<IEnumerable<DtoOutputRole>> FetchAll()
