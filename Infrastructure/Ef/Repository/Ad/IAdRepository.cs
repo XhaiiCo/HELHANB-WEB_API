@@ -13,6 +13,8 @@ public interface IAdRepository
     DbAd Create(DbAd ad);
 
     DbAd FetchById(int id);
+
+    DbAd FetchBySlug(string slug);
     IEnumerable<DbAd> FetchByUserId(int id);
 
     DbAd Delete(DbAd ad);

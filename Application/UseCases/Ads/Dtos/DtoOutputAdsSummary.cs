@@ -16,5 +16,6 @@ public class DtoOutputAdsSummary
     
     public float PricePerNight { get; set; }
     
+    public string AdSlug { get; set; }
     public IEnumerable<string> Pictures { get; set; }
 }

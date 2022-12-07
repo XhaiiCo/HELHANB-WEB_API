@@ -1,6 +1,7 @@
 using System.Text;
 using API;
 using API.ChatController;
+using API.Services;
 using API.Utils.Picture;
 using Application.Services;
 using Application.Services.Ad;
@@ -115,7 +116,7 @@ builder.Services.AddScoped<UseCaseCreateAd>();
 builder.Services.AddScoped<UseCaseDeleteAd>();
 builder.Services.AddScoped<UseCaseFetchAllAds>();
 builder.Services.AddScoped<UseCaseAddPictureAd>();
-builder.Services.AddScoped<UseCaseFetchAdById>();
+builder.Services.AddScoped<UseCaseFetchAdBySlug>();
 builder.Services.AddScoped<UseCaseCountValidatedAds>();
 builder.Services.AddScoped<UseCaseFetchAdsForPagination>();
 builder.Services.AddScoped<UseCaseUpdateStatusAd>();
@@ -137,6 +138,7 @@ builder.Services.AddScoped<IReservationBookService, ReservationBookService>();
 builder.Services.AddScoped<IDateService, DateService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IReservationService, ReservationService>();
+builder.Services.AddScoped<ISlugService, SlugService>();
 
 //conversation
 builder.Services.AddScoped<UseCaseCreateConversation>();

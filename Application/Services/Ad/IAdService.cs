@@ -6,6 +6,7 @@ namespace Application.Services.Ad;
 public interface IAdService
 {
     Domain.Ad FetchById(int id);
+    Domain.Ad FetchBySlug(string slug);
     IEnumerable<Domain.Ad> FetchByUserId(int id);
     
     IEnumerable<Domain.Ad> FetchAll(DtoInputFilteringAds dto);

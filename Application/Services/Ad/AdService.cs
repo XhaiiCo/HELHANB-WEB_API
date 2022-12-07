@@ -36,6 +36,12 @@ public class AdService : IAdService
         return MapToAd(dbAd);
     }
 
+    public Domain.Ad FetchBySlug(string slug)
+    {
+        var dbAd = _adRepository.FetchBySlug(slug);
+        return MapToAd(dbAd);
+    }
+
     public IEnumerable<Domain.Ad> FetchByUserId(int id)
     {
         var dbAds = _adRepository.FetchByUserId(id);

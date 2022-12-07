@@ -35,4 +35,6 @@ public class DbAd
     public TimeSpan ArrivalTimeRangeEnd { get; set; }
     
     public TimeSpan LeaveTime { get; set; }
+    
+    public string AdSlug { get; set; }
 }

@@ -1,6 +1,4 @@
-﻿using API.Utils.Picture;
-using Application.Services.Ad;
-using Application.UseCases;
+﻿using Application.UseCases;
 using Application.UseCases.Ads;
 using Application.UseCases.Ads.Dtos;
 using Application.UseCases.Reservations;
@@ -18,8 +16,7 @@ public class AdController : ControllerBase
     private readonly UseCaseDeleteAd _useCaseDeleteAd;
     private readonly UseCaseCreateReservation _useCaseCreateReservation;
     private readonly UseCaseFetchAllAds _useCaseFetchAllAds;
-    private readonly UseCaseAddPictureAd _useCaseAddPictureAd;
-    private readonly UseCaseFetchAdById _useCaseFetchAdById;
+    private readonly UseCaseFetchAdBySlug _useCaseFetchAdBySlug;
     private readonly UseCaseCountValidatedAds _useCaseCountValidatedAds;
     private readonly UseCaseFetchAdsForPagination _useCaseFetchAdsForPagination;
     private readonly UseCaseUpdateStatusAd _useCaseUpdateStatusAd;
@@ -35,8 +32,7 @@ public class AdController : ControllerBase
         UseCaseDeleteAd useCaseDeleteAd,
         UseCaseCreateReservation useCaseCreateReservation,
         UseCaseFetchAllAds useCaseFetchAllAds,
-        UseCaseAddPictureAd useCaseAddPictureAd,
-        UseCaseFetchAdById useCaseFetchAdById,
+        UseCaseFetchAdBySlug useCaseFetchAdBySlug,
         UseCaseCountValidatedAds useCaseCountValidatedAds,
         UseCaseFetchAdsForPagination useCaseFetchAdsForPagination,
         UseCaseUpdateStatusAd useCaseUpdateStatusAd,
@@ -51,8 +47,7 @@ public class AdController : ControllerBase
         _useCaseDeleteAd = useCaseDeleteAd;
         _useCaseCreateReservation = useCaseCreateReservation;
         _useCaseFetchAllAds = useCaseFetchAllAds;
-        _useCaseAddPictureAd = useCaseAddPictureAd;
-        _useCaseFetchAdById = useCaseFetchAdById;
+        _useCaseFetchAdBySlug = useCaseFetchAdBySlug;
         _useCaseCountValidatedAds = useCaseCountValidatedAds;
         _useCaseFetchAdsForPagination = useCaseFetchAdsForPagination;
         _useCaseUpdateStatusAd = useCaseUpdateStatusAd;
@@ -122,13 +117,13 @@ public class AdController : ControllerBase
     }
 
     [HttpGet]
-    [Route("{id:int}")]
+    [Route("{slug}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public ActionResult<DtoOutputAdWithReservations> FetchById(int id)
+    public ActionResult<DtoOutputAdWithReservations> FetchBySlug(string slug)
     {
-        return Ok(_useCaseFetchAdById.Execute(id));
+        return Ok(_useCaseFetchAdBySlug.Execute(slug));
     }
-
+    
     [HttpGet]
     [Authorize(Roles = "hote")]
     [Route("{id:int}/myAds")]

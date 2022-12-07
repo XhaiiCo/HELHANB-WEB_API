@@ -21,6 +21,8 @@ public class Ad
     public TimeSpan ArrivalTimeRangeStart { get; set; }
     public TimeSpan ArrivalTimeRangeEnd { get; set; }
     public TimeSpan LeaveTime { get; set; }
+    
+    public string AdSlug { get; set; }
     public User Owner { get; set; }
 
     public AdStatus Status { get; set; }

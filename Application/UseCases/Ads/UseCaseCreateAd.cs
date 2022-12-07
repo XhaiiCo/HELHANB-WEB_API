@@ -1,4 +1,5 @@
-﻿using API.Utils.Picture;
+﻿using API.Services;
+using API.Utils.Picture;
 using Application.Services.Time;
 using Application.Services.User;
 using Application.UseCases.Ads.Dtos;
@@ -19,9 +20,10 @@ public class UseCaseCreateAd : IUseCaseWriter<DtoOutputAd, DtoInputCreateAd>
     private readonly ITimeService _timeService;
     private readonly IPictureService _pictureService;
     private readonly IAdPictureRepository _adPictureRepository;
+    private readonly ISlugService _slugService;
 
     public UseCaseCreateAd(IAdRepository adRepository, IUserService userService, ITimeService timeService,
-        IHouseFeatureRepository houseFeatureRepository, IPictureService pictureService, IAdPictureRepository adPictureRepository)
+        IHouseFeatureRepository houseFeatureRepository, IPictureService pictureService, IAdPictureRepository adPictureRepository, ISlugService slugService)
     {
         _adRepository = adRepository;
         _userService = userService;
@@ -29,6 +31,7 @@ public class UseCaseCreateAd : IUseCaseWriter<DtoOutputAd, DtoInputCreateAd>
         _houseFeatureRepository = houseFeatureRepository;
         _pictureService = pictureService;
         _adPictureRepository = adPictureRepository;
+        _slugService = slugService;
     }
 
     public DtoOutputAd Execute(DtoInputCreateAd input)
@@ -64,6 +67,8 @@ public class UseCaseCreateAd : IUseCaseWriter<DtoOutputAd, DtoInputCreateAd>
 
         Ad.ValidHours(dbAd.ArrivalTimeRangeStart, dbAd.ArrivalTimeRangeEnd, dbAd.LeaveTime);
 
+        dbAd.AdSlug = _slugService.GenerateSlug(input.Name);
+        
         var newAd = _adRepository.Create(dbAd);
         
         //Add the features
@@ -79,7 +84,6 @@ public class UseCaseCreateAd : IUseCaseWriter<DtoOutputAd, DtoInputCreateAd>
 
         var basePath = "\\Upload\\AdPictures\\" + newAd.Id + "\\";
         var filePath = "";
-
         
         foreach (var pic in input.PicturesToAdd)
         {
@@ -97,6 +101,7 @@ public class UseCaseCreateAd : IUseCaseWriter<DtoOutputAd, DtoInputCreateAd>
             _pictureService.UploadBase64Picture(basePath, filePath, pic);
         }
 
+        
 
         return mapper.Map<DtoOutputAd>(newAd);
     }

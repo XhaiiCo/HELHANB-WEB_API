@@ -7,23 +7,24 @@ using Infrastructure.Ef.Repository.Reservation;
 
 namespace Application.UseCases.Ads;
 
-public class UseCaseFetchAdById : IUseCaseParameterizedQuery<DtoOutputAdWithReservations, int>
+public class UseCaseFetchAdBySlug : IUseCaseParameterizedQuery<DtoOutputAdWithReservations, string>
 {
     private readonly IAdService _adService;
     private readonly IReservationRepository _reservationRepository;
 
-    public UseCaseFetchAdById(IAdService adService, IReservationRepository reservationRepository)
+    public UseCaseFetchAdBySlug(IAdService adService, IReservationRepository reservationRepository)
     {
         _adService = adService;
         _reservationRepository = reservationRepository;
     }
 
-    public DtoOutputAdWithReservations Execute(int id)
+    public DtoOutputAdWithReservations Execute(string slug)
     {
-        var ad = _adService.FetchById(id);
+        var ad = _adService.FetchBySlug(slug);
 
         var dto = Mapper.GetInstance().Map<DtoOutputAdWithReservations>(ad);
 
+        /*
         var reservations = _reservationRepository.FilterByAdId(id);
 
         var reservationsList = reservations.Select(reservation =>
@@ -33,7 +34,7 @@ public class UseCaseFetchAdById : IUseCaseParameterizedQuery<DtoOutputAdWithRese
                 LeaveDate = reservation.LeaveDate
             }).ToList();
 
-        dto.Reservations = reservationsList;
+        dto.Reservations = reservationsList;*/
 
         return dto;
     }

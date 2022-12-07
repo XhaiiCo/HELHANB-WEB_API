@@ -72,6 +72,17 @@ public class AdRepository : IAdRepository
 
         return ad;
     }
+    
+    public DbAd FetchBySlug(string slug)
+    {
+        using var context = _contextProvider.NewContext();
+        var ad = context.Ads.FirstOrDefault(ad => ad.AdSlug == slug);
+
+        if (ad == null)
+            throw new KeyNotFoundException($"Ad with slug {slug} has not been found");
+
+        return ad;
+    }
 
     public DbAd Delete(DbAd ad)
     {

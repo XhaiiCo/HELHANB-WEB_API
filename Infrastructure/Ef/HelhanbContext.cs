@@ -104,6 +104,7 @@ public class HelhanbContext : DbContext
             entity.Property(a => a.ArrivalTimeRangeStart).HasColumnName("arrival_time_range_start");
             entity.Property(a => a.ArrivalTimeRangeEnd).HasColumnName("arrival_time_range_end");
             entity.Property(a => a.LeaveTime).HasColumnName("leave_time");
+            entity.Property(a => a.AdSlug).HasColumnName("ad_slug");
         });
 
         modelBuilder.Entity<DbRole>(entity =>
