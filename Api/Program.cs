@@ -64,16 +64,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("Dev", policyBuilder =>
-    {
-        policyBuilder.WithOrigins("https://localhost:4200").
-            AllowAnyHeader().
-            AllowAnyMethod().
-            AllowCredentials();
-    });
+    options.AddPolicy("Dev",
+        policyBuilder =>
+        {
+            policyBuilder.WithOrigins("https://localhost:4200").AllowAnyHeader().AllowAnyMethod()
+                .AllowCredentials();
+        });
 });
 builder.Services.AddControllers();
-builder.Services.AddSignalR(); 
+builder.Services.AddSignalR();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -109,7 +108,7 @@ builder.Services.AddScoped<UseCaseChangeRole>();
 builder.Services.AddScoped<UseCaseCreateReservation>();
 
 // Roles
-builder.Services.AddScoped<UseCaseFetchAllRoles>() ;
+builder.Services.AddScoped<UseCaseFetchAllRoles>();
 
 //Ads
 builder.Services.AddScoped<UseCaseCreateAd>();
@@ -128,10 +127,10 @@ builder.Services.AddScoped<UseCaseFetchDistinctsCountries>();
 builder.Services.AddScoped<UseCaseFetchDistinctsCitiesByCountry>();
 
 // Services
-builder.Services.AddScoped<IUserService, UserService>() ;
-builder.Services.AddScoped<IAuthService, AuthService>() ;
-builder.Services.AddScoped<ITokenService, TokenService>() ;
-builder.Services.AddScoped<IPictureService, PictureService>() ;
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IPictureService, PictureService>();
 builder.Services.AddScoped<ITimeService, TimeService>();
 builder.Services.AddScoped<IAdService, AdService>();
 builder.Services.AddScoped<IReservationBookService, ReservationBookService>();
@@ -155,7 +154,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//Pour android en local
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseCors("Dev");
 app.UseAuthentication();
@@ -163,6 +166,6 @@ app.UseAuthorization();
 app.UseStaticFiles();
 
 app.MapControllers();
-app.MapHub<ChatHub>("/chatsocket"); 
+app.MapHub<ChatHub>("/chatsocket");
 
 app.Run();
