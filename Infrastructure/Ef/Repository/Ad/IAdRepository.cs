@@ -5,8 +5,8 @@ namespace Infrastructure.Ef.Repository.Ad;
 public interface IAdRepository
 {
     IEnumerable<DbAd> FetchAll(FilteringAd filter);
-    IEnumerable<string> FetchDistinctByCountry();
-    IEnumerable<string> FetchByCountryDistinctCity(string country);
+    IEnumerable<string> FetchDistinctsCountries();
+    IEnumerable<string> FetchDistinctsCitiesByCountry(string country);
     
     IEnumerable<DbAd> FetchRange(int offset, int limit, FilteringAd filter);
 
