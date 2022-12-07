@@ -9,7 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Application.UseCases.Users;
 
-public class UseCaseChangeRole : IUseCaseWriter<bool, DtoUserNewRole>
+public class UseCaseChangeRole : IUseCaseWriter<DtoOutputUser, DtoUserNewRole>
 {
     private readonly IUserService _userService;
     private readonly IUserRepository _userRepository;
@@ -26,21 +26,22 @@ public class UseCaseChangeRole : IUseCaseWriter<bool, DtoUserNewRole>
         _roleService = roleService;
         _adRepository = adRepository;
     }
-    
-    public bool Execute(DtoUserNewRole userNewRole)
+
+    public DtoOutputUser Execute(DtoUserNewRole userNewRole)
     {
         var user = _userService.FetchById(userNewRole.Id);
-        
+
         // if user has host role and switch to user role
-        if (user.Role.Name == "hote" && 
-            _roleService.FetchById(user.Id).Name == "utilisateur")
+        if (user.Role.Name == "hote")
             // if he has rentings
-            if (!_adRepository.FetchByUserId(user.Id).IsNullOrEmpty())
-                return false;
+            if (_adRepository.FetchByUserId(user.Id).Count() != 0)
+                throw new Exception();
 
-        if (userNewRole.RoleId == user.Role.Id) return false;
+        if (userNewRole.RoleId == user.Role.Id) throw new Exception();
 
-        _userRepository.Update(Mapper.GetInstance().Map<DbUser>(_userService.ChangeRole(userNewRole.Id, userNewRole.RoleId)));
-        return true;
+        var result = _userRepository.Update(Mapper.GetInstance()
+            .Map<DbUser>(_userService.ChangeRole(userNewRole.Id, userNewRole.RoleId)));
+
+        return Mapper.GetInstance().Map<DtoOutputUser>(_userService.MapToUser(result));
     }
 }
