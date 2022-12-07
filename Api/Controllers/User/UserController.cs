@@ -89,7 +89,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Roles = "administrateur")]
+    [Authorize(Roles = "administrateur,super-administrateur")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public ActionResult<IEnumerable<DtoOutputUser>> FetchAll([FromQuery] string? role, [FromQuery] string? search)
@@ -103,14 +103,17 @@ public class UserController : ControllerBase
 
     [HttpDelete]
     [Route("{id}")]
-    [Authorize(Roles = "administrateur")]
+    [Authorize(Roles = "administrateur,super-administrateur")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public ActionResult<DtoOutputUser> Delete(int id)
     {
-        if (IsTheIdOfConnectedUser(id)) return Unauthorized("Vous ne pouvez pas vous supprimer"); 
+        if (IsTheIdOfConnectedUser(id)) return Unauthorized("Vous ne pouvez pas vous supprimer");
         var currentUser = _userService.FetchById(id);
+        if (User.Identity.Name == "administrateur")
+            if (currentUser.Role.Name == "administrateur" || currentUser.Role.Name == "super-administrateur")
+                return Unauthorized("Vous ne pouvez pas supprimer cet utilisateur");
 
         //Remove the current profile picture if exist
         if (currentUser.ProfilePicturePath != null)
@@ -330,7 +333,7 @@ public class UserController : ControllerBase
     {
         //Check that this is the id of the logged in user
         if (!IsTheIdOfConnectedUser(id)) return Unauthorized();
-        
+
         try
         {
             var user = _useCaseChangeRoleToHostUser.Execute(id);
@@ -344,7 +347,7 @@ public class UserController : ControllerBase
 
             var generatedToken = this.GenerateToken(tokenUser);
             this.AppendCookies(generatedToken);
-            
+
             return Ok(user);
         }
         catch (Exception e)
@@ -354,7 +357,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPut]
-    [Authorize(Roles = "administrateur")]
+    [Authorize(Roles = "super-administrateur")]
     [Route("{id:int}/changeRole/{newRoleId:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -368,7 +371,7 @@ public class UserController : ControllerBase
                 Id = id,
                 RoleId = newRoleId
             };
-            
+
             return Ok(_useCaseChangeRole.Execute(userNewRole));
         }
         catch (Exception e)
@@ -376,5 +379,4 @@ public class UserController : ControllerBase
             return Unauthorized();
         }
     }
-
 }
