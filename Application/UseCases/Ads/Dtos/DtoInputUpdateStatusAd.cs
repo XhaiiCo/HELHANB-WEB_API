@@ -2,6 +2,6 @@
 
 public class DtoInputUpdateStatusAd
 {
-    public int Id { get; set; }
+    public string AdSlug { get; set; }
     public int StatusId { get; set;} 
 }

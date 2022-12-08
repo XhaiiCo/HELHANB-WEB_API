@@ -18,7 +18,7 @@ public class UseCaseUpdateStatusAd: IUseCaseWriter<DtoOutputAd, DtoInputUpdateSt
 
     public DtoOutputAd Execute(DtoInputUpdateStatusAd input)
     {
-        var dbAd = _adRepository.FetchById(input.Id);
+        var dbAd = _adRepository.FetchBySlug(input.AdSlug);
 
         dbAd.AdStatusId = input.StatusId;
 

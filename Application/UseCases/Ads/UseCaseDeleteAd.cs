@@ -5,7 +5,7 @@ using Infrastructure.Ef.Repository.Ad;
 
 namespace Application.UseCases.Ads;
 
-public class UseCaseDeleteAd : IUseCaseParameterizedQuery<DtoOutputAd, int>
+public class UseCaseDeleteAd : IUseCaseParameterizedQuery<DtoOutputAd, string>
 {
     private readonly IAdRepository _adRepository;
 
@@ -15,9 +15,9 @@ public class UseCaseDeleteAd : IUseCaseParameterizedQuery<DtoOutputAd, int>
         _adRepository = adRepository;
     }
 
-    public DtoOutputAd Execute(int id)
+    public DtoOutputAd Execute(string slug)
     {
-        var ad = _adRepository.FetchById(id);
+        var ad = _adRepository.FetchBySlug(slug);
 
         var dbAd = Mapper.GetInstance().Map<DbAd>(ad);
 
