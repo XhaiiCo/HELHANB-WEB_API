@@ -13,7 +13,9 @@ public class DtoOutputMyAdsAd
     public int PostalCode { get; set; }
     public string Country { get; set; }
     public string City { get; set; }
-
+    
+    public string AdSlug { get; set; }
+    
     public TimeSpan ArrivalTimeRangeStart { get; set; }
     public TimeSpan ArrivalTimeRangeEnd { get; set; }
     public TimeSpan LeaveTime { get; set; }

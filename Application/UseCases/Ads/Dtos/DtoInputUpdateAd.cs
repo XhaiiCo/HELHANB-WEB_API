@@ -4,7 +4,7 @@ namespace Application.UseCases.Ads.Dtos;
 
 public class DtoInputUpdateAd
 {
-    [Required] public int Id { get; set; }
+    [Required] public string AdSlug { get; set; }
     
     [Required] public string Name { get; set; }
     

@@ -30,7 +30,7 @@ public class UseCaseUpdateAd : IUseCaseWriter<DtoOutputAd, DtoInputUpdateAd>
     {
         var mapper = Mapper.GetInstance();
         
-        var dbAd = _adRepository.FetchById(input.Id);
+        var dbAd = _adRepository.FetchBySlug(input.AdSlug);
 
         dbAd.Name = input.Name;
         dbAd.NumberOfPersons = input.NumberOfPersons;
@@ -69,7 +69,7 @@ public class UseCaseUpdateAd : IUseCaseWriter<DtoOutputAd, DtoInputUpdateAd>
         }
         
         //pictures
-        var dbAdPictures = _adPictureRepository.FetchByAdId(input.Id);
+        var dbAdPictures = _adPictureRepository.FetchByAdId(dbAd.Id);
 
         foreach (var dbAdPicture in dbAdPictures)
         {
