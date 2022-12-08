@@ -292,7 +292,7 @@ public class UserController : ControllerBase
     [AllowAnonymous]
     [Route("login")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public ActionResult<DtoOutputUser> Login(DtoInputLoginUser userDto)
+    public ActionResult<DtoOutputUserToken> Login(DtoInputLoginUser userDto)
     {
         try
         {
@@ -306,6 +306,8 @@ public class UserController : ControllerBase
             };
 
             var generatedToken = this.GenerateToken(tokenUser);
+            user.Token = generatedToken;
+
             this.AppendCookies(generatedToken);
 
             return Ok(user);

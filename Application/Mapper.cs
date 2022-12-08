@@ -28,6 +28,7 @@ public class Mapper
             cfg.CreateMap<User, DtoOutputUser>();
             cfg.CreateMap<DtoInputCreateUser, DbUser>();
             cfg.CreateMap<DbUser, DtoOutputUser>();
+            cfg.CreateMap<User, DtoOutputUserToken>();
             cfg.CreateMap<DbUser, User>();
             cfg.CreateMap<DtoOutputUser, DtoTokenUser>();
             cfg.CreateMap<User, DbUser>();
