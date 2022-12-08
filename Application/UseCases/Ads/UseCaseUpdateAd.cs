@@ -1,4 +1,5 @@
-﻿using API.Utils.Picture;
+﻿using API.Services;
+using API.Utils.Picture;
 using Application.Services.Time;
 using Application.UseCases.Ads.Dtos;
 using Application.UseCases.Utils;
@@ -16,14 +17,15 @@ public class UseCaseUpdateAd : IUseCaseWriter<DtoOutputAd, DtoInputUpdateAd>
     private readonly IHouseFeatureRepository _houseFeatureRepository;
     private readonly IAdPictureRepository _adPictureRepository;
     private readonly IPictureService _pictureService;
-
-    public UseCaseUpdateAd(IAdRepository adRepository, ITimeService timeService, IHouseFeatureRepository houseFeatureRepository, IAdPictureRepository adPictureRepository, IPictureService pictureService)
+    private readonly ISlugService _slugService;
+    public UseCaseUpdateAd(IAdRepository adRepository, ITimeService timeService, IHouseFeatureRepository houseFeatureRepository, IAdPictureRepository adPictureRepository, IPictureService pictureService, ISlugService slugService)
     {
         _adRepository = adRepository;
         _timeService = timeService;
         _houseFeatureRepository = houseFeatureRepository;
         _adPictureRepository = adPictureRepository;
         _pictureService = pictureService;
+        _slugService = slugService;
     }
 
     public DtoOutputAd Execute(DtoInputUpdateAd input)
@@ -40,6 +42,7 @@ public class UseCaseUpdateAd : IUseCaseWriter<DtoOutputAd, DtoInputUpdateAd>
         dbAd.ArrivalTimeRangeStart = _timeService.ToTimeSpan(input.ArrivalTimeRangeStart);
         dbAd.ArrivalTimeRangeEnd = _timeService.ToTimeSpan(input.ArrivalTimeRangeEnd);
         dbAd.LeaveTime = _timeService.ToTimeSpan(input.LeaveTime);
+        dbAd.AdSlug = _slugService.GenerateSlug(input.Name);
 
         var result = _adRepository.Update(dbAd);
 
