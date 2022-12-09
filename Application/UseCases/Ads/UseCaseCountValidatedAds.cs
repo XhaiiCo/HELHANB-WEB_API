@@ -1,9 +1,10 @@
-﻿using Application.UseCases.Utils;
+﻿using Application.UseCases.Ads.Dtos;
+using Application.UseCases.Utils;
 using Infrastructure.Ef.Repository.Ad;
 
 namespace Application.UseCases.Ads;
 
-public class UseCaseCountValidatedAds:IUseCaseQuery<int>
+public class UseCaseCountValidatedAds : IUseCaseParameterizedQuery<int, DtoInputFilteringAds>
 {
     private readonly IAdRepository _adRepository;
 
@@ -12,13 +13,9 @@ public class UseCaseCountValidatedAds:IUseCaseQuery<int>
         _adRepository = adRepository;
     }
 
-    public int Execute()
+    public int Execute(DtoInputFilteringAds dto)
     {
-        var filter = new FilteringAd
-        {
-            StatusId = 3
-        };
         
-        return _adRepository.Count(filter);
+        return _adRepository.Count(Mapper.GetInstance().Map<FilteringAd>(dto));
     }
 }

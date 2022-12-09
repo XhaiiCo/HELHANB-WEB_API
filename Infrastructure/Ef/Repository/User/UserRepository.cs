@@ -29,11 +29,14 @@ public class UserRepository : IUserRepository
                                                user.Email.ToLower().Contains(filteringUser.Search.ToLower())).ToList();
 
         if (filteringUser.Search != null && filteringUser.RoleId.HasValue)
-            return context.Users.Where(user => user.FirstName.ToLower().Contains(filteringUser.Search.ToLower()) ||
+            return context.Users.Where(user => (user.FirstName.ToLower().Contains(filteringUser.Search.ToLower()) ||
                                                user.LastName.ToLower().Contains(filteringUser.Search.ToLower()) ||
-                                               user.Email.ToLower().Contains(filteringUser.Search.ToLower())
+                                               user.Email.ToLower().Contains(filteringUser.Search.ToLower()))
                                                &&
                                                user.RoleId == filteringUser.RoleId).ToList();
+        
+        
+        
         return context.Users.ToList();
     }
 
