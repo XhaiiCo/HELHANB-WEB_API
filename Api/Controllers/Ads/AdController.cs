@@ -26,7 +26,7 @@ public class AdController : ControllerBase
     private readonly UseCaseRemoveReservation _useCaseRemoveReservation;
     private readonly UseCaseFetchDistinctsCountries _useCaseFetchDistinctsCountries;
     private readonly UseCaseFetchDistinctsCitiesByCountry _useCaseFetchDistinctsCitiesByCountry;
-    
+
     public AdController(
         UseCaseCreateAd useCaseCreateAd,
         UseCaseDeleteAd useCaseDeleteAd,
@@ -39,8 +39,8 @@ public class AdController : ControllerBase
         UseCaseFetchByUserIdAd useCaseFetchByUserIdAd,
         UseCaseUpdateAd useCaseUpdateAd,
         UseCaseFetchMyReservations useCaseFetchMyReservations,
-        UseCaseRemoveReservation useCaseRemoveReservation, 
-        UseCaseFetchDistinctsCountries useCaseFetchDistinctsCountries, 
+        UseCaseRemoveReservation useCaseRemoveReservation,
+        UseCaseFetchDistinctsCountries useCaseFetchDistinctsCountries,
         UseCaseFetchDistinctsCitiesByCountry useCaseFetchDistinctsCitiesByCountry)
     {
         _useCaseCreateAd = useCaseCreateAd;
@@ -123,7 +123,7 @@ public class AdController : ControllerBase
     {
         return Ok(_useCaseFetchAdBySlug.Execute(slug));
     }
-    
+
     [HttpGet]
     [Authorize(Roles = "hote")]
     [Route("{id:int}/myAds")]
@@ -175,24 +175,36 @@ public class AdController : ControllerBase
     [HttpGet]
     [Route("count")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public ActionResult<int> CountValidatedAds()
+    public ActionResult<int> CountValidatedAds(
+        [FromQuery] string? name
+    )
     {
-        return Ok(_useCaseCountValidatedAds.Execute());
+        return Ok(_useCaseCountValidatedAds.Execute(new DtoInputFilteringAds
+        {
+            StatusId = 3,
+            Name = name
+        }));
     }
 
     [HttpGet]
     [Route("summary")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public ActionResult<IEnumerable<DtoOutputAdsSummary>> FetchForPagination([FromQuery] int? limit,
-        [FromQuery] int? offset)
+    public ActionResult<IEnumerable<DtoOutputAdsSummary>> FetchForPagination(
+        [FromQuery] int? limit,
+        [FromQuery] int? offset,
+        [FromQuery] string? name
+    )
     {
-        return Ok(_useCaseFetchAdsForPagination.Execute(new DtoInputFilterAdsForPagination
+        return Ok(_useCaseFetchAdsForPagination.Execute(new DtoInputFilteringAds
         {
             Limit = limit,
-            Offset = offset
+            Offset = offset,
+
+            StatusId = 3,
+            Name = name
         }));
     }
-    
+
     [HttpPut]
     [Route("status")]
     [Authorize(Roles = "administrateur, super-administrateur")]
@@ -201,7 +213,7 @@ public class AdController : ControllerBase
     {
         return Ok(_useCaseUpdateStatusAd.Execute(dto));
     }
-        
+
     [HttpPut]
     [Route("adUpdate")]
     [Authorize(Roles = "hote")]
@@ -249,5 +261,4 @@ public class AdController : ControllerBase
     {
         return Ok(_useCaseFetchDistinctsCitiesByCountry.Execute(country));
     }
-
 }

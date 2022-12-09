@@ -6,7 +6,7 @@ using Infrastructure.Ef.Repository.Ad;
 namespace Application.UseCases.Ads;
 
 public class UseCaseFetchAdsForPagination : IUseCaseParameterizedQuery<IEnumerable<DtoOutputAdsSummary>,
-    DtoInputFilterAdsForPagination>
+    DtoInputFilteringAds>
 {
     private readonly IAdService _adService;
 
@@ -15,7 +15,7 @@ public class UseCaseFetchAdsForPagination : IUseCaseParameterizedQuery<IEnumerab
         _adService = adService;
     }
 
-    public IEnumerable<DtoOutputAdsSummary> Execute(DtoInputFilterAdsForPagination param)
+    public IEnumerable<DtoOutputAdsSummary> Execute(DtoInputFilteringAds param)
     {
         var filter = new DtoInputFilteringAds
         {
