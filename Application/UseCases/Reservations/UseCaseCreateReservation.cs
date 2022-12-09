@@ -65,7 +65,7 @@ public class UseCaseCreateReservation : IUseCaseWriter<DtoOutputReservation, Dto
 
         Reservation.ValidNewReservation(newDomainReservation);
 
-        var reservationBook = _reservationBookService.FetchByAdId(input.AdId);
+        var reservationBook = _reservationBookService.FetchByAdId(dbReservation.AdId);
 
         //Keep only the accepted reservations
         var reservations = (reservationBook.Where(r => r.ReservationStatus.Id == 3)).Entries();
