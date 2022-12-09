@@ -27,4 +27,9 @@ public class DateService: IDateService
     {
         return new DateOnly(dtoDateOnly.Year, dtoDateOnly.Month, dtoDateOnly.Day);
     }
+
+    public DtoInputDateOnly MapToDtoInputDateOnly(DateTime dateTime)
+    {
+        return new DtoInputDateOnly { Day = dateTime.Day, Month = dateTime.Month, Year = dateTime.Year };
+    }
 }
