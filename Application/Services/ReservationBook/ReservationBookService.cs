@@ -1,4 +1,5 @@
-﻿using Domain;
+﻿using Application.Services.Reservation;
+using Infrastructure.Ef.Repository.Ad;
 using Infrastructure.Ef.Repository.Reservation;
 
 namespace Application.Services.ReservationBook;
@@ -6,10 +7,14 @@ namespace Application.Services.ReservationBook;
 public class ReservationBookService : IReservationBookService
 {
     private readonly IReservationRepository _reservationRepository;
+    private readonly IReservationService _reservationService;
+    private readonly IAdRepository _adRepository;
 
-    public ReservationBookService(IReservationRepository reservationRepository)
+    public ReservationBookService(IReservationRepository reservationRepository, IReservationService reservationService, IAdRepository adRepository)
     {
         _reservationRepository = reservationRepository;
+        _reservationService = reservationService;
+        _adRepository = adRepository;
     }
 
     /// <summary>
@@ -23,21 +28,15 @@ public class ReservationBookService : IReservationBookService
     {
         var dbReservations = _reservationRepository.FilterByAdId(adId);
 
-        var reservations = dbReservations.Select(dbReservation => new Reservation
-        {
-            Id = dbReservation.Id,
-            Creation = dbReservation.Creation,
-            DateTimeRange = new DateTimeRange
-            (
-                dbReservation.ArrivalDate,
-                dbReservation.LeaveDate
-            ),
-            ReservationStatus = new ReservationStatus
-            {
-                Id = dbReservation.ReservationStatusId
-            }
-        });
+        var reservations = dbReservations.Select(_reservationService.MapToReservation);
 
         return Domain.ReservationBook.Of(reservations);
+    }
+    
+    public Domain.ReservationBook FetchReservationToConfirmByAdSlug(string adSlug)
+    {
+        var adId = _adRepository.FetchBySlug(adSlug).Id;
+        var reservations = FetchByAdId(adId);
+        return reservations.Where(r => r.ReservationStatus.StatusName == "en attente");
     }
 }
