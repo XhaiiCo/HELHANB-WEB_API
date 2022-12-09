@@ -7,6 +7,7 @@ using AutoMapper;
 using Domain;
 using Infrastructure.Ef.DbEntities;
 using Infrastructure.Ef.Repository.Ad;
+using Infrastructure.Ef.Repository.Reservation;
 using Infrastructure.Ef.Repository.User;
 
 namespace Application;
@@ -75,6 +76,7 @@ public class Mapper
             cfg.CreateMap<Reservation, DtoOutputReservation>();
             cfg.CreateMap<User, DtoOutputReservation.DtoRenter>();
             cfg.CreateMap<Ad, DtoOutputReservation.DtoAd>();
+            cfg.CreateMap<Reservation, DtoOutputMyAdReservation>();
             cfg.CreateMap<ReservationStatus, DtoOutputReservation.DtoReservationStatus>();
             cfg.CreateMap<DbReservationStatus, ReservationStatus>();
 
