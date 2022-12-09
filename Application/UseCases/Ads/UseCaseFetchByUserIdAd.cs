@@ -24,14 +24,14 @@ public class UseCaseFetchByUserIdAd : IUseCaseParameterizedQuery<IEnumerable<Dto
 
     public IEnumerable<DtoOutputMyAdsAd> Execute(int id)
     {
-        var ads = _adService.FetchByUserId(id);
+        var ads = _adService.FetchByUserId(id).ToArray();
 
-        var dtos = Mapper.GetInstance().Map<IEnumerable<DtoOutputMyAdsAd>>(ads);
-
-        foreach (var dto in dtos)
+        var dtos = Mapper.GetInstance().Map<IEnumerable<DtoOutputMyAdsAd>>(ads).ToArray();
+        
+        for (int i = 0; i < dtos.Length; i++)
         {
-            var reservations = _reservationRepository.FilterByAdId(dto.Id);
-
+            var reservations = _reservationRepository.FilterByAdId(ads[i].Id);
+            
             var reservationsList = reservations.Select(reservation =>
                 new DtoOutputMyAdsAd.DtoOutputAdReservationMyAds
                 {
@@ -41,7 +41,7 @@ public class UseCaseFetchByUserIdAd : IUseCaseParameterizedQuery<IEnumerable<Dto
                     StatusMyAds = Mapper.GetInstance().Map<DtoOutputMyAdsAd.DtoOutputAdReservationMyAds.DtoReservationStatusMyAds>(_reservationStatusRepository.FetchById(reservation.ReservationStatusId)),
                 }).ToList();
 
-            dto.Reservations = reservationsList;
+            dtos[i].Reservations = reservationsList;
         }
 
         return dtos;

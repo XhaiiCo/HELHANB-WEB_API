@@ -2,7 +2,6 @@
 
 public class DtoOutputAdWithReservations
 {
-    public int Id { get; set; }
     public string Name { get; set; }
     public DateTime Created { get; set; }
     public float PricePerNight { get; set; }
@@ -18,6 +17,8 @@ public class DtoOutputAdWithReservations
     public TimeSpan ArrivalTimeRangeStart { get; set; }
     public TimeSpan ArrivalTimeRangeEnd { get; set; }
     public TimeSpan LeaveTime { get; set; }
+
+    public string AdSlug { get; set; }
 
     public IEnumerable<string> Features { get; set; }
     public IEnumerable<DtoOutputAdPicture> Pictures { get; set; }
