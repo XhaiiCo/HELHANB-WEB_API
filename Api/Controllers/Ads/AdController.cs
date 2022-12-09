@@ -28,16 +28,13 @@ public class AdController : ControllerBase
     private readonly UseCaseRemoveReservation _useCaseRemoveReservation;
     private readonly UseCaseFetchDistinctsCountries _useCaseFetchDistinctsCountries;
     private readonly UseCaseFetchDistinctsCitiesByCountry _useCaseFetchDistinctsCitiesByCountry;
-    private readonly UseCaseFetchAllReservationToConfirm _useCaseFetchAllReservationToConfirm;
+    private readonly UseCaseFetchAllReservationByAd _useCaseFetchAllReservationByAd;
 
     public AdController(
-        UseCaseCreateAd useCaseCreateAd, 
+        UseCaseCreateAd useCaseCreateAd,
         UseCaseDeleteAd useCaseDeleteAd,
-        UseCaseCreateReservation useCaseCreateReservation, 
-        UseCaseFetchAllAds useCaseFetchAllAds, 
-        IAdService adService,
-        IPictureService pictureService, 
-        UseCaseAddPictureAd useCaseAddPictureAd, 
+        UseCaseCreateReservation useCaseCreateReservation,
+        UseCaseFetchAllAds useCaseFetchAllAds,
         UseCaseFetchAdBySlug useCaseFetchAdBySlug,
         UseCaseCountValidatedAds useCaseCountValidatedAds,
         UseCaseFetchAdsForPagination useCaseFetchAdsForPagination,
@@ -48,7 +45,7 @@ public class AdController : ControllerBase
         UseCaseRemoveReservation useCaseRemoveReservation,
         UseCaseFetchDistinctsCountries useCaseFetchDistinctsCountries,
         UseCaseFetchDistinctsCitiesByCountry useCaseFetchDistinctsCitiesByCountry,
-        UseCaseFetchAllReservationToConfirm useCaseFetchAllReservationToConfirm)
+        UseCaseFetchAllReservationByAd useCaseFetchAllReservationByAd)
     {
         _useCaseCreateAd = useCaseCreateAd;
         _useCaseDeleteAd = useCaseDeleteAd;
@@ -64,7 +61,7 @@ public class AdController : ControllerBase
         _useCaseRemoveReservation = useCaseRemoveReservation;
         _useCaseFetchDistinctsCountries = useCaseFetchDistinctsCountries;
         _useCaseFetchDistinctsCitiesByCountry = useCaseFetchDistinctsCitiesByCountry;
-        _useCaseFetchAllReservationToConfirm = useCaseFetchAllReservationToConfirm;
+        _useCaseFetchAllReservationByAd = useCaseFetchAllReservationByAd;
     }
 
 
@@ -181,14 +178,14 @@ public class AdController : ControllerBase
     }
 
     [HttpGet]
-    [Route("reservation/{adSlug}")]
+    [Route("{adSlug}/reservation")]
     [Authorize(Roles = "hote")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public ActionResult<DtoOutputUserReservation> FetchAllReservationToConfirm(string adSlug)
+    public ActionResult<IEnumerable<DtoOutputMyAdReservation>> FetchAllReservationByAd(string adSlug)
     {
-        return Ok(_useCaseFetchAllReservationToConfirm.Execute(adSlug));
+        return Ok(_useCaseFetchAllReservationByAd.Execute(adSlug));
     }
-    
+
     [HttpGet]
     [Route("count")]
     [ProducesResponseType(StatusCodes.Status200OK)]

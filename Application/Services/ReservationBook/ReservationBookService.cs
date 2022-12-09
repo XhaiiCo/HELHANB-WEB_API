@@ -33,10 +33,9 @@ public class ReservationBookService : IReservationBookService
         return Domain.ReservationBook.Of(reservations);
     }
     
-    public Domain.ReservationBook FetchReservationToConfirmByAdSlug(string adSlug)
+    public Domain.ReservationBook FetchByAdSlug(string adSlug)
     {
         var adId = _adRepository.FetchBySlug(adSlug).Id;
-        var reservations = FetchByAdId(adId);
-        return reservations.Where(r => r.ReservationStatus.StatusName == "en attente");
+        return FetchByAdId(adId);
     }
 }
