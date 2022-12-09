@@ -30,7 +30,7 @@ public class UseCaseFetchAdsForPagination : IUseCaseParameterizedQuery<IEnumerab
         foreach (var dtoOutputAdsSummary in result)
         {
             var pictures = new List<string>();
-            ads.FirstOrDefault(ad => ad.Id == dtoOutputAdsSummary.Id)
+            ads.FirstOrDefault(ad => ad.AdSlug == dtoOutputAdsSummary.AdSlug)
                 ?.Pictures
                 .ForEach(picture => pictures.Add(picture.Path));
             dtoOutputAdsSummary.Pictures = pictures;

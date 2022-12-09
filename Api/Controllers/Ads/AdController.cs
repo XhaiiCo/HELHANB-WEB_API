@@ -126,15 +126,15 @@ public class AdController : ControllerBase
 
     [HttpGet]
     [Authorize(Roles = "hote")]
-    [Route("{id:int}/myAds")]
+    [Route("{userId:int}/myAds")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public ActionResult<DtoOutputMyAdsAd> FetchByUserId(int id)
+    public ActionResult<DtoOutputMyAdsAd> FetchByUserId(int userId)
     {
         //Check that this is the id of the logged in user
-        if ("" + id != User.Identity?.Name) return Unauthorized();
+        if ("" + userId != User.Identity?.Name) return Unauthorized();
 
-        return Ok(_useCaseFetchByUserIdAd.Execute(id));
+        return Ok(_useCaseFetchByUserIdAd.Execute(userId));
     }
 
     [HttpPost]
@@ -160,16 +160,16 @@ public class AdController : ControllerBase
     }
 
     [HttpGet]
-    [Route("{id:int}/myReservations")]
+    [Route("{userId:int}/myReservations")]
     [Authorize(Roles = "utilisateur,hote")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public ActionResult<IEnumerable<DtoOutputReservation>> FetchMyReservations(int id)
+    public ActionResult<IEnumerable<DtoOutputReservation>> FetchMyReservations(int userId)
     {
         //Check that this is the id of the logged in user
-        if ("" + id != User.Identity?.Name) return Unauthorized();
+        if ("" + userId != User.Identity?.Name) return Unauthorized();
 
-        return Ok(_useCaseFetchMyReservations.Execute(id));
+        return Ok(_useCaseFetchMyReservations.Execute(userId));
     }
 
     [HttpGet]
@@ -181,18 +181,16 @@ public class AdController : ControllerBase
     {
         return Ok(_useCaseCountValidatedAds.Execute(new DtoInputFilteringAds
         {
-            StatusId = 3,
-            Name = name
+            StatusId = 3
         }));
     }
-
+    
     [HttpGet]
     [Route("summary")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public ActionResult<IEnumerable<DtoOutputAdsSummary>> FetchForPagination(
         [FromQuery] int? limit,
-        [FromQuery] int? offset,
-        [FromQuery] string? name
+        [FromQuery] int? offset
     )
     {
         return Ok(_useCaseFetchAdsForPagination.Execute(new DtoInputFilteringAds
@@ -201,7 +199,6 @@ public class AdController : ControllerBase
             Offset = offset,
 
             StatusId = 3,
-            Name = name
         }));
     }
 
@@ -224,7 +221,7 @@ public class AdController : ControllerBase
     }
 
     [HttpDelete]
-    [Route("{id:int}/reservation")]
+    [Route("reservation/{id:int}")]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
