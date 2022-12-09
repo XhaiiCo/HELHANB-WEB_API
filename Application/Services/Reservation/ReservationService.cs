@@ -1,4 +1,4 @@
-﻿using Application.UseCases.Reservations.Dtos;
+using Application.Services.Reservation;
 using Domain;
 using Infrastructure.Ef;
 using Infrastructure.Ef.DbEntities;
@@ -24,11 +24,11 @@ public class ReservationService : IReservationService
         _adRepository = adRepository;
     }
 
-    public Reservation MapToReservation(DbReservation dbReservation)
+    public Domain.Reservation MapToReservation(DbReservation dbReservation)
     {
         var mapper = Mapper.GetInstance();
 
-        var result = mapper.Map<Reservation>(dbReservation);
+        var result = mapper.Map<Domain.Reservation>(dbReservation);
 
         //Add the renter
         var dbRenter = _userRepository.FetchById(dbReservation.RenterId);
@@ -43,4 +43,5 @@ public class ReservationService : IReservationService
 
         return result;
     }
+
 }
