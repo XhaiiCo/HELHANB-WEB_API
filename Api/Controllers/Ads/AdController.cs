@@ -1,4 +1,6 @@
-﻿using Application.UseCases;
+﻿using API.Utils.Picture;
+using Application.Services.Ad;
+using Application.UseCases;
 using Application.UseCases.Ads;
 using Application.UseCases.Ads.Dtos;
 using Application.UseCases.Reservations;
@@ -26,12 +28,16 @@ public class AdController : ControllerBase
     private readonly UseCaseRemoveReservation _useCaseRemoveReservation;
     private readonly UseCaseFetchDistinctsCountries _useCaseFetchDistinctsCountries;
     private readonly UseCaseFetchDistinctsCitiesByCountry _useCaseFetchDistinctsCitiesByCountry;
+    private readonly UseCaseFetchAllReservationToConfirm _useCaseFetchAllReservationToConfirm;
 
     public AdController(
-        UseCaseCreateAd useCaseCreateAd,
+        UseCaseCreateAd useCaseCreateAd, 
         UseCaseDeleteAd useCaseDeleteAd,
-        UseCaseCreateReservation useCaseCreateReservation,
-        UseCaseFetchAllAds useCaseFetchAllAds,
+        UseCaseCreateReservation useCaseCreateReservation, 
+        UseCaseFetchAllAds useCaseFetchAllAds, 
+        IAdService adService,
+        IPictureService pictureService, 
+        UseCaseAddPictureAd useCaseAddPictureAd, 
         UseCaseFetchAdBySlug useCaseFetchAdBySlug,
         UseCaseCountValidatedAds useCaseCountValidatedAds,
         UseCaseFetchAdsForPagination useCaseFetchAdsForPagination,
@@ -41,7 +47,8 @@ public class AdController : ControllerBase
         UseCaseFetchMyReservations useCaseFetchMyReservations,
         UseCaseRemoveReservation useCaseRemoveReservation,
         UseCaseFetchDistinctsCountries useCaseFetchDistinctsCountries,
-        UseCaseFetchDistinctsCitiesByCountry useCaseFetchDistinctsCitiesByCountry)
+        UseCaseFetchDistinctsCitiesByCountry useCaseFetchDistinctsCitiesByCountry,
+        UseCaseFetchAllReservationToConfirm useCaseFetchAllReservationToConfirm)
     {
         _useCaseCreateAd = useCaseCreateAd;
         _useCaseDeleteAd = useCaseDeleteAd;
@@ -57,6 +64,7 @@ public class AdController : ControllerBase
         _useCaseRemoveReservation = useCaseRemoveReservation;
         _useCaseFetchDistinctsCountries = useCaseFetchDistinctsCountries;
         _useCaseFetchDistinctsCitiesByCountry = useCaseFetchDistinctsCitiesByCountry;
+        _useCaseFetchAllReservationToConfirm = useCaseFetchAllReservationToConfirm;
     }
 
 
@@ -172,6 +180,15 @@ public class AdController : ControllerBase
         return Ok(_useCaseFetchMyReservations.Execute(userId));
     }
 
+    [HttpGet]
+    [Route("reservation/{adSlug}")]
+    [Authorize(Roles = "hote")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public ActionResult<DtoOutputUserReservation> FetchAllReservationToConfirm(string adSlug)
+    {
+        return Ok(_useCaseFetchAllReservationToConfirm.Execute(adSlug));
+    }
+    
     [HttpGet]
     [Route("count")]
     [ProducesResponseType(StatusCodes.Status200OK)]

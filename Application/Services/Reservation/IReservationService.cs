@@ -1,9 +1,8 @@
-﻿using Application.UseCases.Reservations.Dtos;
 using Infrastructure.Ef.DbEntities;
 
-namespace Application.Services;
+namespace Application.Services.Reservation;
 
 public interface IReservationService
 {
-  Domain.Reservation MapToReservation(DbReservation dbReservation);
+    public Domain.Reservation MapToReservation(DbReservation dbReservation);
 }
