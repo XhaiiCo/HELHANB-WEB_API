@@ -7,6 +7,7 @@ using Application.Services;
 using Application.Services.Ad;
 using Application.Services.Auth;
 using Application.Services.Date;
+using Application.Services.Reservation;
 using Application.Services.ReservationBook;
 using Application.Services.Role;
 using Application.Services.Time;
@@ -125,6 +126,7 @@ builder.Services.AddScoped<UseCaseFetchMyReservations>();
 builder.Services.AddScoped<UseCaseRemoveReservation>();
 builder.Services.AddScoped<UseCaseFetchDistinctsCountries>();
 builder.Services.AddScoped<UseCaseFetchDistinctsCitiesByCountry>();
+builder.Services.AddScoped<UseCaseFetchAllReservationToConfirm>();
 
 // Services
 builder.Services.AddScoped<IUserService, UserService>();
