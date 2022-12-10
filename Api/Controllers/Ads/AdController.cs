@@ -143,16 +143,14 @@ public class AdController : ControllerBase
     }
 
     [HttpPost]
-    [Route("{adSlug}/reservation")]
+    [Route("reservation")]
     [Authorize(Roles = "utilisateur,hote")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public ActionResult<DtoOutputReservation> CreateReservation(string adSlug, DtoInputCreateReservation dto)
+    public ActionResult<DtoOutputReservation> CreateReservation(DtoInputCreateReservation dto)
     {
         //Check that this is the id of the logged in user
         if ("" + dto.RenterId != User.Identity?.Name) return Unauthorized();
-
-        dto.AdSlug = adSlug;
 
         try
         {

@@ -1,4 +1,5 @@
 ﻿using Application.Services;
+using Application.Services.Ad;
 using Application.Services.Date;
 using Application.Services.Reservation;
 using Application.Services.ReservationBook;
@@ -43,6 +44,10 @@ public class UseCaseCreateReservation : IUseCaseWriter<DtoOutputReservation, Dto
         var mapper = Mapper.GetInstance();
 
         var dbReservation = mapper.Map<DbReservation>(input);
+
+        //Set the ad id
+        var ad = _adRepository.FetchBySlug(input.AdSlug);
+        dbReservation.AdId = ad.Id;
 
         //Add default params
         dbReservation.ReservationStatusId = 1;
