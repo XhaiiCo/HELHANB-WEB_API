@@ -197,12 +197,13 @@ public class AdController : ControllerBase
     [Route("count")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public ActionResult<int> CountValidatedAds(
-        [FromQuery] string? name
+        [FromQuery] string? country
     )
     {
         return Ok(_useCaseCountValidatedAds.Execute(new DtoInputFilteringAds
         {
-            StatusId = 3
+            StatusId = 3,
+            Country = country
         }));
     }
 
@@ -211,7 +212,8 @@ public class AdController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public ActionResult<IEnumerable<DtoOutputAdsSummary>> FetchForPagination(
         [FromQuery] int? limit,
-        [FromQuery] int? offset
+        [FromQuery] int? offset,
+        [FromQuery] string? country
     )
     {
         return Ok(_useCaseFetchAdsForPagination.Execute(new DtoInputFilteringAds
@@ -220,6 +222,7 @@ public class AdController : ControllerBase
             Offset = offset,
 
             StatusId = 3,
+            Country = country
         }));
     }
 
