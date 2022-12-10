@@ -15,7 +15,6 @@ public class UseCaseCountValidatedAds : IUseCaseParameterizedQuery<int, DtoInput
 
     public int Execute(DtoInputFilteringAds dto)
     {
-        
         return _adRepository.Count(Mapper.GetInstance().Map<FilteringAd>(dto));
     }
 }

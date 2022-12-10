@@ -40,10 +40,9 @@ public class AdRepository : IAdRepository
     public IEnumerable<DbAd> FetchRange(int offset, int limit, FilteringAd filter)
     {
         using var context = _contextProvider.NewContext();
-
-        return filter.StatusId.HasValue
-            ? context.Ads.Where(ad => ad.AdStatusId == filter.StatusId).Skip(offset).Take(limit).ToList()
-            : context.Ads.Skip(offset).Take(limit).ToList();
+        
+        return context.Ads.Where(ad => (filter.StatusId == null || ad.AdStatusId == filter.StatusId)
+                                && (filter.Country == null || ad.Country == filter.Country)).Skip(offset).Take(limit).ToList();
     }
 
     public IEnumerable<DbAd> FetchByUserId(int id)
@@ -118,9 +117,9 @@ public class AdRepository : IAdRepository
     public int Count(FilteringAd filter)
     {
         using var context = _contextProvider.NewContext();
+        
+        return context.Ads.Count(ad => (filter.StatusId == null || ad.AdStatusId == filter.StatusId)
+                                       && (filter.Country == null || ad.Country == filter.Country));
 
-        return filter.StatusId.HasValue
-            ? context.Ads.Count(ad => ad.AdStatusId == filter.StatusId)
-            : context.Ads.Count();
     }
 }

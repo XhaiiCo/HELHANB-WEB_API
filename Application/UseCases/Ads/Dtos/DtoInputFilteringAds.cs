@@ -6,4 +6,6 @@ public class DtoInputFilteringAds
     public int? Offset { get; set; }
     
     public int? StatusId { get; set; }
+    
+    public string? Country { get; set; }
 }
