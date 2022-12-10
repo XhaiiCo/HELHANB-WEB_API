@@ -163,15 +163,15 @@ public class AdController : ControllerBase
     }
 
     [HttpGet]
-    [Route("{userId:int}/myReservations")]
+    [Route("myReservations")]
     [Authorize(Roles = "utilisateur,hote")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public ActionResult<IEnumerable<DtoOutputReservation>> FetchMyReservations(int userId)
+    public ActionResult<IEnumerable<DtoOutputReservation>> FetchMyReservations()
     {
-        //Check that this is the id of the logged in user
-        if ("" + userId != User.Identity?.Name) return Unauthorized();
+        if (User.Identity?.Name == null) return Unauthorized();
 
+        var userId = Int32.Parse(User.Identity.Name);
         return Ok(_useCaseFetchMyReservations.Execute(userId));
     }
 
@@ -196,7 +196,7 @@ public class AdController : ControllerBase
             StatusId = 3
         }));
     }
-    
+
     [HttpGet]
     [Route("summary")]
     [ProducesResponseType(StatusCodes.Status200OK)]
