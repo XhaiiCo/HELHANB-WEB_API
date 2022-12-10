@@ -40,7 +40,11 @@ public class AdRepository : IAdRepository
         using var context = _contextProvider.NewContext();
         
         return context.Ads.Where(ad => (filter.StatusId == null || ad.AdStatusId == filter.StatusId)
-                                && (filter.Country == null || ad.Country == filter.Country)).Skip(filter.Offset).Take(filter.Limit).ToList();
+                                && (filter.Country == null || ad.Country == filter.Country)
+                                && (filter.City == null || ad.City == filter.City)
+                                && (filter.PricePerNight == null || ad.PricePerNight <= filter.PricePerNight)
+                                && (filter.NumberOfPersons == null || ad.NumberOfPersons == filter.NumberOfPersons)
+                                ).Skip(filter.Offset).Take(filter.Limit).ToList();
     }
     
     public IEnumerable<DbAd> FetchByUserId(int id)
@@ -117,7 +121,10 @@ public class AdRepository : IAdRepository
         using var context = _contextProvider.NewContext();
         
         return context.Ads.Count(ad => (filter.StatusId == null || ad.AdStatusId == filter.StatusId)
-                                       && (filter.Country == null || ad.Country == filter.Country));
+                                       && (filter.Country == null || ad.Country == filter.Country)
+                                       && (filter.City == null || ad.City == filter.City)
+                                       && (filter.PricePerNight == null || ad.PricePerNight <= filter.PricePerNight)
+                                       && (filter.NumberOfPersons == null || ad.NumberOfPersons == filter.NumberOfPersons));
 
     }
 }

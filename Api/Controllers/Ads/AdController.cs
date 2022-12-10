@@ -197,13 +197,19 @@ public class AdController : ControllerBase
     [Route("count")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public ActionResult<int> CountValidatedAds(
-        [FromQuery] string? country
+        [FromQuery] string? country,
+        [FromQuery] string? city,
+        [FromQuery] float? pricePerNight,
+        [FromQuery] int? numberOfPersons
     )
     {
         return Ok(_useCaseCountValidatedAds.Execute(new DtoInputFilteringAds
         {
             StatusId = 3,
-            Country = country
+            Country = country,
+            City = city,
+            PricePerNight = pricePerNight,
+            NumberOfPersons = numberOfPersons
         }));
     }
 
@@ -213,7 +219,10 @@ public class AdController : ControllerBase
     public ActionResult<IEnumerable<DtoOutputAdsSummary>> FetchForPagination(
         [FromQuery] int? limit,
         [FromQuery] int? offset,
-        [FromQuery] string? country
+        [FromQuery] string? country,
+        [FromQuery] string? city,
+        [FromQuery] float? pricePerNight,
+        [FromQuery] int? numberOfPersons
     )
     {
         return Ok(_useCaseFetchAdsForPagination.Execute(new DtoInputFilteringAds
@@ -222,7 +231,10 @@ public class AdController : ControllerBase
             Offset = offset,
 
             StatusId = 3,
-            Country = country
+            Country = country,
+            City = city,
+            PricePerNight = pricePerNight,
+            NumberOfPersons = numberOfPersons
         }));
     }
 
