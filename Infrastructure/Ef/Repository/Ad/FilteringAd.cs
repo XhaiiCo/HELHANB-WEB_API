@@ -3,5 +3,5 @@
 public class FilteringAd
 {
     public int? StatusId { get; set; }
-    public string? Name { get; set; }
+    public string? Country { get; set; }
 }
