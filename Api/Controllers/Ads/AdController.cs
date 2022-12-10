@@ -1,5 +1,4 @@
-﻿using API.Utils.Picture;
-using Application.Services.Ad;
+﻿using Application.Services.Ad;
 using Application.UseCases;
 using Application.UseCases.Ads;
 using Application.UseCases.Ads.Dtos;
@@ -14,6 +13,8 @@ namespace API.Controllers.Ads;
 [Route("api/v1/ad")]
 public class AdController : ControllerBase
 {
+    private readonly IAdService _adService;
+
     private readonly UseCaseCreateAd _useCaseCreateAd;
     private readonly UseCaseDeleteAd _useCaseDeleteAd;
     private readonly UseCaseCreateReservation _useCaseCreateReservation;
@@ -45,7 +46,9 @@ public class AdController : ControllerBase
         UseCaseRemoveReservation useCaseRemoveReservation,
         UseCaseFetchDistinctsCountries useCaseFetchDistinctsCountries,
         UseCaseFetchDistinctsCitiesByCountry useCaseFetchDistinctsCitiesByCountry,
-        UseCaseFetchAllReservationByAd useCaseFetchAllReservationByAd)
+        UseCaseFetchAllReservationByAd useCaseFetchAllReservationByAd,
+        IAdService adService
+    )
     {
         _useCaseCreateAd = useCaseCreateAd;
         _useCaseDeleteAd = useCaseDeleteAd;
@@ -62,6 +65,7 @@ public class AdController : ControllerBase
         _useCaseFetchDistinctsCountries = useCaseFetchDistinctsCountries;
         _useCaseFetchDistinctsCitiesByCountry = useCaseFetchDistinctsCitiesByCountry;
         _useCaseFetchAllReservationByAd = useCaseFetchAllReservationByAd;
+        _adService = adService;
     }
 
 
@@ -182,6 +186,10 @@ public class AdController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public ActionResult<IEnumerable<DtoOutputMyAdReservation>> FetchAllReservationByAd(string adSlug)
     {
+        //Check the ad belong to the hote who make the request
+        var ad = _adService.FetchBySlug(adSlug);
+        if (ad.Owner.Id + "" != User.Identity?.Name) return Unauthorized();
+
         return Ok(_useCaseFetchAllReservationByAd.Execute(adSlug));
     }
 
