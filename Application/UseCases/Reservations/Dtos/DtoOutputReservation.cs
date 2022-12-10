@@ -29,6 +29,7 @@ public class DtoOutputReservation
 
     public class DtoAd
     {
+        public float PricePerNight { get; set; }
         public string AdSlug { get; set; }
         public string Name { get; set; }
     }
