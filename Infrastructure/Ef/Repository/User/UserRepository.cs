@@ -17,29 +17,16 @@ public class UserRepository : IUserRepository
     public IEnumerable<DbUser> FetchAll(FilteringUser? filteringUser)
     {
         using var context = _contextProvider.NewContext();
-
+        
         if (filteringUser == null) return context.Users.ToList();
-
-        if (filteringUser.RoleId.HasValue && filteringUser.Search == null)
-            return context.Users.Where(user => user.RoleId == filteringUser.RoleId).ToList();
-
-        if (filteringUser.Search != null && !filteringUser.RoleId.HasValue)
-            return context.Users.Where(user => user.FirstName.ToLower().Contains(filteringUser.Search.ToLower()) ||
-                                               user.LastName.ToLower().Contains(filteringUser.Search.ToLower()) ||
-                                               user.Email.ToLower().Contains(filteringUser.Search.ToLower())).ToList();
-
-        if (filteringUser.Search != null && filteringUser.RoleId.HasValue)
-            return context.Users.Where(user => (user.FirstName.ToLower().Contains(filteringUser.Search.ToLower()) ||
-                                               user.LastName.ToLower().Contains(filteringUser.Search.ToLower()) ||
-                                               user.Email.ToLower().Contains(filteringUser.Search.ToLower()))
-                                               &&
-                                               user.RoleId == filteringUser.RoleId).ToList();
         
-        
-        
-        return context.Users.ToList();
+        return context.Users.Where(user => (filteringUser.RoleId == null || user.RoleId == filteringUser.RoleId) && 
+                                           (filteringUser.Search == null || 
+                                            (user.FirstName.ToLower().Contains(filteringUser.Search.ToLower()) ||
+                                             user.LastName.ToLower().Contains(filteringUser.Search.ToLower()) ||
+                                             user.Email.ToLower().Contains(filteringUser.Search.ToLower())))).ToList();
     }
-
+    
     public DbUser Create(DbUser user)
     {
         using var context = _contextProvider.NewContext();
