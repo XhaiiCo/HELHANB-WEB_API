@@ -110,15 +110,17 @@ public class UserController : ControllerBase
     public ActionResult<DtoOutputUser> Delete(int id)
     {
         if (IsTheIdOfConnectedUser(id)) return Unauthorized("Vous ne pouvez pas vous supprimer");
-        var currentUser = _userService.FetchById(id);
-        if (User.Identity.Name == "administrateur")
-            if (currentUser.Role.Name == "administrateur" || currentUser.Role.Name == "super-administrateur")
+
+        var userToDelete = _userService.FetchById(id);
+        var userWhoMakeRequest = _userService.FetchById(int.Parse(User.Identity?.Name));
+        if (userWhoMakeRequest.Role.Name == "administrateur")
+            if (userToDelete.Role.Name is "administrateur" or "super-administrateur")
                 return Unauthorized("Vous ne pouvez pas supprimer cet utilisateur");
 
         //Remove the current profile picture if exist
-        if (currentUser.ProfilePicturePath != null)
+        if (userToDelete.ProfilePicturePath != null)
         {
-            _pictureService.RemoveFile(currentUser.ProfilePicturePath);
+            _pictureService.RemoveFile(userToDelete.ProfilePicturePath);
         }
 
         try
