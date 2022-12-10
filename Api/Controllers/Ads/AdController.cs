@@ -13,7 +13,7 @@ namespace API.Controllers.Ads;
 [Route("api/v1/ad")]
 public class AdController : ControllerBase
 {
-    private readonly AdService _adService;
+    private readonly IAdService _adService;
 
     private readonly UseCaseCreateAd _useCaseCreateAd;
     private readonly UseCaseDeleteAd _useCaseDeleteAd;
@@ -47,7 +47,7 @@ public class AdController : ControllerBase
         UseCaseFetchDistinctsCountries useCaseFetchDistinctsCountries,
         UseCaseFetchDistinctsCitiesByCountry useCaseFetchDistinctsCitiesByCountry,
         UseCaseFetchAllReservationByAd useCaseFetchAllReservationByAd,
-        AdService adService
+        IAdService adService
     )
     {
         _useCaseCreateAd = useCaseCreateAd;
@@ -189,7 +189,7 @@ public class AdController : ControllerBase
         //Check the ad belong to the hote who make the request
         var ad = _adService.FetchBySlug(adSlug);
         if (ad.Owner.Id + "" != User.Identity?.Name) return Unauthorized();
-        
+
         return Ok(_useCaseFetchAllReservationByAd.Execute(adSlug));
     }
 
