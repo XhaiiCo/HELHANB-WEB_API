@@ -8,7 +8,7 @@ public interface IAdRepository
     IEnumerable<string> FetchDistinctsCountries();
     IEnumerable<string> FetchDistinctsCitiesByCountry(string country);
     
-    IEnumerable<DbAd> FetchRange(int offset, int limit, FilteringAd filter);
+    IEnumerable<DbAd> FetchRange(FilteringAd filter);
 
     DbAd Create(DbAd ad);
 

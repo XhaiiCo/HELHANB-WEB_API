@@ -57,9 +57,9 @@ public class AdService : IAdService
         return ads;
     }
 
-    public IEnumerable<Domain.Ad> FetchRange(int offset, int limit, DtoInputFilteringAds filter)
+    public IEnumerable<Domain.Ad> FetchRange(DtoInputFilteringAds filter)
     {
-        var dbAds = _adRepository.FetchRange(offset, limit, Mapper.GetInstance().Map<FilteringAd>(filter));
+        var dbAds = _adRepository.FetchRange(Mapper.GetInstance().Map<FilteringAd>(filter));
         var ads = dbAds.Select(MapToAd);
 
         return ads;

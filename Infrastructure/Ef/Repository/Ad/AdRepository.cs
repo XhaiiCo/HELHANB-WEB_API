@@ -18,9 +18,7 @@ public class AdRepository : IAdRepository
     {
         using var context = _contextProvider.NewContext();
 
-        return filter.StatusId.HasValue
-            ? context.Ads.Where(ad => ad.AdStatusId == filter.StatusId).ToList()
-            : context.Ads.ToList();
+        return context.Ads.Where(ad => filter.StatusId == null || ad.AdStatusId == filter.StatusId).ToList();
     }
 
     public IEnumerable<string> FetchDistinctsCountries()
@@ -37,14 +35,14 @@ public class AdRepository : IAdRepository
         return context.Ads.Where(item => item.Country == country).Select(item => item.City).Distinct().ToList();
     }
 
-    public IEnumerable<DbAd> FetchRange(int offset, int limit, FilteringAd filter)
+    public IEnumerable<DbAd> FetchRange(FilteringAd filter)
     {
         using var context = _contextProvider.NewContext();
         
         return context.Ads.Where(ad => (filter.StatusId == null || ad.AdStatusId == filter.StatusId)
-                                && (filter.Country == null || ad.Country == filter.Country)).Skip(offset).Take(limit).ToList();
+                                && (filter.Country == null || ad.Country == filter.Country)).Skip(filter.Offset).Take(filter.Limit).ToList();
     }
-
+    
     public IEnumerable<DbAd> FetchByUserId(int id)
     {
         using var context = _contextProvider.NewContext();
