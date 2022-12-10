@@ -131,13 +131,14 @@ public class AdController : ControllerBase
 
     [HttpGet]
     [Authorize(Roles = "hote")]
-    [Route("{userId:int}/myAds")]
+    [Route("myAds")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public ActionResult<DtoOutputMyAdsAd> FetchByUserId(int userId)
+    public ActionResult<DtoOutputMyAdsAd> FetchByUserId()
     {
-        //Check that this is the id of the logged in user
-        if ("" + userId != User.Identity?.Name) return Unauthorized();
+        if (User.Identity?.Name == null) return Unauthorized();
+
+        var userId = Int32.Parse(User.Identity.Name);
 
         return Ok(_useCaseFetchByUserIdAd.Execute(userId));
     }
