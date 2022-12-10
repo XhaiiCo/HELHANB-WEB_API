@@ -146,6 +146,7 @@ builder.Services.AddScoped<UseCaseCreateConversation>();
 builder.Services.AddScoped<UseCaseCreateMessage>();
 builder.Services.AddScoped<UseCaseFetchMyConversation>();
 builder.Services.AddScoped<UseCaseFetchMessageForAConversation>();
+builder.Services.AddScoped<UseCasePutMessageViewToTrue>();
 
 var app = builder.Build();
 

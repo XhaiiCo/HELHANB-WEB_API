@@ -3,6 +3,7 @@ using Application.UseCases.Conversation.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualBasic.CompilerServices;
+using static System.Int32;
 
 namespace API.Controllers.Conversation;
 
@@ -14,15 +15,21 @@ public class ConversationController : ControllerBase
     private readonly UseCaseCreateMessage _useCaseCreateMessage;
     private readonly UseCaseFetchMyConversation _useCaseFetchMyConversation;
     private readonly UseCaseFetchMessageForAConversation _useCaseFetchMessageForAConversation;
+    public readonly UseCasePutMessageViewToTrue _useCasePutMessageViewToTrue;
 
-    public ConversationController(UseCaseCreateConversation useCaseCreateConversation,
-        UseCaseCreateMessage useCaseCreateMessage, UseCaseFetchMyConversation useCaseFetchMyConversation,
-        UseCaseFetchMessageForAConversation useCaseFetchMessageForAConversation)
+    public ConversationController(
+        UseCaseCreateConversation useCaseCreateConversation,
+        UseCaseCreateMessage useCaseCreateMessage,
+        UseCaseFetchMyConversation useCaseFetchMyConversation,
+        UseCaseFetchMessageForAConversation useCaseFetchMessageForAConversation,
+        UseCasePutMessageViewToTrue useCasePutMessageViewToTrue
+    )
     {
         _useCaseCreateConversation = useCaseCreateConversation;
         _useCaseCreateMessage = useCaseCreateMessage;
         _useCaseFetchMyConversation = useCaseFetchMyConversation;
         _useCaseFetchMessageForAConversation = useCaseFetchMessageForAConversation;
+        _useCasePutMessageViewToTrue = useCasePutMessageViewToTrue;
     }
 
     private bool IsTheIdOfConnectedUser(int id)
@@ -59,32 +66,57 @@ public class ConversationController : ControllerBase
         }
     }
 
-    [HttpGet("{id:int}/myConversations")]
+    [HttpGet("myConversations")]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public ActionResult<IEnumerable<DtoOutputMyConversation>> FetchMyConversations(int id)
+    public ActionResult<IEnumerable<DtoOutputMyConversation>> FetchMyConversations()
     {
-        if (!IsTheIdOfConnectedUser(id)) return Unauthorized();
+        if (User.Identity?.Name == null) return Unauthorized();
 
-        return Ok(_useCaseFetchMyConversation.Execute(id));
+        var userId = Parse(User.Identity?.Name);
+
+        return Ok(_useCaseFetchMyConversation.Execute(userId));
     }
 
-    [HttpGet("{id:int}/messages")]
+    [HttpGet("{convId:int}/messages")]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public ActionResult<IEnumerable<DtoOutputMessage>> FetchMessagesForAConversation(int id)
+    public ActionResult<IEnumerable<DtoOutputMessage>> FetchMessagesForAConversation(int convId)
     {
         try
         {
             var dto = new DtoInputFetchMessagesForAConversation
             {
-                conversationId = id,
-                UserId = Int32.Parse(User.Identity?.Name)
+                conversationId = convId,
+                UserId = Parse(User.Identity?.Name)
             };
-            
+
             return Ok(_useCaseFetchMessageForAConversation.Execute(dto));
+        }
+        catch (Exception e)
+        {
+            return Unauthorized(e.Message);
+        }
+    }
+
+    [HttpPut("{convId:int}/view")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public ActionResult PutMessageViewToTrue(int convId)
+    {
+        try
+        {
+            var dto = new DtoInputPutMessageViewToTrue
+            {
+                conversationId = convId,
+                UserId = Parse(User.Identity?.Name)
+            };
+            _useCasePutMessageViewToTrue.Execute(dto);
+
+            return Ok();
         }
         catch (Exception e)
         {

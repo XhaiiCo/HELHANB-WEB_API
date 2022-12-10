@@ -6,5 +6,6 @@ public class DtoOutputMessage
     public int SenderId { get; set; }
     
     public string Content { get; set; }
+    public bool view { get; set; }
     public DateTime SendTime { get; set; }
 }
