@@ -31,7 +31,7 @@ public class UseCasePutMessageViewToTrue : IUseCaseWriter<bool, DtoInputPutMessa
 
         foreach (var message in messages)
         {
-            if (message.SenderId == dto.UserId)
+            if (message.SenderId != dto.UserId)
                 _messageRepository.UpdateMessageViewToTrue(message.Id);
         }
 

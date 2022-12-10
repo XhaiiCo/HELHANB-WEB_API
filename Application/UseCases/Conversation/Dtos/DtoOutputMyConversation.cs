@@ -5,6 +5,7 @@ namespace Application.UseCases.Conversation.Dtos;
 public class DtoOutputMyConversation
 {
     public int Id { get; set; }
+    public bool MessageNotView { get; set; }
     public DtoOutputUserInMyConversation Recipient { get; set; }
 
     public class DtoOutputUserInMyConversation
