@@ -1,7 +1,11 @@
-﻿namespace Application.UseCases.Ads.Dtos;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+
+namespace Application.UseCases.Ads.Dtos;
 
 public class DtoInputUpdateStatusAd
 {
-    public string AdSlug { get; set; }
-    public int StatusId { get; set;} 
+    [JsonIgnore] public int UserId { get; set; }
+    [Required] public string AdSlug { get; set; }
+    [Required] public int StatusId { get; set; }
 }

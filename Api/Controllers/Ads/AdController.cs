@@ -240,11 +240,20 @@ public class AdController : ControllerBase
 
     [HttpPut]
     [Route("status")]
-    [Authorize(Roles = "administrateur, super-administrateur")]
+    [Authorize(Roles = "administrateur,super-administrateur,hote")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public ActionResult<DtoOutputAd> UpdateStatus(DtoInputUpdateStatusAd dto)
     {
-        return Ok(_useCaseUpdateStatusAd.Execute(dto));
+        dto.UserId = int.Parse(User.Identity?.Name);
+
+        try
+        {
+            return Ok(_useCaseUpdateStatusAd.Execute(dto));
+        }
+        catch (Exception e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
 
     [HttpPut]
