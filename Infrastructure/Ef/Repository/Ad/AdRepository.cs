@@ -43,7 +43,7 @@ public class AdRepository : IAdRepository
                                 && (filter.Country == null || ad.Country == filter.Country)
                                 && (filter.City == null || ad.City == filter.City)
                                 && (filter.PricePerNight == null || ad.PricePerNight <= filter.PricePerNight)
-                                && (filter.NumberOfPersons == null || ad.NumberOfPersons == filter.NumberOfPersons)
+                                && (filter.NumberOfPersons == null || ad.NumberOfPersons >= filter.NumberOfPersons)
                                 ).Skip(filter.Offset).Take(filter.Limit).ToList();
     }
     
@@ -124,7 +124,7 @@ public class AdRepository : IAdRepository
                                        && (filter.Country == null || ad.Country == filter.Country)
                                        && (filter.City == null || ad.City == filter.City)
                                        && (filter.PricePerNight == null || ad.PricePerNight <= filter.PricePerNight)
-                                       && (filter.NumberOfPersons == null || ad.NumberOfPersons == filter.NumberOfPersons));
+                                       && (filter.NumberOfPersons == null || ad.NumberOfPersons >= filter.NumberOfPersons));
 
     }
 }
