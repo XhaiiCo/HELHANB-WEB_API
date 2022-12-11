@@ -47,6 +47,10 @@ public class UseCaseCreateReservation : IUseCaseWriter<DtoOutputReservation, Dto
 
         //Set the ad id
         var ad = _adRepository.FetchBySlug(input.AdSlug);
+
+        if (ad.AdStatusId != 3)
+            throw new Exception("L'annonce n'est pas disponible pour des réservations");
+
         dbReservation.AdId = ad.Id;
 
         //Add default params
