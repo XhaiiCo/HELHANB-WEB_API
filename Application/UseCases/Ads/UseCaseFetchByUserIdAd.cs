@@ -37,6 +37,7 @@ public class UseCaseFetchByUserIdAd : IUseCaseParameterizedQuery<IEnumerable<Dto
                 {
                     ArrivalDate = reservation.ArrivalDate,
                     LeaveDate = reservation.LeaveDate,
+                    Creation = reservation.Creation,
                     RenterMyAds = Mapper.GetInstance().Map<DtoOutputMyAdsAd.DtoOutputAdReservationMyAds.DtoRenterMyAds>(_userRepository.FetchById(reservation.RenterId)),
                     StatusMyAds = Mapper.GetInstance().Map<DtoOutputMyAdsAd.DtoOutputAdReservationMyAds.DtoReservationStatusMyAds>(_reservationStatusRepository.FetchById(reservation.ReservationStatusId)),
                 }).ToList();

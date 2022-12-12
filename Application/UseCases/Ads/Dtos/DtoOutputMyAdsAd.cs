@@ -32,6 +32,7 @@ public class DtoOutputMyAdsAd
 
         public DtoReservationStatusMyAds StatusMyAds { get; set; }
         public DtoRenterMyAds RenterMyAds { get; set; }
+        public DateTime Creation { get; set; }
 
         public class DtoRenterMyAds
         {
