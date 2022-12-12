@@ -26,7 +26,8 @@ public class DtoOutputMyAdsAd
     public IEnumerable<DtoOutputAdReservationMyAds> Reservations { get; set; }
 
     public class DtoOutputAdReservationMyAds
-    {
+    { 
+        public int Id { get; set; }
         public DateTime ArrivalDate { get; set; }
         public DateTime LeaveDate { get; set; }
 

@@ -35,6 +35,7 @@ public class UseCaseFetchByUserIdAd : IUseCaseParameterizedQuery<IEnumerable<Dto
             var reservationsList = reservations.Select(reservation =>
                 new DtoOutputMyAdsAd.DtoOutputAdReservationMyAds
                 {
+                    Id = reservation.Id,
                     ArrivalDate = reservation.ArrivalDate,
                     LeaveDate = reservation.LeaveDate,
                     Creation = reservation.Creation,
