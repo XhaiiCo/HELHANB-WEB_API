@@ -50,8 +50,8 @@ public class UseCaseUpdateAd : IUseCaseWriter<DtoOutputAd, DtoInputUpdateAd>
         var dbFeatures = _houseFeatureRepository.FetchByAdId(dbAd.Id);
         
         foreach (var dbFeature in dbFeatures)
-        {
-                    //because input.Features is like the updated list
+        { 
+            //because input.Features is like the updated list
             if (!input.Features.Contains(dbFeature.Feature))
             {
                 _houseFeatureRepository.Delete(dbFeature);

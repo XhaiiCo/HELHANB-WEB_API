@@ -108,13 +108,6 @@ public class PictureService : IPictureService
     }
     public bool ContainsImage(IEnumerable<byte[]> images, byte[] image)
     {
-        foreach (var img in images)
-        {
-            if (image.SequenceEqual(img))
-            {
-                return true;
-            }
-        }
-        return false;
+        return images.Any(image.SequenceEqual);
     }
 }
