@@ -200,7 +200,9 @@ public class AdController : ControllerBase
         [FromQuery] string? country,
         [FromQuery] string? city,
         [FromQuery] float? pricePerNight,
-        [FromQuery] int? numberOfPersons
+        [FromQuery] int? numberOfPersons,
+        [FromQuery] string? arrivalDate,
+        [FromQuery] string? leaveDate
     )
     {
         return Ok(_useCaseCountValidatedAds.Execute(new DtoInputFilteringAds
@@ -209,7 +211,9 @@ public class AdController : ControllerBase
             Country = country,
             City = city,
             PricePerNight = pricePerNight,
-            NumberOfPersons = numberOfPersons
+            NumberOfPersons = numberOfPersons,
+            ArrivalDate = arrivalDate,
+            LeaveDate = leaveDate
         }));
     }
 
@@ -222,7 +226,9 @@ public class AdController : ControllerBase
         [FromQuery] string? country,
         [FromQuery] string? city,
         [FromQuery] float? pricePerNight,
-        [FromQuery] int? numberOfPersons
+        [FromQuery] int? numberOfPersons,
+        [FromQuery] string? arrivalDate,
+        [FromQuery] string? leaveDate
     )
     {
         return Ok(_useCaseFetchAdsForPagination.Execute(new DtoInputFilteringAds
@@ -234,7 +240,9 @@ public class AdController : ControllerBase
             Country = country,
             City = city,
             PricePerNight = pricePerNight,
-            NumberOfPersons = numberOfPersons
+            NumberOfPersons = numberOfPersons,
+            ArrivalDate = arrivalDate,
+            LeaveDate = leaveDate
         }));
     }
 
