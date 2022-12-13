@@ -216,16 +216,14 @@ public class UserController : ControllerBase
 
     [HttpPut]
     [Authorize]
-    [Route("{id:int}/profilePicture")]
+    [Route("profilePicture")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public ActionResult<DtoOutputUser> UpdateProfilePicture(int id, IFormFile? profilePicture)
+    public ActionResult<DtoOutputUser> UpdateProfilePicture(IFormFile? profilePicture)
     {
-        //Check that this is the id of the logged in user
-        if (!IsTheIdOfConnectedUser(id)) return Unauthorized();
-
         try
         {
+            var id = int.Parse(User.Identity?.Name);
             var currentUser = _userService.FetchById(id);
 
             //If the protilePicture is null remove it
