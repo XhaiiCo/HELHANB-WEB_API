@@ -1,5 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
+using Domain;
 using Infrastructure.Ef.DbEntities;
+using Infrastructure.Ef.Repository.Reservation;
 using Infrastructure.Utils;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,10 +10,12 @@ namespace Infrastructure.Ef.Repository.Ad;
 public class AdRepository : IAdRepository
 {
     private readonly HelhanbContextProvider _contextProvider;
+    private readonly IReservationRepository _reservationRepository;
 
-    public AdRepository(HelhanbContextProvider contextProvider)
+    public AdRepository(HelhanbContextProvider contextProvider, IReservationRepository reservationRepository)
     {
         _contextProvider = contextProvider;
+        _reservationRepository = reservationRepository;
     }
 
     public IEnumerable<DbAd> FetchAll(FilteringAd filter)
@@ -115,16 +119,42 @@ public class AdRepository : IAdRepository
         
         
     }*/
-
+    
     public int Count(FilteringAd filter)
     {
         using var context = _contextProvider.NewContext();
         
-        return context.Ads.Count(ad => (filter.StatusId == null || ad.AdStatusId == filter.StatusId)
+        var dbAds = context.Ads.Where(ad => (filter.StatusId == null || ad.AdStatusId == filter.StatusId)
                                        && (filter.Country == null || ad.Country == filter.Country)
                                        && (filter.City == null || ad.City == filter.City)
                                        && (filter.PricePerNight == null || ad.PricePerNight <= filter.PricePerNight)
-                                       && (filter.NumberOfPersons == null || ad.NumberOfPersons >= filter.NumberOfPersons));
+                                       && (filter.NumberOfPersons == null || ad.NumberOfPersons >= filter.NumberOfPersons)).ToList();
 
+
+        if (filter.ArrivalDate == null || filter.LeaveDate == null) return dbAds.Count;
+        
+        var filterReservation = new Domain.Reservation
+        {
+            DateTimeRange = new DateTimeRange(DateTime.Parse(filter.ArrivalDate).Date, DateTime.Parse(filter.LeaveDate).Date)
+        };
+
+        Domain.Reservation.ValidNewReservation(filterReservation);
+
+        for (var i = dbAds.Count - 1; i >= 0; i--)
+        {
+            var dbReservations = _reservationRepository.FilterByAdId(dbAds[i].Id).Where(dbReservation => dbReservation.ReservationStatusId == 3);
+
+            var reservations = dbReservations.Select(dbReservation =>  new Domain.Reservation
+            {
+                DateTimeRange = new DateTimeRange(dbReservation.ArrivalDate, dbReservation.LeaveDate)
+            });
+
+            if(!Domain.Reservation.IsDateAvailable(reservations, filterReservation))
+            {
+                dbAds.RemoveAt(i);
+            }
+        }
+
+        return dbAds.Count;
     }
 }
