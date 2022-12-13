@@ -1,10 +1,8 @@
 ﻿using API.Utils.Picture;
 using Application.Services.Token;
 using Application.Services.User;
-using Application.UseCases.Roles;
 using Application.UseCases.Users;
 using Application.UseCases.Users.Dtos;
-using Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static System.Int32;
@@ -15,7 +13,6 @@ namespace API.Controllers.User;
 [Route("api/v1/users")]
 public class UserController : ControllerBase
 {
-    public static IWebHostEnvironment _environment;
     private IConfiguration _config;
 
     private readonly ITokenService _tokenService;
@@ -32,6 +29,7 @@ public class UserController : ControllerBase
     private readonly UseCaseUpdateUser _useCaseUpdateUser;
     private readonly UseCaseChangeRoleToHostUser _useCaseChangeRoleToHostUser;
     private readonly UseCaseChangeRole _useCaseChangeRole;
+    private readonly UseCaseUpdateProfilePictureBase64 _useCaseUpdateProfilePictureBase64;
 
     public UserController(
         UseCaseFetchAllUsers useCaseFetchAllUsers,
@@ -39,22 +37,23 @@ public class UserController : ControllerBase
         UseCaseLoginUser useCaseLoginUser,
         ITokenService tokenService,
         IConfiguration config,
-        IWebHostEnvironment environment,
         IUserService userService,
         UseCaseUpdateUserProfilePicture useCaseUpdateUserProfilePicture,
         UseCaseFetchUserById useCaseFetchUserById,
         IPictureService pictureService,
         UseCaseDeleteUserById useCaseDeleteUserById,
         UseCaseUpdatePasswordUser useCaseUpdatePasswordUser,
-        UseCaseUpdateUser useCaseUpdateUser, UseCaseChangeRoleToHostUser useCaseChangeRoleToHostUser,
-        UseCaseChangeRole useCaseChangeRole)
+        UseCaseUpdateUser useCaseUpdateUser,
+        UseCaseChangeRoleToHostUser useCaseChangeRoleToHostUser,
+        UseCaseChangeRole useCaseChangeRole,
+        UseCaseUpdateProfilePictureBase64 useCaseUpdateProfilePictureBase64
+    )
     {
         _useCaseFetchAllUsers = useCaseFetchAllUsers;
         _useCaseCreateUser = useCaseCreateUser;
         _useCaseLoginUser = useCaseLoginUser;
         _tokenService = tokenService;
         _config = config;
-        _environment = environment;
         _userService = userService;
         _useCaseUpdateUserProfilePicture = useCaseUpdateUserProfilePicture;
         _useCaseFetchUserById = useCaseFetchUserById;
@@ -64,6 +63,7 @@ public class UserController : ControllerBase
         _useCaseUpdateUser = useCaseUpdateUser;
         _useCaseChangeRoleToHostUser = useCaseChangeRoleToHostUser;
         _useCaseChangeRole = useCaseChangeRole;
+        _useCaseUpdateProfilePictureBase64 = useCaseUpdateProfilePictureBase64;
     }
 
     private void AppendCookies(string token)
@@ -296,49 +296,9 @@ public class UserController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public ActionResult<DtoOutputUser> UpdateProfilePictureBase64(DtoInputProfilePictureBase64 dto)
     {
-        var userId = int.Parse(User.Identity?.Name);
-        var currentUser = _userService.FetchById(userId);
-        var filePath = "\\Upload\\ProfilePicture\\default_user_pic.png";
+        dto.userId = int.Parse(User.Identity?.Name);
 
-
-        if (dto.ProfilePicture == null)
-        {
-            //Remove the current profile picture if exist
-            if (currentUser.ProfilePicturePath != null && currentUser.ProfilePicturePath !=
-                "\\Upload\\ProfilePicture\\default_user_pic.png")
-            {
-                _pictureService.RemoveFile(currentUser.ProfilePicturePath);
-            }
-        }
-        else
-        {
-            var basePath = "\\Upload\\ProfilePicture\\";
-
-            filePath = basePath + _pictureService.GenerateUniqueFileName(userId) +
-                       _pictureService.GetExtension(dto.ProfilePicture);
-
-            _pictureService.UploadBase64Picture(basePath, filePath, dto.ProfilePicture);
-        }
-
-
-        var dtoInputUpdateProfilePictureUser = new DtoInputUpdateProfilePictureUser
-        {
-            Id = userId,
-            ProfilePicturePath = filePath
-        };
-
-        var oldProfilePicturePath = currentUser.ProfilePicturePath;
-        
-        var user = _useCaseUpdateUserProfilePicture.Execute(dtoInputUpdateProfilePictureUser);
-
-        //Remove the current profile picture if exist
-        if (oldProfilePicturePath != null && oldProfilePicturePath !=
-            "\\Upload\\ProfilePicture\\default_user_pic.png")
-        {
-            _pictureService.RemoveFile(oldProfilePicturePath);
-        }
-
-        return Ok(user);
+        return Ok(_useCaseUpdateProfilePictureBase64.Execute(dto));
     }
 
     [HttpPost]

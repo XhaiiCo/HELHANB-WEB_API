@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using Domain;
+﻿//using Domain;
 using Infrastructure.Ef.DbEntities;
 using Infrastructure.Ef.Repository.Reservation;
 using Infrastructure.Utils;
@@ -133,6 +132,7 @@ public class AdRepository : IAdRepository
 
         if (filter.ArrivalDate == null || filter.LeaveDate == null) return dbAds.Count;
         
+        /*
         var filterReservation = new Domain.Reservation
         {
             DateTimeRange = new DateTimeRange(DateTime.Parse(filter.ArrivalDate).Date, DateTime.Parse(filter.LeaveDate).Date)
@@ -154,7 +154,7 @@ public class AdRepository : IAdRepository
                 dbAds.RemoveAt(i);
             }
         }
-
+        */
         return dbAds.Count;
     }
 }

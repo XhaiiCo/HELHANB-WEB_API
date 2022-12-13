@@ -104,6 +104,7 @@ builder.Services.AddScoped<UseCaseUpdatePasswordUser>();
 builder.Services.AddScoped<UseCaseUpdateUser>();
 builder.Services.AddScoped<UseCaseChangeRoleToHostUser>();
 builder.Services.AddScoped<UseCaseChangeRole>();
+builder.Services.AddScoped<UseCaseUpdateProfilePictureBase64>();
 
 //Reservation
 builder.Services.AddScoped<UseCaseCreateReservation>();
