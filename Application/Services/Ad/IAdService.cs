@@ -1,5 +1,6 @@
 ﻿using Application.UseCases.Ads.Dtos;
 using Infrastructure.Ef.DbEntities;
+using Infrastructure.Ef.Repository.Ad;
 
 namespace Application.Services.Ad;
 
@@ -11,6 +12,6 @@ public interface IAdService
     
     IEnumerable<Domain.Ad> FetchAll(DtoInputFilteringAds dto);
     IEnumerable<Domain.Ad> FetchRange(DtoInputFilteringAds filter);
-
     Domain.Ad MapToAd(DbAd dbAd);
+    public IEnumerable<Domain.Ad> FilterAds(FilteringAd filter);
 }
