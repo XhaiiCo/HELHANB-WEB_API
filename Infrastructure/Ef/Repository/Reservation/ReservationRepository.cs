@@ -78,4 +78,14 @@ public class ReservationRepository : IReservationRepository
 
         return reservation;
     }
+
+    public DbReservation Update(DbReservation reservation)
+    {
+        using var context = _contextProvider.NewContext();
+
+        context.Reservations.Update(reservation);
+        context.SaveChanges();
+
+        return reservation;
+    }
 }
