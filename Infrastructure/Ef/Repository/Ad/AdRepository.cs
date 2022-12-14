@@ -1,4 +1,5 @@
 ﻿//using Domain;
+
 using Infrastructure.Ef.DbEntities;
 using Infrastructure.Ef.Repository.Reservation;
 using Infrastructure.Utils;
@@ -37,19 +38,24 @@ public class AdRepository : IAdRepository
 
         return context.Ads.Where(item => item.Country == country).Select(item => item.City).Distinct().ToList();
     }
-/*
+
     public IEnumerable<DbAd> FetchRange(FilteringAd filter)
     {
+        if (filter.Limit == null || filter.Offset == null)
+            throw new Exception("Limit and offset cannot be null");
+
         using var context = _contextProvider.NewContext();
-        
-        return context.Ads.Where(ad => (filter.StatusId == null || ad.AdStatusId == filter.StatusId)
-                                && (filter.Country == null || ad.Country == filter.Country)
-                                && (filter.City == null || ad.City == filter.City)
-                                && (filter.PricePerNight == null || ad.PricePerNight <= filter.PricePerNight)
-                                && (filter.NumberOfPersons == null || ad.NumberOfPersons >= filter.NumberOfPersons)
-                                ).Skip(filter.Offset).Take(filter.Limit).ToList();
-    }*/
-    
+
+        return context.Ads.Where(ad =>
+                (filter.StatusId == null || ad.AdStatusId == filter.StatusId)
+                && (filter.Country == null || ad.Country == filter.Country)
+                && (filter.City == null || ad.City == filter.City)
+                && (filter.PricePerNight == null || ad.PricePerNight <= filter.PricePerNight)
+                && (filter.NumberOfPersons == null ||
+                    ad.NumberOfPersons >= filter.NumberOfPersons))
+            .Skip((int)filter.Offset).Take((int)filter.Limit).ToList();
+    }
+
     public IEnumerable<DbAd> FetchByUserId(int id)
     {
         using var context = _contextProvider.NewContext();
@@ -76,7 +82,7 @@ public class AdRepository : IAdRepository
 
         return ad;
     }
-    
+
     public DbAd FetchBySlug(string slug)
     {
         using var context = _contextProvider.NewContext();
@@ -108,16 +114,16 @@ public class AdRepository : IAdRepository
 
         return ad;
     }
-    
+
     public IEnumerable<DbAd> FilterAds(FilteringAd filter)
     {
         using var context = _contextProvider.NewContext();
-        
+
         return context.Ads.Where(ad => (filter.StatusId == null || ad.AdStatusId == filter.StatusId)
-                                            && (filter.Country == null || ad.Country == filter.Country)
-                                            && (filter.City == null || ad.City == filter.City)
-                                            && (filter.PricePerNight == null || ad.PricePerNight <= filter.PricePerNight)
-                                            && (filter.NumberOfPersons == null || ad.NumberOfPersons >= filter.NumberOfPersons)).ToList();
+                                       && (filter.Country == null || ad.Country == filter.Country)
+                                       && (filter.City == null || ad.City == filter.City)
+                                       && (filter.PricePerNight == null || ad.PricePerNight <= filter.PricePerNight)
+                                       && (filter.NumberOfPersons == null ||
+                                           ad.NumberOfPersons >= filter.NumberOfPersons)).ToList();
     }
-    
 }
