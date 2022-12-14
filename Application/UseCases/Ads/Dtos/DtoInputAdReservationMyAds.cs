@@ -1,13 +1,11 @@
-﻿namespace Application.UseCases.Ads.Dtos;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
-public class DtoInputAdReservationMyAds {
-    public int Id { get; set; }
-    public DateTime Creation { get; set; }
-    public string adSlug { get; set; }
-    public DateTime ArrivalDate { get; set; }
-    public DateTime LeaveDate { get; set; }
+namespace Application.UseCases.Ads.Dtos;
 
-    public DtoOutputMyAdsAd.DtoOutputAdReservationMyAds.DtoReservationStatusMyAds StatusMyAds { get; set; }
-    public DtoOutputMyAdsAd.DtoOutputAdReservationMyAds.DtoRenterMyAds RenterMyAds { get; set; }
-
+public class DtoInputAdReservationMyAds
+{
+    [JsonIgnore] public int userId { get; set; }
+    [Required] public int Id { get; set; }
+    [Required] public string adSlug { get; set; }
 }

@@ -33,10 +33,13 @@ public class UseCaseConfirmReservation : IUseCaseWriter<DtoOutputMyAdsAd.DtoOutp
     
     public DtoOutputMyAdsAd.DtoOutputAdReservationMyAds Execute(DtoInputAdReservationMyAds reservation)
     {
-        var dbReservation = _reservationRepository.FindById(reservation.Id);
-        
         // Récupérer l'annonce avec la reservationId
         var ad = _adService.FetchBySlug(reservation.adSlug);
+
+        if (ad.Owner.Id != reservation.userId)
+            throw new Exception("Vous n'avez pas le droit de modifier cette annonce");
+                
+        var dbReservation = _reservationRepository.FindById(reservation.Id);
 
         // Récupérer toutes les réservations en attente et acceptées
         var reservationsList = _reservationRepository.FilterByAdId(ad.Id);
