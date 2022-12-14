@@ -30,7 +30,9 @@ public class AdController : ControllerBase
     private readonly UseCaseFetchDistinctsCountries _useCaseFetchDistinctsCountries;
     private readonly UseCaseFetchDistinctsCitiesByCountry _useCaseFetchDistinctsCitiesByCountry;
     private readonly UseCaseFetchAllReservationByAd _useCaseFetchAllReservationByAd;
-
+    private readonly UseCaseConfirmReservation _useCaseConfirmReservation;
+    private readonly UseCaseRefuseReservation _useCaseRefuseReservation;
+    
     public AdController(
         UseCaseCreateAd useCaseCreateAd,
         UseCaseDeleteAd useCaseDeleteAd,
@@ -47,7 +49,9 @@ public class AdController : ControllerBase
         UseCaseFetchDistinctsCountries useCaseFetchDistinctsCountries,
         UseCaseFetchDistinctsCitiesByCountry useCaseFetchDistinctsCitiesByCountry,
         UseCaseFetchAllReservationByAd useCaseFetchAllReservationByAd,
-        IAdService adService
+        IAdService adService,
+        UseCaseConfirmReservation useCaseConfirmReservation,
+        UseCaseRefuseReservation useCaseRefuseReservation
     )
     {
         _useCaseCreateAd = useCaseCreateAd;
@@ -66,6 +70,8 @@ public class AdController : ControllerBase
         _useCaseFetchDistinctsCitiesByCountry = useCaseFetchDistinctsCitiesByCountry;
         _useCaseFetchAllReservationByAd = useCaseFetchAllReservationByAd;
         _adService = adService;
+        _useCaseConfirmReservation = useCaseConfirmReservation;
+        _useCaseRefuseReservation = useCaseRefuseReservation;
     }
 
 
@@ -264,6 +270,27 @@ public class AdController : ControllerBase
     {
         return Ok(_useCaseUpdateAd.Execute(dto));
     }
+
+    [HttpPut]
+    [Route("confirmReservation")]
+    [Authorize(Roles = "hote")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public ActionResult<DtoOutputMyAdsAd.DtoOutputAdReservationMyAds> ConfirmReservation(DtoInputAdReservationMyAds dto)
+    {
+        return Ok(_useCaseConfirmReservation.Execute(dto));
+    }    
+    
+    [HttpPut]
+    [Route("refuseReservation")]
+    [Authorize(Roles = "hote")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public ActionResult<DtoOutputMyAdsAd.DtoOutputAdReservationMyAds> RefuseReservation(DtoInputAdReservationMyAds dto)
+    {
+        return Ok(_useCaseRefuseReservation.Execute(dto));
+    }
+
 
     [HttpDelete]
     [Route("reservation/{id:int}")]
