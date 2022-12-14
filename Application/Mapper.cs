@@ -52,6 +52,7 @@ public class Mapper
             cfg.CreateMap<Ad, DtoOutputMyAdsAd>();
             cfg.CreateMap<DtoInputFilteringAds, FilteringAd>();
             cfg.CreateMap<Reservation, DtoOutputUserReservation>();
+            cfg.CreateMap<DbReservation, DtoOutputMyAdsAd.DtoOutputAdReservationMyAds>();
 
             //AdStatus
             cfg.CreateMap<DbAdStatus, AdStatus>();
