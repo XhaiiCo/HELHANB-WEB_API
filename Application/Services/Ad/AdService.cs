@@ -6,6 +6,7 @@ using Infrastructure.Ef.Repository.Ad;
 using Infrastructure.Ef.Repository.Ad.AdStatus;
 using Infrastructure.Ef.Repository.AdPicture;
 using Infrastructure.Ef.Repository.HouseFeature;
+using Infrastructure.Ef.Repository.Reservation;
 
 namespace Application.Services.Ad;
 
@@ -17,17 +18,19 @@ public class AdService : IAdService
     private readonly IHouseFeatureRepository _houseFeatureRepository;
     private readonly IAdPictureRepository _adPictureRepository;
     private readonly IAdStatusRepository _adStatusRepository;
+    private readonly IReservationRepository _reservationRepository;
 
     public AdService(IAdRepository adRepository,
         IUserService userService,
         IHouseFeatureRepository houseFeatureRepository,
-        IAdPictureRepository adPictureRepository, IAdStatusRepository adStatusRepository)
+        IAdPictureRepository adPictureRepository, IAdStatusRepository adStatusRepository, IReservationRepository reservationRepository)
     {
         _adRepository = adRepository;
         _userService = userService;
         _houseFeatureRepository = houseFeatureRepository;
         _adPictureRepository = adPictureRepository;
         _adStatusRepository = adStatusRepository;
+        _reservationRepository = reservationRepository;
     }
 
     public Domain.Ad FetchById(int id)
@@ -83,4 +86,38 @@ public class AdService : IAdService
         ad.Status = Mapper.GetInstance().Map<AdStatus>(_adStatusRepository.FetchById(dbAd.AdStatusId));
         return ad;
     }
+    
+    public IEnumerable<Domain.Ad> FilterAds(FilteringAd filter)
+    {
+        var dbAds = _adRepository.FilterAds(filter).ToList();
+
+        if (filter.ArrivalDate == null && filter.LeaveDate == null) return dbAds.Select(MapToAd);
+        
+        var filterReservation = new Domain.Reservation
+        {
+            DateTimeRange = new DateTimeRange(DateTime.Parse(filter.ArrivalDate).Date,
+                DateTime.Parse(filter.LeaveDate).Date)
+        };
+
+        Domain.Reservation.ValidNewReservation(filterReservation);
+            
+        for (var i = dbAds.Count - 1; i >= 0; i--)
+        {
+            var dbReservations = _reservationRepository.FilterByAdId(dbAds[i].Id)
+                .Where(dbReservation => dbReservation.ReservationStatusId == 3);
+            
+            var reservations = dbReservations.Select(dbReservation => new Domain.Reservation
+            {
+                DateTimeRange = new DateTimeRange(dbReservation.ArrivalDate, dbReservation.LeaveDate)
+            });
+
+            if (!Domain.Reservation.IsDateAvailable(reservations, filterReservation))
+            {
+                dbAds.RemoveAt(i);
+            }
+        }
+
+        return dbAds.Select(MapToAd);
+    }
+
 }

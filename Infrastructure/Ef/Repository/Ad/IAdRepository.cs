@@ -19,7 +19,6 @@ public interface IAdRepository
 
     DbAd Delete(DbAd ad);
     DbAd Update(DbAd ad);
-
-    // DbAd FetchByCountry(string country);
-    int Count(FilteringAd filter);
+    
+    public IEnumerable<DbAd> FilterAds(FilteringAd filter);
 }

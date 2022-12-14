@@ -108,53 +108,16 @@ public class AdRepository : IAdRepository
 
         return ad;
     }
-
-    /*public DbAd FetchByCountry(string country)
-    {
-        using var context = _contextProvider.NewContext();
-        var ad = context.Ads.FirstOrDefault(a => a.Country == country);
-
-        //if (ad == null)
-        
-        
-    }*/
     
-    public int Count(FilteringAd filter)
+    public IEnumerable<DbAd> FilterAds(FilteringAd filter)
     {
         using var context = _contextProvider.NewContext();
         
-        var dbAds = context.Ads.Where(ad => (filter.StatusId == null || ad.AdStatusId == filter.StatusId)
-                                       && (filter.Country == null || ad.Country == filter.Country)
-                                       && (filter.City == null || ad.City == filter.City)
-                                       && (filter.PricePerNight == null || ad.PricePerNight <= filter.PricePerNight)
-                                       && (filter.NumberOfPersons == null || ad.NumberOfPersons >= filter.NumberOfPersons)).ToList();
-
-
-        if (filter.ArrivalDate == null || filter.LeaveDate == null) return dbAds.Count;
-        
-        /*
-        var filterReservation = new Domain.Reservation
-        {
-            DateTimeRange = new DateTimeRange(DateTime.Parse(filter.ArrivalDate).Date, DateTime.Parse(filter.LeaveDate).Date)
-        };
-
-        Domain.Reservation.ValidNewReservation(filterReservation);
-
-        for (var i = dbAds.Count - 1; i >= 0; i--)
-        {
-            var dbReservations = _reservationRepository.FilterByAdId(dbAds[i].Id).Where(dbReservation => dbReservation.ReservationStatusId == 3);
-
-            var reservations = dbReservations.Select(dbReservation =>  new Domain.Reservation
-            {
-                DateTimeRange = new DateTimeRange(dbReservation.ArrivalDate, dbReservation.LeaveDate)
-            });
-
-            if(!Domain.Reservation.IsDateAvailable(reservations, filterReservation))
-            {
-                dbAds.RemoveAt(i);
-            }
-        }
-        */
-        return dbAds.Count;
+        return context.Ads.Where(ad => (filter.StatusId == null || ad.AdStatusId == filter.StatusId)
+                                            && (filter.Country == null || ad.Country == filter.Country)
+                                            && (filter.City == null || ad.City == filter.City)
+                                            && (filter.PricePerNight == null || ad.PricePerNight <= filter.PricePerNight)
+                                            && (filter.NumberOfPersons == null || ad.NumberOfPersons >= filter.NumberOfPersons)).ToList();
     }
+    
 }

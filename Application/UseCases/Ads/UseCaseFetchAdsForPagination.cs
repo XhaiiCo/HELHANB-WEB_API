@@ -15,12 +15,10 @@ public class UseCaseFetchAdsForPagination : IUseCaseParameterizedQuery<IEnumerab
         _adService = adService;
     }
 
-    public IEnumerable<DtoOutputAdsSummary> Execute(DtoInputFilteringAds param)
+    public IEnumerable<DtoOutputAdsSummary> Execute(DtoInputFilteringAds dto)
     {
-        var ads = param.Limit.HasValue && param.Offset.HasValue
-            ? _adService.FetchRange(param)
-            : _adService.FetchAll(param);
-
+        var ads = _adService.FilterAds(Mapper.GetInstance().Map<FilteringAd>(dto));
+        
         var result = Mapper.GetInstance().Map<IEnumerable<DtoOutputAdsSummary>>(ads);
         foreach (var dtoOutputAdsSummary in result)
         {
