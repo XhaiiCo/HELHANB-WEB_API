@@ -11,21 +11,4 @@ public class User
     public string? ProfilePicturePath { get; set; }
 
     public Role Role { get; set; }
-
-    private List<Ad> _Ads;
-
-    public List<Ad> Ads
-    {
-        get => _Ads;
-        set { value.ForEach(ad => AddAd(ad)); }
-    }
-
-    public bool AddAd(Ad ad)
-    {
-        if (this.Role?.Name != "hote") return false;
-
-        this.Ads.Add(ad);
-
-        return true;
-    }
 }
