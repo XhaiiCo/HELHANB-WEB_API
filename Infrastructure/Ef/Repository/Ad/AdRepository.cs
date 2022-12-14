@@ -37,7 +37,7 @@ public class AdRepository : IAdRepository
 
         return context.Ads.Where(item => item.Country == country).Select(item => item.City).Distinct().ToList();
     }
-
+/*
     public IEnumerable<DbAd> FetchRange(FilteringAd filter)
     {
         using var context = _contextProvider.NewContext();
@@ -48,7 +48,7 @@ public class AdRepository : IAdRepository
                                 && (filter.PricePerNight == null || ad.PricePerNight <= filter.PricePerNight)
                                 && (filter.NumberOfPersons == null || ad.NumberOfPersons >= filter.NumberOfPersons)
                                 ).Skip(filter.Offset).Take(filter.Limit).ToList();
-    }
+    }*/
     
     public IEnumerable<DbAd> FetchByUserId(int id)
     {

@@ -59,14 +59,14 @@ public class AdService : IAdService
 
         return ads;
     }
-
+/*
     public IEnumerable<Domain.Ad> FetchRange(DtoInputFilteringAds filter)
     {
         var dbAds = _adRepository.FetchRange(Mapper.GetInstance().Map<FilteringAd>(filter));
         var ads = dbAds.Select(MapToAd);
 
         return ads;
-    }
+    }*/
 
     public Domain.Ad MapToAd(DbAd dbAd)
     {
@@ -91,32 +91,38 @@ public class AdService : IAdService
     {
         var dbAds = _adRepository.FilterAds(filter).ToList();
 
-        if (filter.ArrivalDate == null && filter.LeaveDate == null) return dbAds.Select(MapToAd);
-        
-        var filterReservation = new Domain.Reservation
+        if (filter.ArrivalDate != null && filter.LeaveDate != null)
         {
-            DateTimeRange = new DateTimeRange(DateTime.Parse(filter.ArrivalDate).Date,
-                DateTime.Parse(filter.LeaveDate).Date)
-        };
-
-        Domain.Reservation.ValidNewReservation(filterReservation);
-            
-        for (var i = dbAds.Count - 1; i >= 0; i--)
-        {
-            var dbReservations = _reservationRepository.FilterByAdId(dbAds[i].Id)
-                .Where(dbReservation => dbReservation.ReservationStatusId == 3);
-            
-            var reservations = dbReservations.Select(dbReservation => new Domain.Reservation
+            var filterReservation = new Domain.Reservation
             {
-                DateTimeRange = new DateTimeRange(dbReservation.ArrivalDate, dbReservation.LeaveDate)
-            });
+                DateTimeRange = new DateTimeRange(DateTime.Parse(filter.ArrivalDate).Date,
+                    DateTime.Parse(filter.LeaveDate).Date)
+            };
 
-            if (!Domain.Reservation.IsDateAvailable(reservations, filterReservation))
+            Domain.Reservation.ValidNewReservation(filterReservation);
+                
+            for (var i = dbAds.Count - 1; i >= 0; i--)
             {
-                dbAds.RemoveAt(i);
+                var dbReservations = _reservationRepository.FilterByAdId(dbAds[i].Id)
+                    .Where(dbReservation => dbReservation.ReservationStatusId == 3);
+                
+                var reservations = dbReservations.Select(dbReservation => new Domain.Reservation
+                {
+                    DateTimeRange = new DateTimeRange(dbReservation.ArrivalDate, dbReservation.LeaveDate)
+                });
+
+                if (!Domain.Reservation.IsDateAvailable(reservations, filterReservation))
+                {
+                    dbAds.RemoveAt(i);
+                }
             }
         }
-
+        
+        if (filter.Offset != null && filter.Limit != null)
+        {
+            return dbAds.Select(MapToAd).Skip(Convert.ToInt32(filter.Offset)).Take(Convert.ToInt32(filter.Limit));
+        }
+        
         return dbAds.Select(MapToAd);
     }
 
