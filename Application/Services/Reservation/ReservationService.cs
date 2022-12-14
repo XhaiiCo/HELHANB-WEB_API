@@ -4,22 +4,27 @@ using Infrastructure.Ef;
 using Infrastructure.Ef.DbEntities;
 using Infrastructure.Ef.Repository.Ad;
 using Infrastructure.Ef.Repository.AdStatus;
+using Infrastructure.Ef.Repository.Reservation;
 
 namespace Application.Services;
 
 public class ReservationService : IReservationService
 {
     private readonly IUserRepository _userRepository;
+
+    private readonly IReservationRepository _reservationRepository;
     private readonly IReservationStatusRepository _reservationStatusRepository;
     private readonly IAdRepository _adRepository;
 
     public ReservationService(
         IUserRepository userRepository,
+        IReservationRepository reservationRepository,
         IReservationStatusRepository reservationStatusRepository,
         IAdRepository adRepository
     )
     {
         _userRepository = userRepository;
+        _reservationRepository = reservationRepository;
         _reservationStatusRepository = reservationStatusRepository;
         _adRepository = adRepository;
     }
@@ -42,5 +47,17 @@ public class ReservationService : IReservationService
         result.Ad = mapper.Map<Domain.Ad>(_adRepository.FetchById(dbReservation.AdId));
 
         return result;
+    }
+
+    public DbReservation ConfirmReservation(DbReservation dbReservation)
+    {
+        dbReservation.ReservationStatusId = 3;
+        return _reservationRepository.Update(dbReservation);
+    }
+
+    public DbReservation RefuseReservation(DbReservation dbReservation)
+    {
+        dbReservation.ReservationStatusId = 2;
+        return _reservationRepository.Update(dbReservation);
     }
 }

@@ -127,6 +127,8 @@ builder.Services.AddScoped<UseCaseRemoveReservation>();
 builder.Services.AddScoped<UseCaseFetchDistinctsCountries>();
 builder.Services.AddScoped<UseCaseFetchDistinctsCitiesByCountry>();
 builder.Services.AddScoped<UseCaseFetchAllReservationByAd>();
+builder.Services.AddScoped<UseCaseConfirmReservation>();
+builder.Services.AddScoped<UseCaseRefuseReservation>();
 
 // Services
 builder.Services.AddScoped<IUserService, UserService>();
