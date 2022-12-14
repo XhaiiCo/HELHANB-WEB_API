@@ -44,18 +44,14 @@ public class PictureService : IPictureService
 
     public string GetExtension(string base64)
     {
-        char firstChar = base64[0];
+        var firstChar = base64[0];
 
-        if (firstChar == '/')
+        return firstChar switch
         {
-            return ".jpeg";
-        }
-        else if (firstChar == 'i')
-        {
-            return ".png";
-        }
-
-        return ".webp";
+            '/' => ".jpeg",
+            'i' => ".png",
+            _ => ".webp"
+        };
     }
 
     public void CreateDirectory(string path)
@@ -108,13 +104,6 @@ public class PictureService : IPictureService
     }
     public bool ContainsImage(IEnumerable<byte[]> images, byte[] image)
     {
-        foreach (var img in images)
-        {
-            if (image.SequenceEqual(img))
-            {
-                return true;
-            }
-        }
-        return false;
+        return images.Any(image.SequenceEqual);
     }
 }
