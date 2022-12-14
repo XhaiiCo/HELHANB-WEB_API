@@ -101,6 +101,7 @@ public class AdController : ControllerBase
     [HttpDelete]
     [Route("{slug}")]
     [Authorize(Roles = "administrateur,super-administrateur")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public ActionResult<DtoOutputAd> DeleteAd(string slug)
