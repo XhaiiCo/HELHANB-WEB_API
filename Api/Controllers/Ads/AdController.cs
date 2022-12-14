@@ -32,7 +32,7 @@ public class AdController : ControllerBase
     private readonly UseCaseFetchAllReservationByAd _useCaseFetchAllReservationByAd;
     private readonly UseCaseConfirmReservation _useCaseConfirmReservation;
     private readonly UseCaseRefuseReservation _useCaseRefuseReservation;
-    
+
     public AdController(
         UseCaseCreateAd useCaseCreateAd,
         UseCaseDeleteAd useCaseDeleteAd,
@@ -284,11 +284,21 @@ public class AdController : ControllerBase
     [Authorize(Roles = "hote")]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public ActionResult<DtoOutputMyAdsAd.DtoOutputAdReservationMyAds> ConfirmReservation(DtoInputAdReservationMyAds dto)
     {
-        return Ok(_useCaseConfirmReservation.Execute(dto));
-    }    
-    
+        dto.userId = int.Parse(User.Identity?.Name);
+
+        try
+        {
+            return Ok(_useCaseConfirmReservation.Execute(dto));
+        }
+        catch (Exception e)
+        {
+            return Unauthorized(e.Message);
+        }
+    }
+
     [HttpPut]
     [Route("refuseReservation")]
     [Authorize(Roles = "hote")]
@@ -296,7 +306,15 @@ public class AdController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public ActionResult<DtoOutputMyAdsAd.DtoOutputAdReservationMyAds> RefuseReservation(DtoInputAdReservationMyAds dto)
     {
-        return Ok(_useCaseRefuseReservation.Execute(dto));
+        dto.userId = int.Parse(User.Identity?.Name);
+        try
+        {
+            return Ok(_useCaseRefuseReservation.Execute(dto));
+        }
+        catch (Exception e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
 
 
