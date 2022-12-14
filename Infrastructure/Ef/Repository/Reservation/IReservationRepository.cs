@@ -9,5 +9,5 @@ public interface IReservationRepository
     IEnumerable<DbReservation> FilterByRenterId(int renterId);
     DbReservation FindById(int id);
     DbReservation Delete(DbReservation reservation);
-    
+    DbReservation Update(DbReservation reservation);
 }

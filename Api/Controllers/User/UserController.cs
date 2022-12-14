@@ -22,7 +22,6 @@ public class UserController : ControllerBase
     private readonly UseCaseFetchAllUsers _useCaseFetchAllUsers;
     private readonly UseCaseCreateUser _useCaseCreateUser;
     private readonly UseCaseLoginUser _useCaseLoginUser;
-    private readonly UseCaseUpdateUserProfilePicture _useCaseUpdateUserProfilePicture;
     private readonly UseCaseFetchUserById _useCaseFetchUserById;
     private readonly UseCaseDeleteUserById _useCaseDeleteUserById;
     private readonly UseCaseUpdatePasswordUser _useCaseUpdatePasswordUser;
@@ -38,7 +37,6 @@ public class UserController : ControllerBase
         ITokenService tokenService,
         IConfiguration config,
         IUserService userService,
-        UseCaseUpdateUserProfilePicture useCaseUpdateUserProfilePicture,
         UseCaseFetchUserById useCaseFetchUserById,
         IPictureService pictureService,
         UseCaseDeleteUserById useCaseDeleteUserById,
@@ -55,7 +53,6 @@ public class UserController : ControllerBase
         _tokenService = tokenService;
         _config = config;
         _userService = userService;
-        _useCaseUpdateUserProfilePicture = useCaseUpdateUserProfilePicture;
         _useCaseFetchUserById = useCaseFetchUserById;
         _pictureService = pictureService;
         _useCaseDeleteUserById = useCaseDeleteUserById;
@@ -212,81 +209,6 @@ public class UserController : ControllerBase
         {
             return Conflict(e.Message);
         }
-    }
-
-    [HttpPut]
-    [Authorize]
-    [Route("profilePicture")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public ActionResult<DtoOutputUser> UpdateProfilePicture(IFormFile? profilePicture)
-    {
-        try
-        {
-            var id = int.Parse(User.Identity?.Name);
-            var currentUser = _userService.FetchById(id);
-
-            //If the protilePicture is null remove it
-            if (profilePicture == null)
-            {
-                //Remove the current profile picture if exist
-                if (currentUser.ProfilePicturePath != null && currentUser.ProfilePicturePath !=
-                    "\\Upload\\ProfilePicture\\default_user_pic.png")
-                {
-                    _pictureService.RemoveFile(currentUser.ProfilePicturePath);
-                }
-
-                var dtoInputUpdateProfilePictureUser = new DtoInputUpdateProfilePictureUser
-                {
-                    Id = id,
-                    ProfilePicturePath = "\\Upload\\ProfilePicture\\default_user_pic.png"
-                };
-                var user = _useCaseUpdateUserProfilePicture.Execute(dtoInputUpdateProfilePictureUser);
-
-                return Ok(user);
-            }
-
-            //Else add the  new profile picture
-            else if (profilePicture.Length > 0)
-            {
-                var basePath = "\\Upload\\ProfilePicture\\";
-
-                //Check the file type
-                if (!_pictureService.ValidPictureType(profilePicture.ContentType))
-                {
-                    return Unauthorized("Extension d'image invalide acceptés: jpeg, png");
-                }
-
-                //Create a unique file name
-                var fileName = _pictureService.GenerateUniqueFileName(id) + profilePicture.FileName;
-
-
-                //Remove the current profile picture if exist
-                if (currentUser.ProfilePicturePath != null && currentUser.ProfilePicturePath !=
-                    "\\Upload\\ProfilePicture\\default_user_pic.png")
-                {
-                    _pictureService.RemoveFile(currentUser.ProfilePicturePath);
-                }
-
-                //Update the user
-                var dtoInputUpdateProfilePictureUser = new DtoInputUpdateProfilePictureUser
-                {
-                    Id = id,
-                    ProfilePicturePath = basePath + fileName
-                };
-                var user = _useCaseUpdateUserProfilePicture.Execute(dtoInputUpdateProfilePictureUser);
-
-                //Upload the new picture
-                this._pictureService.UploadPicture(basePath, fileName, profilePicture);
-                return Ok(user);
-            }
-        }
-        catch (Exception e)
-        {
-            return Unauthorized(e.Message);
-        }
-
-        return Unauthorized("Failed");
     }
 
     [HttpPut]
