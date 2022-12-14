@@ -1,4 +1,5 @@
-﻿using Application.Services.User;
+﻿using Application.Services.ReservationBook;
+using Application.Services.User;
 using Application.UseCases.Ads.Dtos;
 using Domain;
 using Infrastructure.Ef.DbEntities;
@@ -19,11 +20,12 @@ public class AdService : IAdService
     private readonly IAdPictureRepository _adPictureRepository;
     private readonly IAdStatusRepository _adStatusRepository;
     private readonly IReservationRepository _reservationRepository;
+    private readonly IReservationBookService _reservationBookService;
 
     public AdService(IAdRepository adRepository,
         IUserService userService,
         IHouseFeatureRepository houseFeatureRepository,
-        IAdPictureRepository adPictureRepository, IAdStatusRepository adStatusRepository, IReservationRepository reservationRepository)
+        IAdPictureRepository adPictureRepository, IAdStatusRepository adStatusRepository, IReservationRepository reservationRepository, IReservationBookService reservationBookService)
     {
         _adRepository = adRepository;
         _userService = userService;
@@ -31,6 +33,7 @@ public class AdService : IAdService
         _adPictureRepository = adPictureRepository;
         _adStatusRepository = adStatusRepository;
         _reservationRepository = reservationRepository;
+        _reservationBookService = reservationBookService;
     }
 
     public Domain.Ad FetchById(int id)
@@ -103,6 +106,8 @@ public class AdService : IAdService
                 
             for (var i = dbAds.Count - 1; i >= 0; i--)
             {
+             
+                //retirer ça pour mettre le reservation book service
                 var dbReservations = _reservationRepository.FilterByAdId(dbAds[i].Id)
                     .Where(dbReservation => dbReservation.ReservationStatusId == 3);
                 
@@ -110,7 +115,15 @@ public class AdService : IAdService
                 {
                     DateTimeRange = new DateTimeRange(dbReservation.ArrivalDate, dbReservation.LeaveDate)
                 });
+                
+                //fonctionne pas jsp pq
+                /*
+                var reservationBook = _reservationBookService.FetchByAdId(dbAds[i].Id);
 
+                //Keep only the accepted reservations
+                var reservations = (reservationBook.Where(r => r.ReservationStatus.Id == 3)).Entries();*/
+                
+                
                 if (!Domain.Reservation.IsDateAvailable(reservations, filterReservation))
                 {
                     dbAds.RemoveAt(i);
