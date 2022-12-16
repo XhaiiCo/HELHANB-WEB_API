@@ -23,8 +23,9 @@ public class UseCaseFetchAdBySlug : IUseCaseParameterizedQuery<DtoOutputAdWithRe
         var ad = _adService.FetchBySlug(slug);
 
         var dto = Mapper.GetInstance().Map<DtoOutputAdWithReservations>(ad);
-        
-        var reservations = _reservationRepository.FilterByAdId(ad.Id);
+
+        //Only the accepted reservation
+        var reservations = _reservationRepository.FilterByAdId(ad.Id).Where(item => item.ReservationStatusId == 3);
 
         var reservationsList = reservations.Select(reservation =>
             new DtoOutputAdWithReservations.DtoOutputAdReservation

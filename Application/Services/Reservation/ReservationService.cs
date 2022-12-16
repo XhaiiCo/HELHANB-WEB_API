@@ -46,6 +46,13 @@ public class ReservationService : IReservationService
         //Add the ad
         result.Ad = mapper.Map<Domain.Ad>(_adRepository.FetchById(dbReservation.AdId));
 
+        //Add the dateTimeRange
+        result.DateTimeRange = new DateTimeRange
+        {
+            ArrivalDate = dbReservation.ArrivalDate,
+            LeaveDate = dbReservation.LeaveDate,
+        };
+
         return result;
     }
 

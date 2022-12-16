@@ -47,15 +47,15 @@ public class Reservation
     {
         //At least 1 night
         //The arrival date cannot be in the past
-        if(IsInThePast(reservation))
+        if (IsInThePast(reservation))
             throw new Exception("La date d'arrivée ne peut pas être passée");
 
         //A reservation must be for at least the following day
-        if(IsForTheSameDay(reservation))
+        if (IsForTheSameDay(reservation))
             throw new Exception("Une réservation doit être au minimum pour le lendemain");
-            
+
         //The reservation must be for at least one night
-        if(IsLessThanOneNight(reservation))
+        if (IsLessThanOneNight(reservation))
             throw new Exception("La réservation doit au moins faire une nuit");
 
         return true;
