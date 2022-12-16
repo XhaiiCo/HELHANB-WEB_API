@@ -6,7 +6,7 @@ namespace Application.UseCases.Reservations.Dtos;
 public class DtoInputCreateReservation
 {
     [Required] public string AdSlug { get; set; }
-    [Required] public int RenterId { get; set; }
+    [JsonIgnore] public int RenterId { get; set; }
 
     [Required]
     public DtoInputDateOnly ArrivalDate { get; set; }

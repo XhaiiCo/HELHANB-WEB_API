@@ -161,8 +161,8 @@ public class AdController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public ActionResult<DtoOutputReservation> CreateReservation(DtoInputCreateReservation dto)
     {
-        //Check that this is the id of the logged in user
-        if ("" + dto.RenterId != User.Identity?.Name) return Unauthorized();
+        var renterId = int.Parse(User.Identity?.Name);
+        dto.RenterId = renterId;
 
         try
         {
@@ -305,6 +305,7 @@ public class AdController : ControllerBase
     [Authorize(Roles = "hote")]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public ActionResult<DtoOutputMyAdsAd.DtoOutputAdReservationMyAds> RefuseReservation(DtoInputAdReservationMyAds dto)
     {
         dto.userId = int.Parse(User.Identity?.Name);
