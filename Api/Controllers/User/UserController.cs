@@ -29,6 +29,7 @@ public class UserController : ControllerBase
     private readonly UseCaseChangeRoleToHostUser _useCaseChangeRoleToHostUser;
     private readonly UseCaseChangeRole _useCaseChangeRole;
     private readonly UseCaseUpdateProfilePictureBase64 _useCaseUpdateProfilePictureBase64;
+    private readonly UseCaseCountUsers _useCaseCountUsers;
 
     public UserController(
         UseCaseFetchAllUsers useCaseFetchAllUsers,
@@ -44,8 +45,7 @@ public class UserController : ControllerBase
         UseCaseUpdateUser useCaseUpdateUser,
         UseCaseChangeRoleToHostUser useCaseChangeRoleToHostUser,
         UseCaseChangeRole useCaseChangeRole,
-        UseCaseUpdateProfilePictureBase64 useCaseUpdateProfilePictureBase64
-    )
+        UseCaseUpdateProfilePictureBase64 useCaseUpdateProfilePictureBase64, UseCaseCountUsers useCaseCountUsers)
     {
         _useCaseFetchAllUsers = useCaseFetchAllUsers;
         _useCaseCreateUser = useCaseCreateUser;
@@ -61,6 +61,7 @@ public class UserController : ControllerBase
         _useCaseChangeRoleToHostUser = useCaseChangeRoleToHostUser;
         _useCaseChangeRole = useCaseChangeRole;
         _useCaseUpdateProfilePictureBase64 = useCaseUpdateProfilePictureBase64;
+        _useCaseCountUsers = useCaseCountUsers;
     }
 
     private void AppendCookies(string token)
@@ -86,13 +87,33 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Roles = "administrateur,super-administrateur")]
+    [Route("count")]
+    [Authorize(Roles = "administrateur, super-administrateur")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public ActionResult<IEnumerable<DtoOutputUser>> FetchAll([FromQuery] string? role, [FromQuery] string? search)
+    public ActionResult<int> CountUsers([FromQuery] string? role, [FromQuery] string? search)
+    {
+        return Ok(_useCaseCountUsers.Execute(new DtoInputFilteringUsers
+        {
+            Role = role,
+            Search = search
+        }));
+    }
+    
+    [HttpGet]
+    [Authorize(Roles = "administrateur, super-administrateur")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public ActionResult<IEnumerable<DtoOutputUser>> FetchAll(
+        [FromQuery] int? limit,
+        [FromQuery] int? offset,
+        [FromQuery] string? role, 
+        [FromQuery] string? search)
     {
         return Ok(_useCaseFetchAllUsers.Execute(new DtoInputFilteringUsers
         {
+            Limit = limit,
+            Offset = offset,
             Role = role,
             Search = search
         }));

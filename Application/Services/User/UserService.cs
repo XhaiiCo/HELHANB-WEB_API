@@ -63,6 +63,8 @@ public class UserService : IUserService
 
             filteringUser = new FilteringUser
             {
+                Limit = dtoInputFilteringUsers.Limit,
+                Offset = dtoInputFilteringUsers.Offset,
                 RoleId = roles.FirstOrDefault(role => role.Name == dtoInputFilteringUsers.Role)?.Id,
                 Search = dtoInputFilteringUsers.Search
             };

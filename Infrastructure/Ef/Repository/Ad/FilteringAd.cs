@@ -9,8 +9,6 @@ public class FilteringAd
     public string? City { get; set; }
     public float? PricePerNight { get; set; }
     public int? NumberOfPersons { get; set; }
-    
     public string? ArrivalDate { get; set; }
-    
     public string? LeaveDate { get; set; }
 }

@@ -20,11 +20,18 @@ public class UserRepository : IUserRepository
         
         if (filteringUser == null) return context.Users.ToList();
         
-        return context.Users.Where(user => (filteringUser.RoleId == null || user.RoleId == filteringUser.RoleId) && 
+        var dbUsers = context.Users.Where(user => (filteringUser.RoleId == null || user.RoleId == filteringUser.RoleId) && 
                                            (filteringUser.Search == null || 
                                             (user.FirstName.ToLower().Contains(filteringUser.Search.ToLower()) ||
                                              user.LastName.ToLower().Contains(filteringUser.Search.ToLower()) ||
                                              user.Email.ToLower().Contains(filteringUser.Search.ToLower())))).ToList();
+
+        if (filteringUser.Offset != null && filteringUser.Limit != null)
+        {
+            return dbUsers.Skip(Convert.ToInt32(filteringUser.Offset)).Take(Convert.ToInt32(filteringUser.Limit));
+        }
+
+        return dbUsers;
     }
     
     public DbUser Create(DbUser user)

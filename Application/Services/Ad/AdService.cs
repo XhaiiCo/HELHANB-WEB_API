@@ -106,8 +106,6 @@ public class AdService : IAdService
                 
             for (var i = dbAds.Count - 1; i >= 0; i--)
             {
-             
-                //retirer ça pour mettre le reservation book service
                 var dbReservations = _reservationRepository.FilterByAdId(dbAds[i].Id)
                     .Where(dbReservation => dbReservation.ReservationStatusId == 3);
                 
@@ -115,14 +113,6 @@ public class AdService : IAdService
                 {
                     DateTimeRange = new DateTimeRange(dbReservation.ArrivalDate, dbReservation.LeaveDate)
                 });
-                
-                //fonctionne pas jsp pq
-                /*
-                var reservationBook = _reservationBookService.FetchByAdId(dbAds[i].Id);
-
-                //Keep only the accepted reservations
-                var reservations = (reservationBook.Where(r => r.ReservationStatus.Id == 3)).Entries();*/
-                
                 
                 if (!Domain.Reservation.IsDateAvailable(reservations, filterReservation))
                 {
