@@ -166,7 +166,8 @@ public class AdController : ControllerBase
 
         try
         {
-            return StatusCode(201, _useCaseCreateReservation.Execute(dto));
+            var result = _useCaseCreateReservation.Execute(dto);
+            return StatusCode(201, result);
         }
         catch (Exception e)
         {
