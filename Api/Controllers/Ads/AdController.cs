@@ -283,9 +283,18 @@ public class AdController : ControllerBase
     [Route("adUpdate")]
     [Authorize(Roles = "hote")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public ActionResult<DtoOutputAd> UpdateAd(DtoInputUpdateAd dto) //<DtoOutputAd>
     {
-        return Ok(_useCaseUpdateAd.Execute(dto));
+        try
+        {
+            var result = _useCaseUpdateAd.Execute(dto) ;
+            return Ok(result);
+        }
+        catch (Exception e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
 
     [HttpPut]
