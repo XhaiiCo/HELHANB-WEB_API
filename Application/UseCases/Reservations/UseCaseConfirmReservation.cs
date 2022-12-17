@@ -41,6 +41,9 @@ public class UseCaseConfirmReservation : IUseCaseWriter<DtoOutputMyAdsAd.DtoOutp
                 
         var dbReservation = _reservationRepository.FindById(reservation.Id);
 
+        if (dbReservation.ArrivalDate <= DateTime.Now)
+            throw new Exception("Vous ne pouvez pas accepter une réservation passée");
+            
         // Récupérer toutes les réservations en attente et acceptées
         var reservationsList = _reservationRepository.FilterByAdId(ad.Id);
 
