@@ -120,18 +120,7 @@ public class AdController : ControllerBase
             return Conflict(e.Message);
         }
     }
-
-    [HttpGet]
-    [Authorize(Roles = "administrateur,super-administrateur")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public ActionResult<IEnumerable<DtoOutputAd>> FetchAll([FromQuery] int? statusId)
-    {
-        return Ok(_useCaseFetchAllAds.Execute(new DtoInputFilteringAds
-        {
-            StatusId = statusId
-        }));
-    }
-
+    
     [HttpGet]
     [Route("{slug}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -226,9 +215,25 @@ public class AdController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Roles = "administrateur,super-administrateur")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public ActionResult<IEnumerable<DtoOutputAd>> FetchAll(
+        [FromQuery] int? limit,
+        [FromQuery] int? offset, 
+        [FromQuery] int? statusId)
+    {
+        return Ok(_useCaseFetchAllAds.Execute(new DtoInputFilteringAds
+        {
+            Limit = limit,
+            Offset = offset,
+            StatusId = statusId
+        }));
+    }
+    
+    [HttpGet]
     [Route("summary")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public ActionResult<IEnumerable<DtoOutputAdsSummary>> FetchForPagination(
+    public ActionResult<IEnumerable<DtoOutputAdsSummary>> FetchSummaryForPagination(
         [FromQuery] int? limit,
         [FromQuery] int? offset,
         [FromQuery] string? country,

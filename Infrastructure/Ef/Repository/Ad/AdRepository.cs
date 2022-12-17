@@ -22,7 +22,14 @@ public class AdRepository : IAdRepository
     {
         using var context = _contextProvider.NewContext();
 
-        return context.Ads.Where(ad => filter.StatusId == null || ad.AdStatusId == filter.StatusId).ToList();
+        var ads = context.Ads.Where(ad => filter.StatusId == null || ad.AdStatusId == filter.StatusId).ToList();
+        
+        if (filter.Offset != null && filter.Limit != null)
+        {
+            return ads.Skip(Convert.ToInt32(filter.Offset)).Take(Convert.ToInt32(filter.Limit));
+        }
+
+        return ads;
     }
 
     public IEnumerable<string> FetchDistinctsCountries()
