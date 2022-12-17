@@ -191,30 +191,6 @@ public class AdController : ControllerBase
     }
 
     [HttpGet]
-    [Route("count")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public ActionResult<int> CountValidatedAds(
-        [FromQuery] string? country,
-        [FromQuery] string? city,
-        [FromQuery] float? pricePerNight,
-        [FromQuery] int? numberOfPersons,
-        [FromQuery] string? arrivalDate,
-        [FromQuery] string? leaveDate
-    )
-    {
-        return Ok(_useCaseCountValidatedAds.Execute(new DtoInputFilteringAds
-        {
-            StatusId = 3,
-            Country = country,
-            City = city,
-            PricePerNight = pricePerNight,
-            NumberOfPersons = numberOfPersons,
-            ArrivalDate = arrivalDate,
-            LeaveDate = leaveDate
-        }));
-    }
-
-    [HttpGet]
     [Authorize(Roles = "administrateur,super-administrateur")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public ActionResult<IEnumerable<DtoOutputAd>> FetchAll(
@@ -229,6 +205,31 @@ public class AdController : ControllerBase
             StatusId = statusId
         }));
     }
+
+    [HttpGet]
+    [Route("count")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public ActionResult<int> CountValidatedAds(
+        [FromQuery] int? statusId,
+        [FromQuery] string? country,
+        [FromQuery] string? city,
+        [FromQuery] float? pricePerNight,
+        [FromQuery] int? numberOfPersons,
+        [FromQuery] string? arrivalDate,
+        [FromQuery] string? leaveDate
+    )
+    {
+        return Ok(_useCaseCountValidatedAds.Execute(new DtoInputFilteringAds
+        {
+            StatusId = statusId,
+            Country = country,
+            City = city,
+            PricePerNight = pricePerNight,
+            NumberOfPersons = numberOfPersons,
+            ArrivalDate = arrivalDate,
+            LeaveDate = leaveDate
+        }));
+    }
     
     [HttpGet]
     [Route("summary")]
@@ -236,6 +237,7 @@ public class AdController : ControllerBase
     public ActionResult<IEnumerable<DtoOutputAdsSummary>> FetchSummaryForPagination(
         [FromQuery] int? limit,
         [FromQuery] int? offset,
+        [FromQuery] int? statusId,
         [FromQuery] string? country,
         [FromQuery] string? city,
         [FromQuery] float? pricePerNight,
@@ -249,7 +251,7 @@ public class AdController : ControllerBase
             Limit = limit,
             Offset = offset,
 
-            StatusId = 3,
+            StatusId = statusId,
             Country = country,
             City = city,
             PricePerNight = pricePerNight,
