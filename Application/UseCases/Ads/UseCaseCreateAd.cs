@@ -49,7 +49,6 @@ public class UseCaseCreateAd : IUseCaseWriter<DtoOutputAd, DtoInputCreateAd>
             throw new Exception("Le nombre d'images doit être compris entre 3 et 15");
         }
         
-        //on fait déjà une verif pour les images ici
         if (_pictureService.ValidExtensions(input.PicturesToAdd))
         {
             throw new Exception("Les seuls formats de fichiers acceptés sont : jpeg, png, webp");
