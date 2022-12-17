@@ -21,7 +21,7 @@ public class Ad
     public TimeSpan ArrivalTimeRangeStart { get; set; }
     public TimeSpan ArrivalTimeRangeEnd { get; set; }
     public TimeSpan LeaveTime { get; set; }
-    
+
     public string AdSlug { get; set; }
     public User Owner { get; set; }
 
@@ -50,6 +50,8 @@ public class Ad
 
     public bool AddPicture(Picture picture)
     {
+        if (_pictures.Count >= 15) return false;
+        
         foreach (var p in _pictures)
         {
             if (p.Equals(picture)) return false;
