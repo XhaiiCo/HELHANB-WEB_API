@@ -293,7 +293,8 @@ public class AdController : ControllerBase
 
         try
         {
-            return Ok(_useCaseConfirmReservation.Execute(dto));
+            var result = _useCaseConfirmReservation.Execute(dto);
+            return Ok(result);
         }
         catch (Exception e)
         {
