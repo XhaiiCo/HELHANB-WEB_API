@@ -125,8 +125,9 @@ public class AdRepository : IAdRepository
     public IEnumerable<DbAd> FilterAds(FilteringAd filter)
     {
         using var context = _contextProvider.NewContext();
-
+        
         return context.Ads.Where(ad => (filter.StatusId == null || ad.AdStatusId == filter.StatusId)
+                                       && (filter.Name == null || ad.Name.Contains(filter.Name.Trim()))
                                        && (filter.Country == null || ad.Country == filter.Country)
                                        && (filter.City == null || ad.City == filter.City)
                                        && (filter.PricePerNight == null || ad.PricePerNight <= filter.PricePerNight)

@@ -211,6 +211,7 @@ public class AdController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public ActionResult<int> CountValidatedAds(
         [FromQuery] int? statusId,
+        [FromQuery] string? name,
         [FromQuery] string? country,
         [FromQuery] string? city,
         [FromQuery] float? pricePerNight,
@@ -222,6 +223,7 @@ public class AdController : ControllerBase
         return Ok(_useCaseCountValidatedAds.Execute(new DtoInputFilteringAds
         {
             StatusId = statusId,
+            Name = name,
             Country = country,
             City = city,
             PricePerNight = pricePerNight,
@@ -238,6 +240,7 @@ public class AdController : ControllerBase
         [FromQuery] int? limit,
         [FromQuery] int? offset,
         [FromQuery] int? statusId,
+        [FromQuery] string? name,
         [FromQuery] string? country,
         [FromQuery] string? city,
         [FromQuery] float? pricePerNight,
@@ -252,6 +255,7 @@ public class AdController : ControllerBase
             Offset = offset,
 
             StatusId = statusId,
+            Name = name,
             Country = country,
             City = city,
             PricePerNight = pricePerNight,
