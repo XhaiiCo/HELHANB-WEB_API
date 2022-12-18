@@ -5,20 +5,23 @@ namespace Application.UseCases.Ads.Dtos;
 public class DtoInputUpdateAd
 {
     [Required] public string AdSlug { get; set; }
-    
+
     [Required] public string Name { get; set; }
-    
-    //[Range(1, int.MaxValue, ErrorMessage = "Only positive numbers are allowed ")]
-    [Required] public int NumberOfPersons { get; set; }
-    
-    //[Range(1, int.MaxValue, ErrorMessage = "Only positive numbers are allowed ")]
-    [Required] public int NumberOfBedrooms { get; set; }
-    
+
+    [Range(1, int.MaxValue, ErrorMessage = "Only positive numbers are allowed ")]
+    [Required]
+    public int NumberOfPersons { get; set; }
+
+    [Range(1, int.MaxValue, ErrorMessage = "Only positive numbers are allowed ")]
+    [Required]
+    public int NumberOfBedrooms { get; set; }
+
     [Required] public string Description { get; set; }
-    
-    //[Range(1, int.MaxValue, ErrorMessage = "Only positive numbers are allowed ")]
-    [Required] public float PricePerNight { get; set; }
-    
+
+    [Range(1, int.MaxValue, ErrorMessage = "Only positive numbers are allowed ")]
+    [Required]
+    public float PricePerNight { get; set; }
+
     [Required] public DtoInputTime ArrivalTimeRangeStart { get; set; }
     [Required] public DtoInputTime ArrivalTimeRangeEnd { get; set; }
     [Required] public DtoInputTime LeaveTime { get; set; }
@@ -26,9 +29,6 @@ public class DtoInputUpdateAd
     [Required] public IEnumerable<string> Features { get; set; }
 
     [Required] public IEnumerable<string> PicturesToAdd { get; set; }
-    
-    [Required] public IEnumerable<string> PicturesToDelete { get; set; }
 
-    
-    
+    [Required] public IEnumerable<string> PicturesToDelete { get; set; }
 }
