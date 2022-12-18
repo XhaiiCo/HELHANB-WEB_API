@@ -19,19 +19,22 @@ public class UseCaseUpdateAd : IUseCaseWriter<DtoOutputAd, DtoInputUpdateAd>
     private readonly IHouseFeatureRepository _houseFeatureRepository;
     private readonly IAdPictureRepository _adPictureRepository;
     private readonly IPictureService _pictureService;
-    private readonly ISlugService _slugService;
-    public readonly IAdService _adService;
+    private readonly IAdService _adService;
 
-    public UseCaseUpdateAd(IAdRepository adRepository, ITimeService timeService,
-        IHouseFeatureRepository houseFeatureRepository, IAdPictureRepository adPictureRepository,
-        IPictureService pictureService, ISlugService slugService, IAdService adService)
+    public UseCaseUpdateAd(
+        IAdRepository adRepository,
+        ITimeService timeService,
+        IHouseFeatureRepository houseFeatureRepository,
+        IAdPictureRepository adPictureRepository,
+        IPictureService pictureService,
+        IAdService adService
+    )
     {
         _adRepository = adRepository;
         _timeService = timeService;
         _houseFeatureRepository = houseFeatureRepository;
         _adPictureRepository = adPictureRepository;
         _pictureService = pictureService;
-        _slugService = slugService;
         _adService = adService;
     }
 
@@ -66,24 +69,23 @@ public class UseCaseUpdateAd : IUseCaseWriter<DtoOutputAd, DtoInputUpdateAd>
         //Validation hours
         Ad.ValidHours(dbAd.ArrivalTimeRangeStart, dbAd.ArrivalTimeRangeEnd, dbAd.LeaveTime);
 
-
-        var result = _adRepository.Update(dbAd);
+        var dbAdUpdated = _adRepository.Update(dbAd);
 
         //features
         var dbFeatures = _houseFeatureRepository.FetchByAdId(dbAd.Id);
 
+        //Remove the deleted features
         foreach (var dbFeature in dbFeatures)
         {
-            //because input.Features is like the updated list
             if (!input.Features.Contains(dbFeature.Feature))
             {
                 _houseFeatureRepository.Delete(dbFeature);
             }
         }
 
-        var dbFeaturesFeatures = _houseFeatureRepository.FetchByAdId(dbAd.Id).Select(dbFeature => dbFeature.Feature);
+        var dbFeaturesString = _houseFeatureRepository.FetchByAdId(dbAd.Id).Select(dbFeature => dbFeature.Feature);
 
-        var diff = input.Features.Except(dbFeaturesFeatures);
+        var diff = input.Features.Except(dbFeaturesString);
 
         foreach (var newFeature in diff)
         {
@@ -95,20 +97,19 @@ public class UseCaseUpdateAd : IUseCaseWriter<DtoOutputAd, DtoInputUpdateAd>
         }
 
         //pictures
-
         foreach (var dbAdPicture in dbAdPictures)
         {
-            if (input.PicturesToDelete.Contains(dbAdPicture.Path))
-            {
-                _adPictureRepository.Delete(dbAdPicture);
+            if (!input.PicturesToDelete.Contains(dbAdPicture.Path)) continue;
 
-                _pictureService.RemoveFile(dbAdPicture.Path);
-            }
+            var deletedPicture = _adPictureRepository.Delete(dbAdPicture);
+            _pictureService.RemoveFile(deletedPicture.Path);
         }
 
         var basePath = "\\Upload\\AdPictures\\" + dbAd.Id + "\\";
         var filePath = "";
 
+        //Because some picture can be deleted
+        dbAdPictures = _adPictureRepository.FetchByAdId(dbAd.Id);
         var existingPics = dbAdPictures.Select(dbAdPicture => _pictureService.PathToBytes(dbAdPicture.Path));
 
         foreach (var pic in input.PicturesToAdd)
@@ -131,6 +132,6 @@ public class UseCaseUpdateAd : IUseCaseWriter<DtoOutputAd, DtoInputUpdateAd>
             _pictureService.UploadBase64Picture(basePath, filePath, pic);
         }
 
-        return mapper.Map<DtoOutputAd>(_adService.MapToAd(result));
+        return mapper.Map<DtoOutputAd>(_adService.MapToAd(dbAdUpdated));
     }
 }
