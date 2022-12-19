@@ -102,7 +102,6 @@ public class AdController : ControllerBase
     [Route("{slug}")]
     [Authorize(Roles = "administrateur,super-administrateur")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public ActionResult<DtoOutputAd> DeleteAd(string slug)
     {
@@ -117,16 +116,25 @@ public class AdController : ControllerBase
         }
         catch (KeyNotFoundException e)
         {
-            return Conflict(e.Message);
+            return Unauthorized(e.Message);
         }
     }
-    
+
     [HttpGet]
     [Route("{slug}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public ActionResult<DtoOutputAdWithReservations> FetchBySlug(string slug)
     {
-        return Ok(_useCaseFetchAdBySlug.Execute(slug));
+        var result = _useCaseFetchAdBySlug.Execute(slug);
+        try
+        {
+            return Ok(result);
+        }
+        catch (Exception e)
+        {
+            return Unauthorized(e.Message);
+        }
     }
 
     [HttpGet]
@@ -195,7 +203,7 @@ public class AdController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public ActionResult<IEnumerable<DtoOutputAd>> FetchAll(
         [FromQuery] int? limit,
-        [FromQuery] int? offset, 
+        [FromQuery] int? offset,
         [FromQuery] int? statusId)
     {
         return Ok(_useCaseFetchAllAds.Execute(new DtoInputFilteringAds
@@ -232,7 +240,7 @@ public class AdController : ControllerBase
             LeaveDate = leaveDate
         }));
     }
-    
+
     [HttpGet]
     [Route("summary")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -292,7 +300,7 @@ public class AdController : ControllerBase
     {
         try
         {
-            var result = _useCaseUpdateAd.Execute(dto) ;
+            var result = _useCaseUpdateAd.Execute(dto);
             return Ok(result);
         }
         catch (Exception e)

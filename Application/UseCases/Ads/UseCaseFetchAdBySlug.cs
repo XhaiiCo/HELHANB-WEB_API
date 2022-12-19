@@ -22,6 +22,9 @@ public class UseCaseFetchAdBySlug : IUseCaseParameterizedQuery<DtoOutputAdWithRe
     {
         var ad = _adService.FetchBySlug(slug);
 
+        if (ad.Status.StatusName is not ("acceptée" or "désactivée"))
+            throw new Exception("Annonce indisponible");
+
         var dto = Mapper.GetInstance().Map<DtoOutputAdWithReservations>(ad);
 
         //Only the accepted reservation
