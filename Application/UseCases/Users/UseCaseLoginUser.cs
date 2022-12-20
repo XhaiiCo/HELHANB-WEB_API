@@ -6,7 +6,7 @@ using Domain;
 
 namespace Application.UseCases.Users;
 
-public class UseCaseLoginUser : IUseCaseParameterizedQuery<DtoOutputUserToken, DtoInputLoginUser>
+public class UseCaseLoginUser : IUseCaseParameterizedQuery<DtoOutputUserLogin, DtoInputLoginUser>
 {
     private readonly IUserService _userService;
     private readonly IAuthService _authService;
@@ -17,13 +17,13 @@ public class UseCaseLoginUser : IUseCaseParameterizedQuery<DtoOutputUserToken, D
         _authService = authService;
     }
 
-    public DtoOutputUserToken Execute(DtoInputLoginUser input)
+    public DtoOutputUserLogin Execute(DtoInputLoginUser input)
     {
         User user = _userService.FetchByEmail(input.Email);
 
         if (_authService.ValidatePassword(input.Password, user.Password))
         {
-            var dtoUser = Mapper.GetInstance().Map<DtoOutputUserToken>(user);
+            var dtoUser = Mapper.GetInstance().Map<DtoOutputUserLogin>(user);
             return dtoUser;
         }
 

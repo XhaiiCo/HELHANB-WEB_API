@@ -99,7 +99,7 @@ public class UserController : ControllerBase
             Search = search
         }));
     }
-    
+
     [HttpGet]
     [Authorize(Roles = "administrateur, super-administrateur")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -107,7 +107,7 @@ public class UserController : ControllerBase
     public ActionResult<IEnumerable<DtoOutputUser>> FetchAll(
         [FromQuery] int? limit,
         [FromQuery] int? offset,
-        [FromQuery] string? role, 
+        [FromQuery] string? role,
         [FromQuery] string? search)
     {
         return Ok(_useCaseFetchAllUsers.Execute(new DtoInputFilteringUsers
@@ -248,7 +248,7 @@ public class UserController : ControllerBase
     [AllowAnonymous]
     [Route("login")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public ActionResult<DtoOutputUserToken> Login(DtoInputLoginUser userDto)
+    public ActionResult<DtoOutputUserLogin> Login(DtoInputLoginUser userDto)
     {
         try
         {
@@ -262,7 +262,6 @@ public class UserController : ControllerBase
             };
 
             var generatedToken = this.GenerateToken(tokenUser);
-            user.Token = generatedToken;
 
             this.AppendCookies(generatedToken);
 
