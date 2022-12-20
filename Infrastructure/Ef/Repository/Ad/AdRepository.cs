@@ -126,12 +126,15 @@ public class AdRepository : IAdRepository
     {
         using var context = _contextProvider.NewContext();
         
-        return context.Ads.Where(ad => (filter.StatusId == null || ad.AdStatusId == filter.StatusId)
-                                       && (filter.Name == null || ad.Name.Contains(filter.Name.Trim()))
+        var ads = context.Ads.Where(ad => (filter.StatusId == null || ad.AdStatusId == filter.StatusId)
+                                       && (filter.Name == null || ad.Name.ToLower().Contains(filter.Name.ToLower().Trim()))
                                        && (filter.Country == null || ad.Country == filter.Country)
                                        && (filter.City == null || ad.City == filter.City)
                                        && (filter.PricePerNight == null || ad.PricePerNight <= filter.PricePerNight)
                                        && (filter.NumberOfPersons == null ||
                                            ad.NumberOfPersons >= filter.NumberOfPersons)).ToList();
+        ads.Reverse();
+        
+        return ads;
     }
 }

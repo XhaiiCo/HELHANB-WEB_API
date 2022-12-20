@@ -22,10 +22,10 @@ public class UserRepository : IUserRepository
         
         var dbUsers = context.Users.Where(user => (filteringUser.RoleId == null || user.RoleId == filteringUser.RoleId) && 
                                            (filteringUser.Search == null || 
-                                            (user.FirstName.ToLower().Contains(filteringUser.Search.ToLower()) ||
-                                             user.LastName.ToLower().Contains(filteringUser.Search.ToLower()) ||
-                                             user.Email.ToLower().Contains(filteringUser.Search.ToLower())))).ToList();
-
+                                            (user.FirstName.ToLower().Contains(filteringUser.Search.ToLower().Trim()) ||
+                                             user.LastName.ToLower().Contains(filteringUser.Search.ToLower().Trim()) ||
+                                             user.Email.ToLower().Contains(filteringUser.Search.ToLower().Trim())))).ToList();
+        
         if (filteringUser.Offset != null && filteringUser.Limit != null)
         {
             return dbUsers.Skip(Convert.ToInt32(filteringUser.Offset)).Take(Convert.ToInt32(filteringUser.Limit));
