@@ -1,7 +1,4 @@
-﻿using System.Diagnostics;
-using System.Security.Cryptography;
-
-namespace Domain;
+﻿namespace Domain;
 
 public class Ad
 {
@@ -51,7 +48,7 @@ public class Ad
     public bool AddPicture(Picture picture)
     {
         if (_pictures.Count >= 15) return false;
-        
+
         foreach (var p in _pictures)
         {
             if (p.Equals(picture)) return false;
@@ -69,18 +66,31 @@ public class Ad
         return true;
     }
 
+    /// <summary>
+    /// The function checks if the arrival time is before the departure time, and if the arrival end time is after the
+    /// arrival start time
+    /// </summary>
+    /// <returns>
+    /// A boolean value.
+    /// </returns>
     public static bool ValidHours(TimeSpan arrivalStart, TimeSpan arrivalEnd, TimeSpan leave)
     {
-        if (!IsHour2isAfterHour1(leave, arrivalStart))
+        if (!IsHour2IsAfterHour1(leave, arrivalStart))
             throw new Exception("L'heure de départ doit être avant l'heure d'arrivée");
 
-        if (!IsHour2isAfterHour1(arrivalStart, arrivalEnd))
+        if (!IsHour2IsAfterHour1(arrivalStart, arrivalEnd))
             throw new Exception("Heures d'arrivée incorrectes");
 
         return true;
     }
 
-    public static bool IsHour2isAfterHour1(TimeSpan hour1, TimeSpan hour2)
+    /// <summary>
+    /// Check if hour 2 is after hour 1 
+    /// </summary>
+    /// <returns>
+    /// True or False
+    /// </returns>
+    public static bool IsHour2IsAfterHour1(TimeSpan hour1, TimeSpan hour2)
     {
         return hour1 < hour2;
     }
