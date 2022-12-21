@@ -204,13 +204,15 @@ public class AdController : ControllerBase
     public ActionResult<IEnumerable<DtoOutputAd>> FetchAll(
         [FromQuery] int? limit,
         [FromQuery] int? offset,
-        [FromQuery] int? statusId)
+        [FromQuery] int? statusId,
+        [FromQuery] string? name)
     {
         return Ok(_useCaseFetchAllAds.Execute(new DtoInputFilteringAds
         {
             Limit = limit,
             Offset = offset,
-            StatusId = statusId
+            StatusId = statusId,
+            Name = name
         }));
     }
 

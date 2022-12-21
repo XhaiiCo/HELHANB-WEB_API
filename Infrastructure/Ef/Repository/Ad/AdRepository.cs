@@ -22,7 +22,8 @@ public class AdRepository : IAdRepository
     {
         using var context = _contextProvider.NewContext();
 
-        var ads = context.Ads.Where(ad => filter.StatusId == null || ad.AdStatusId == filter.StatusId).ToList();
+        var ads = context.Ads.Where(ad => (filter.StatusId == null || ad.AdStatusId == filter.StatusId) 
+        && (filter.Name == null || ad.Name.ToLower().Contains(filter.Name.ToLower().Trim()))).ToList();
         
         if (filter.Offset != null && filter.Limit != null)
         {
