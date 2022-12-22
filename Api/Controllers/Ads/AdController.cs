@@ -285,7 +285,8 @@ public class AdController : ControllerBase
 
         try
         {
-            return Ok(_useCaseUpdateStatusAd.Execute(dto));
+            var result = _useCaseUpdateStatusAd.Execute(dto);
+            return Ok(result);
         }
         catch (Exception e)
         {
