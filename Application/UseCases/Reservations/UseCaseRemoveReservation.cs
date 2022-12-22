@@ -21,21 +21,17 @@ public class UseCaseRemoveReservation : IUseCaseParameterizedQuery<DtoOutputRese
     {
         var reservation = _reservationRepository.FindById(dto.reservationId);
         if (reservation.RenterId != dto.userId)
-        {
             throw new Exception("Vous n'êtes pas autorisé à supprimer cette annonce");
-        }
 
         var dtoOuputReservation = Mapper.GetInstance()
             .Map<DtoOutputReservation>(_reservationService.MapToReservation(reservation));
         dtoOuputReservation.ArrivalDate = reservation.ArrivalDate;
         dtoOuputReservation.LeaveDate = reservation.LeaveDate;
 
-        if (dtoOuputReservation.ReservationStatus.StatusName == "en attente")
-        {
-            _reservationRepository.Delete(reservation);
-            return dtoOuputReservation;
-        }
+        if (dtoOuputReservation.ReservationStatus.StatusName != "en attente")
+            throw new Exception("Seulement les réservations en attente peuvent être supprimées");
 
-        throw new Exception("Seulement les réservations en attente peuvent être supprimées");
+        _reservationRepository.Delete(reservation);
+        return dtoOuputReservation;
     }
 }

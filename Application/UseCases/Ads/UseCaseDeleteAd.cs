@@ -13,7 +13,8 @@ public class UseCaseDeleteAd : IUseCaseParameterizedQuery<DtoOutputAd, string>
     private readonly IAdPictureRepository _adPictureRepository;
     private readonly IPictureService _pictureService;
 
-    public UseCaseDeleteAd(IAdRepository adRepository, IAdPictureRepository adPictureRepository, IPictureService pictureService)
+    public UseCaseDeleteAd(IAdRepository adRepository, IAdPictureRepository adPictureRepository,
+        IPictureService pictureService)
     {
         _adRepository = adRepository;
         _adPictureRepository = adPictureRepository;
@@ -27,16 +28,17 @@ public class UseCaseDeleteAd : IUseCaseParameterizedQuery<DtoOutputAd, string>
         var dbAd = Mapper.GetInstance().Map<DbAd>(ad);
 
         var dbAdPictures = _adPictureRepository.FetchByAdId(dbAd.Id);
-        
+
+        //Remove the pictures
         foreach (var dbAdPicture in dbAdPictures)
         {
             _adPictureRepository.Delete(dbAdPicture);
-                
+
             _pictureService.RemoveFile(dbAdPicture.Path);
         }
-        
+
         _adRepository.Delete(dbAd);
-        
+
         return Mapper.GetInstance().Map<DtoOutputAd>(ad);
     }
 }

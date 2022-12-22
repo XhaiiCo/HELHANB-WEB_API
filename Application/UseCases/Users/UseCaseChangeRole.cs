@@ -34,7 +34,7 @@ public class UseCaseChangeRole : IUseCaseWriter<DtoOutputUser, DtoUserNewRole>
         // if user has host role and switch to user role
         if (user.Role.Name == "hote")
             // if he has rentings
-            if (_adRepository.FetchByUserId(user.Id).Count() != 0)
+            if (_adRepository.FetchByUserId(user.Id).Any())
                 throw new Exception();
 
         if (userNewRole.RoleId == user.Role.Id) throw new Exception();

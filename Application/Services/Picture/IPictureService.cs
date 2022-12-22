@@ -15,7 +15,7 @@ public interface IPictureService
     
     public bool ValidExtensions(IEnumerable<string> picturesBase64);
 
-    public string GetExtension(string base64);
+    public string GetExtensionOfBase64(string base64);
 
     public void UploadBase64Picture(string basepath, string fullpath, string base64Picture);
 

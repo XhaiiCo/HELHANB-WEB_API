@@ -118,7 +118,7 @@ public class UseCaseUpdateAd : IUseCaseWriter<DtoOutputAd, DtoInputUpdateAd>
             if (_pictureService.ContainsImage(existingPics, _pictureService.Base64ToBytes(pic))) continue;
 
             filePath = basePath + _pictureService.GenerateUniqueFileName(dbAd.UserId) +
-                       _pictureService.GetExtension(pic);
+                       _pictureService.GetExtensionOfBase64(pic);
 
             var dtoInputAddPictureAd = new DtoInputAddPictureAd
             {

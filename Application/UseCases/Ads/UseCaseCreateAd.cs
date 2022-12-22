@@ -86,7 +86,7 @@ public class UseCaseCreateAd : IUseCaseWriter<DtoOutputAd, DtoInputCreateAd>
         
         foreach (var pic in input.PicturesToAdd)
         {
-            filePath = basePath + _pictureService.GenerateUniqueFileName(newAd.UserId) + _pictureService.GetExtension(pic);
+            filePath = basePath + _pictureService.GenerateUniqueFileName(newAd.UserId) + _pictureService.GetExtensionOfBase64(pic);
             
             var dtoInputAddPictureAd = new DtoInputAddPictureAd
             {

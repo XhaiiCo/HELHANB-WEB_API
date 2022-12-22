@@ -30,7 +30,7 @@ public class UseCaseUpdateProfilePictureBase64 : IUseCaseWriter<DtoOutputUser, D
             const string basePath = "\\Upload\\ProfilePicture\\";
 
             filePath = basePath + _pictureService.GenerateUniqueFileName(dto.userId) +
-                       _pictureService.GetExtension(dto.ProfilePicture);
+                       _pictureService.GetExtensionOfBase64(dto.ProfilePicture);
 
             _pictureService.UploadBase64Picture(basePath, filePath, dto.ProfilePicture);
         }
