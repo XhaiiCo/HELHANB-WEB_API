@@ -1,6 +1,5 @@
 ﻿using Application.UseCases.Roles;
 using Application.UseCases.Roles.Dtos;
-using Application.UseCases.Users.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,11 +7,13 @@ namespace API.Controllers.Roles;
 
 [ApiController]
 [Route("api/v1/roles")]
-public class RoleController: ControllerBase
+public class RoleController : ControllerBase
 {
     private readonly UseCaseFetchAllRoles _useCaseFetchAllRoles;
 
-    public RoleController(UseCaseFetchAllRoles useCaseFetchAllRoles)
+    public RoleController(
+        UseCaseFetchAllRoles useCaseFetchAllRoles
+    )
     {
         _useCaseFetchAllRoles = useCaseFetchAllRoles;
     }

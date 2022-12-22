@@ -86,7 +86,8 @@ public class AdController : ControllerBase
 
         try
         {
-            return Ok(_useCaseCreateAd.Execute(dto));
+            var result = _useCaseCreateAd.Execute(dto);
+            return Ok(result);
         }
         catch (UnauthorizedAccessException e)
         {
@@ -126,9 +127,9 @@ public class AdController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public ActionResult<DtoOutputAdWithReservations> FetchBySlug(string slug)
     {
-        var result = _useCaseFetchAdBySlug.Execute(slug);
         try
         {
+            var result = _useCaseFetchAdBySlug.Execute(slug);
             return Ok(result);
         }
         catch (Exception e)
@@ -146,7 +147,7 @@ public class AdController : ControllerBase
     {
         if (User.Identity?.Name == null) return Unauthorized();
 
-        var userId = Int32.Parse(User.Identity.Name);
+        var userId = int.Parse(User.Identity.Name);
 
         return Ok(_useCaseFetchByUserIdAd.Execute(userId));
     }
@@ -181,7 +182,7 @@ public class AdController : ControllerBase
     {
         if (User.Identity?.Name == null) return Unauthorized();
 
-        var userId = Int32.Parse(User.Identity.Name);
+        var userId = int.Parse(User.Identity.Name);
         return Ok(_useCaseFetchMyReservations.Execute(userId));
     }
 
@@ -342,6 +343,7 @@ public class AdController : ControllerBase
     public ActionResult<DtoOutputMyAdsAd.DtoOutputAdReservationMyAds> RefuseReservation(DtoInputAdReservationMyAds dto)
     {
         dto.userId = int.Parse(User.Identity?.Name);
+
         try
         {
             return Ok(_useCaseRefuseReservation.Execute(dto));
@@ -362,13 +364,15 @@ public class AdController : ControllerBase
     {
         try
         {
-            return Ok(_useCaseRemoveReservation.Execute(
+            var result = _useCaseRemoveReservation.Execute(
                 new DtoInputRemoveReservation
                 {
                     reservationId = id,
-                    userId = Int32.Parse(User.Identity?.Name)
+                    userId = int.Parse(User.Identity?.Name)
                 }
-            ));
+            );
+
+            return Ok(result);
         }
         catch (Exception e)
         {

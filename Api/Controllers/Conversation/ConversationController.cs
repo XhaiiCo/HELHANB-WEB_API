@@ -2,7 +2,6 @@
 using Application.UseCases.Conversation.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualBasic.CompilerServices;
 using static System.Int32;
 
 namespace API.Controllers.Conversation;
@@ -15,7 +14,7 @@ public class ConversationController : ControllerBase
     private readonly UseCaseCreateMessage _useCaseCreateMessage;
     private readonly UseCaseFetchMyConversation _useCaseFetchMyConversation;
     private readonly UseCaseFetchMessageForAConversation _useCaseFetchMessageForAConversation;
-    public readonly UseCasePutMessageViewToTrue _useCasePutMessageViewToTrue;
+    private readonly UseCasePutMessageViewToTrue _useCasePutMessageViewToTrue;
 
     public ConversationController(
         UseCaseCreateConversation useCaseCreateConversation,
@@ -43,7 +42,8 @@ public class ConversationController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public ActionResult<DtoOutputCreatedConversation> Create(DtoInputCreateConversation dto)
     {
-        if (!IsTheIdOfConnectedUser(dto.IdUser1) && !IsTheIdOfConnectedUser(dto.IdUser2)) return Unauthorized();
+        if (!IsTheIdOfConnectedUser(dto.IdUser1) && !IsTheIdOfConnectedUser(dto.IdUser2))
+            return Unauthorized();
 
         return Ok(_useCaseCreateConversation.Execute(dto));
     }
@@ -73,7 +73,6 @@ public class ConversationController : ControllerBase
     public ActionResult<IEnumerable<DtoOutputMyConversation>> FetchMyConversations()
     {
         if (User.Identity?.Name == null) return Unauthorized();
-
         var userId = Parse(User.Identity?.Name);
 
         return Ok(_useCaseFetchMyConversation.Execute(userId));
@@ -93,7 +92,8 @@ public class ConversationController : ControllerBase
                 UserId = Parse(User.Identity?.Name)
             };
 
-            return Ok(_useCaseFetchMessageForAConversation.Execute(dto));
+            var result = _useCaseFetchMessageForAConversation.Execute(dto);
+            return Ok(result);
         }
         catch (Exception e)
         {

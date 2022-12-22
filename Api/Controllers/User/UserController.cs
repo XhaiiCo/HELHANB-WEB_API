@@ -13,7 +13,7 @@ namespace API.Controllers.User;
 [Route("api/v1/users")]
 public class UserController : ControllerBase
 {
-    private IConfiguration _config;
+    private readonly IConfiguration _config;
 
     private readonly ITokenService _tokenService;
     private readonly IUserService _userService;
@@ -45,7 +45,9 @@ public class UserController : ControllerBase
         UseCaseUpdateUser useCaseUpdateUser,
         UseCaseChangeRoleToHostUser useCaseChangeRoleToHostUser,
         UseCaseChangeRole useCaseChangeRole,
-        UseCaseUpdateProfilePictureBase64 useCaseUpdateProfilePictureBase64, UseCaseCountUsers useCaseCountUsers)
+        UseCaseUpdateProfilePictureBase64 useCaseUpdateProfilePictureBase64,
+        UseCaseCountUsers useCaseCountUsers
+    )
     {
         _useCaseFetchAllUsers = useCaseFetchAllUsers;
         _useCaseCreateUser = useCaseCreateUser;
@@ -67,7 +69,7 @@ public class UserController : ControllerBase
     private void AppendCookies(string token)
     {
         //Create the cookie options
-        CookieOptions cookieOptions = new CookieOptions
+        var cookieOptions = new CookieOptions
         {
             HttpOnly = true,
             Secure = true
@@ -88,7 +90,7 @@ public class UserController : ControllerBase
 
     [HttpGet]
     [Route("count")]
-    [Authorize(Roles = "administrateur, super-administrateur")]
+    [Authorize(Roles = "administrateur,super-administrateur")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public ActionResult<int> CountUsers([FromQuery] string? role, [FromQuery] string? search)
@@ -101,7 +103,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Roles = "administrateur, super-administrateur")]
+    [Authorize(Roles = "administrateur,super-administrateur")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public ActionResult<IEnumerable<DtoOutputUser>> FetchAll(
@@ -120,7 +122,7 @@ public class UserController : ControllerBase
     }
 
     [HttpDelete]
-    [Route("{id}")]
+    [Route("{id:int}")]
     [Authorize(Roles = "administrateur,super-administrateur")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -179,13 +181,13 @@ public class UserController : ControllerBase
             if (user != null)
             {
                 //Login the user
-                DtoTokenUser tokenUser = new DtoTokenUser
+                var tokenUser = new DtoTokenUser
                 {
                     Id = user.Id,
                     RoleName = user.Role.Name
                 };
                 var generatedToken = this.GenerateToken(tokenUser);
-                this.AppendCookies(generatedToken);
+                AppendCookies(generatedToken);
 
                 return Ok(user);
             }
@@ -255,7 +257,7 @@ public class UserController : ControllerBase
             var user = _useCaseLoginUser.Execute(userDto);
 
             //Login the user
-            DtoTokenUser tokenUser = new DtoTokenUser
+            var tokenUser = new DtoTokenUser
             {
                 Id = user.Id,
                 RoleName = user.Role.Name
@@ -263,7 +265,7 @@ public class UserController : ControllerBase
 
             var generatedToken = this.GenerateToken(tokenUser);
 
-            this.AppendCookies(generatedToken);
+            AppendCookies(generatedToken);
 
             return Ok(user);
         }
@@ -296,14 +298,14 @@ public class UserController : ControllerBase
             var user = _useCaseChangeRoleToHostUser.Execute(id);
 
             //Change the cookie with the role
-            DtoTokenUser tokenUser = new DtoTokenUser
+            var tokenUser = new DtoTokenUser
             {
                 Id = user.Id,
                 RoleName = user.Role.Name
             };
 
             var generatedToken = this.GenerateToken(tokenUser);
-            this.AppendCookies(generatedToken);
+            AppendCookies(generatedToken);
 
             return Ok(user);
         }
@@ -323,13 +325,14 @@ public class UserController : ControllerBase
     {
         try
         {
-            DtoUserNewRole userNewRole = new DtoUserNewRole
+            var userNewRole = new DtoUserNewRole
             {
                 Id = id,
                 RoleId = newRoleId
             };
 
-            return Ok(_useCaseChangeRole.Execute(userNewRole));
+            var result = _useCaseChangeRole.Execute(userNewRole);
+            return Ok(result);
         }
         catch (Exception e)
         {

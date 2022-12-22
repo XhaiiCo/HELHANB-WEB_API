@@ -33,8 +33,10 @@ public class UseCaseUpdateStatusAd : IUseCaseWriter<DtoOutputAd, DtoInputUpdateS
         {
             if (dbAd.UserId != user.Id)
                 throw new Exception("Vous n'avez pas le droit de modifier cette annonce");
+
             if (dbAd.AdStatusId is not (3 or 4))
                 throw new Exception("Vous n'avez pas le droit de changer le rôle");
+
             if (input.StatusId is not (4 or 3))
                 throw new Exception("Vous n'avez pas le droit de mettre ce rôle");
         }
