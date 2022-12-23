@@ -26,7 +26,7 @@ public class AdTests
 
     [Test]
     [TestCase("07:00:00", "07:00:01", "06:59:59", true)]
-    public void ValidHoursThrowsExceptionTest(string arrivalStart, string arrivalEnd, string leave, bool expected)
+    public void ValidHoursTest(string arrivalStart, string arrivalEnd, string leave, bool expected)
     {
         Assert.That(Ad.ValidHours(TimeSpan.Parse(arrivalStart), TimeSpan.Parse(arrivalEnd), TimeSpan.Parse(leave)),
             Is.EqualTo(expected));

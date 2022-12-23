@@ -5,10 +5,10 @@ namespace Tests;
 public class ReservationTests
 {
     [Test]
-    [TestCase("25/12/2021 07:00", "01/01/2022 10:00", false)]
-    [TestCase("25/12/2021 07:00", "01/01/2022 09:59:59", true)]
-    [TestCase("13/01/2022 22:00", "17/01/2022 22:00", false)]
-    [TestCase("13/01/2022 22:00:01", "17/01/2022 22:00", true)]
+    [TestCase("25/12/2021 07:00:00", "01/01/2022 10:00:00", false)]
+    [TestCase("25/12/2021 07:00:00", "01/01/2022 09:59:59", true)]
+    [TestCase("13/01/2022 22:00:00", "17/01/2022 22:00:00", false)]
+    [TestCase("13/01/2022 22:00:01", "17/01/2022 22:00:00", true)]
     public void IsDateAvailableTest(string arrivalDate, string leaveDate, bool expected)
     {
         List<Reservation> reservations = new List<Reservation>();

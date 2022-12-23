@@ -5,10 +5,9 @@ namespace Tests;
 public class DateTimeRangeTests
 {
     [Test]
-    [TestCase("22/11/2022 00:00", "22/11/2022 23:59:59", 0)]
-    [TestCase("22/11/2022 00:00", "23/11/2022 00:00", 1)]
-    [TestCase("22/11/2022 00:00", "23/11/2022 23:59:59", 1)]
-    [TestCase("22/11/2022 23:59:59", "23/11/2022 00:00:01", 1)]
+    [TestCase("22/11/2022 00:00:00", "22/11/2022 23:59:59", 0)]
+    [TestCase("22/11/2022 23:59:59", "23/11/2022 00:00:00", 1)]
+    [TestCase("22/11/2022 00:00:00", "23/11/2022 23:59:59", 1)]
     public void ComputeNbNightTest(string arrivalDate, string leaveDate, int expected)
     {
         DateTimeRange dtr = new DateTimeRange(DateTime.Parse(arrivalDate), DateTime.Parse(leaveDate));
@@ -17,7 +16,6 @@ public class DateTimeRangeTests
     }
     
     [Test]
-    [TestCase("01/01/2023 10:00:00", "La date d'arrivée ne peut pas être après la date de départ")]
     [TestCase("01/01/2022 10:00:00", "La date d'arrivée ne peut pas être après la date de départ")]
     public void ArrivalDateSetterThrowsExceptionTest(string arrivalDate, string expectedErrorMessage)
     {
@@ -32,7 +30,6 @@ public class DateTimeRangeTests
     }
     
     [Test]
-    [TestCase("01/01/2021 10:00:00", "La date de départ ne peut pas être avant la date d'arrivée")]
     [TestCase("01/01/2022 10:00:00", "La date de départ ne peut pas être avant la date d'arrivée")]
     public void LeaveDateSetterThrowsExceptionTest(string leaveDate, string expectedErrorMessage)
     {
