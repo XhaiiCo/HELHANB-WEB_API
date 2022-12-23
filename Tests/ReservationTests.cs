@@ -34,9 +34,9 @@ public class ReservationTests
     }
     
     [Test]
-    [TestCase("22/11/2022 00:00", "22/11/2022 23:59:59", true)]
-    [TestCase("22/11/2022 00:00", "23/11/2022 00:00", false)]
-    [TestCase("22/11/2022 23:59:59", "23/11/2022 00:00:01", false)]
+    [TestCase("22/11/2022 00:00:00", "22/11/2022 23:59:59", true)]
+    [TestCase("22/11/2022 00:00:00", "23/11/2022 00:00:00", false)]
+    [TestCase("22/11/2022 23:59:59", "23/11/2022 00:00:00", false)]
     public void IsLessThanOneNightTest(string arrivalDate, string leaveDate, bool expected)
     {
         Assert.That(Reservation.IsLessThanOneNight(new Reservation
@@ -83,7 +83,7 @@ public class ReservationTests
     [TestCase("22/11/2022 00:00", "22/11/2022 23:59:59", 50f, 0f)]
     [TestCase("22/11/2022 00:00", "23/11/2022 00:00", 50f, 50f)]
     [TestCase("22/11/2022 00:00", "23/11/2022 23:59:59", 50f, 50f)]
-    [TestCase("22/11/2022 23:59:59", "23/11/2022 00:00:01", 50f, 50f)]
+    [TestCase("22/11/2022 23:59:59", "23/11/2022 00:00:00", 50f, 50f)]
     [TestCase("22/11/2022 00:00:00", "25/11/2022 00:00:00", 87.09f, 261.27f)]
     public void ComputeReservationPriceTest(string arrivalDate, string leaveDate, float priceByNight, float expected)
     {
