@@ -37,14 +37,14 @@ public class AdRepository : IAdRepository
     {
         using var context = _contextProvider.NewContext();
 
-        return context.Ads.Select(item => item.Country).Distinct().ToList();
+        return context.Ads.Where(dbAd => dbAd.AdStatusId == 3).Select(dbAd => dbAd.Country).Distinct().ToList();
     }
 
     public IEnumerable<string> FetchDistinctsCitiesByCountry(string country)
     {
         using var context = _contextProvider.NewContext();
 
-        return context.Ads.Where(item => item.Country == country).Select(item => item.City).Distinct().ToList();
+        return context.Ads.Where(dbAd => dbAd.Country == country && dbAd.AdStatusId == 3).Select(dbAd => dbAd.City).Distinct().ToList();
     }
 
     public IEnumerable<DbAd> FetchRange(FilteringAd filter)
